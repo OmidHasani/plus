@@ -12,6 +12,9 @@ require("dotenv").config();
 // -- اضافه کردن OpenAI --
 const OpenAI = require("openai");
 
+// -- اضافه کردن ماژول دسته‌بندی صنایع --
+const { detectIndustry, getIndustryOccasions, getRandomOccasions, generateOccasionIdeas, generateRandomOccasionIdeas } = require("./industryCategories");
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -51,6 +54,7 @@ const User = mongoose.model("User", userSchema);
 const brandSchema = new mongoose.Schema({
   name: String,
   field: String,
+  industry: String, // اضافه کردن فیلد صنعت
   staff: String,
   // اضافه کردن فیلد questions به شکل آرایه‌ای از آبجکت‌ها
   questions: [
@@ -233,12 +237,23 @@ app.post("/api/brands", async (req, res) => {
       return res.status(400).json({ message: "برند قبلا ثبت شده", alreadyExists: true });
     }
 
+    // تشخیص صنعت بر اساس فیلد
+    const industry = detectIndustry(req.body.field || "");
+    
     // req.body باید شامل questions باشه
-    const brandData = { ...req.body, userId };
+    const brandData = { 
+      ...req.body, 
+      industry, // اضافه کردن صنعت تشخیص داده شده
+      userId 
+    };
     const newBrand = new Brand(brandData);
     await newBrand.save();
 
-    res.status(201).json({ message: "✅ برند با موفقیت ذخیره شد", alreadyExists: false });
+    res.status(201).json({ 
+      message: "✅ برند با موفقیت ذخیره شد", 
+      alreadyExists: false,
+      industry // ارسال صنعت تشخیص داده شده به کلاینت
+    });
   } catch (err) {
     console.error("❌ خطا در ذخیره برند:", err);
     res.status(500).json({ error: "خطا در سرور" });
@@ -314,19 +329,133 @@ app.get('/api/brand/:id', async (req, res) => {
   }
 });
 
+// -- دریافت مناسبت‌های صنعتی --
+app.get("/api/industry-occasions/:industry", (req, res) => {
+  try {
+    const { industry } = req.params;
+    const occasions = getIndustryOccasions(industry);
+    res.json({ industry, occasions });
+  } catch (error) {
+    console.error("خطا در دریافت مناسبت‌ها:", error);
+    res.status(500).json({ error: "خطا در دریافت مناسبت‌ها" });
+  }
+});
+
+// -- تولید ایده‌های مناسبتی رندوم --
+app.post("/api/generate-occasion-ideas", async (req, res) => {
+  try {
+    const { myBrandId, targetBrandId } = req.body;
+    
+    if (!myBrandId || !targetBrandId) {
+      return res.status(400).json({ error: "شناسه برندها الزامی است" });
+    }
+    
+    const myBrand = await Brand.findById(myBrandId);
+    const targetBrand = await Brand.findById(targetBrandId);
+    
+    if (!myBrand || !targetBrand) {
+      return res.status(404).json({ error: "برند یافت نشد" });
+    }
+    
+    const myIndustry = myBrand.industry || detectIndustry(myBrand.field);
+    const targetIndustry = targetBrand.industry || detectIndustry(targetBrand.field);
+    
+    const occasionIdeas = generateRandomOccasionIdeas(myIndustry, targetIndustry);
+    
+    res.json({
+      myIndustry,
+      targetIndustry,
+      ideas: occasionIdeas
+    });
+  } catch (error) {
+    console.error("خطا در تولید ایده‌های مناسبتی:", error);
+    res.status(500).json({ error: "خطا در تولید ایده‌های مناسبتی" });
+  }
+});
+
+// -- تشخیص صنعت بر اساس فیلد --
+app.post("/api/detect-industry", (req, res) => {
+  try {
+    const { field } = req.body;
+    if (!field) {
+      return res.status(400).json({ error: "فیلد الزامی است" });
+    }
+    
+    const industry = detectIndustry(field);
+    const occasions = getIndustryOccasions(industry);
+    
+    res.json({ 
+      field, 
+      industry, 
+      occasions: occasions.slice(0, 3) // فقط 3 مناسبت اول
+    });
+  } catch (error) {
+    console.error("خطا در تشخیص صنعت:", error);
+    res.status(500).json({ error: "خطا در تشخیص صنعت" });
+  }
+});
+
 // -- ارسال پیام به OpenAI و دریافت پاسخ --
 app.post("/api/generate-ideas", async (req, res) => {
   try {
-    const { prompt } = req.body;
+    const { prompt, myBrandId, targetBrandId } = req.body;
     if (!prompt) {
       return res.status(400).json({ error: "پیشنهاد الزامی است" });
+    }
+
+    // اگر اطلاعات برندها موجود است، مناسبت‌ها را اضافه کن
+    let enhancedPrompt = prompt;
+    if (myBrandId && targetBrandId) {
+      try {
+        const myBrand = await Brand.findById(myBrandId);
+        const targetBrand = await Brand.findById(targetBrandId);
+        
+        if (myBrand && targetBrand) {
+          const myIndustry = myBrand.industry || detectIndustry(myBrand.field);
+          const targetIndustry = targetBrand.industry || detectIndustry(targetBrand.field);
+          
+          const myOccasions = getRandomOccasions(myIndustry, 3);
+          const targetOccasions = getRandomOccasions(targetIndustry, 3);
+          
+          // اضافه کردن اطلاعات مناسبت‌ها به پرامپت
+          enhancedPrompt += `\n\n🎉 **مناسبت‌های تصادفی مرتبط با صنعت شما (${myIndustry}):**\n`;
+          myOccasions.forEach(occasion => {
+            enhancedPrompt += `- ${occasion.name}\n`;
+          });
+          
+          enhancedPrompt += `\n🎉 **مناسبت‌های تصادفی مرتبط با صنعت برند هدف (${targetIndustry}):**\n`;
+          targetOccasions.forEach(occasion => {
+            enhancedPrompt += `- ${occasion.name}\n`;
+          });
+          
+          enhancedPrompt += `\n\n💡 **لطفاً در ایده‌های همکاری، این مناسبت‌ها را در نظر بگیرید و ایده‌های مناسبتی خلاقانه ارائه دهید که شامل:**
+          
+          **از مناسبت‌های صنعت شما:**
+          - برنامه‌های ویژه و کمپین‌های مرتبط با ${myOccasions.map(o => o.name).join('، ')}
+          - هدایای مناسبتی و جوایز ویژه
+          - رویدادهای تخصصی و کارگاه‌های آموزشی
+          
+          **از مناسبت‌های صنعت برند هدف:**
+          - همکاری در ${targetOccasions.map(o => o.name).join('، ')}
+          - مشارکت در برنامه‌های مشترک
+          - حمایت از رویدادهای تخصصی آن‌ها
+          
+          **ایده‌های ترکیبی:**
+          - ترکیب مناسبت‌های دو صنعت برای ایجاد برنامه‌های نوآورانه
+          - کمپین‌های مشترک که هر دو مناسبت را پوشش دهد
+          - رویدادهای تخصصی که مزایای هر دو صنعت را در نظر بگیرد`;
+        }
+      } catch (err) {
+        console.log("خطا در دریافت اطلاعات مناسبت‌ها:", err.message);
+        // اگر خطا رخ داد، پرامپت اصلی را استفاده کن
+      }
     }
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4.1",
       messages: [
-        { role: "system", content: "تو یک تحلیل‌گر حرفه‌ای و ایده‌پرداز هستی." },
-        { role: "user", content: prompt }
+        { role: "system", content: "تو یک تحلیل‌گر حرفه‌ای و ایده‌پرداز هستی که در تولید ایده‌های مناسبتی و خلاقانه تخصص داری." },
+        { role: "user", content: enhancedPrompt }
       ],
       temperature: 0.7,
       max_tokens: 3000
