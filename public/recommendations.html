@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>پیشنهاد برندهای مشابه</title>
+  <style>
+    body {
+      font-family: Vazir, sans-serif;
+      background: #f0fbfb;
+      color: #065a60;
+      padding: 30px;
+    }
+    .brand-card {
+      background: white;
+      border: 2px solid #b1d7db;
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .brand-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #027c90;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>برندهای مشابه شما</h1>
+  <div id="results"></div>
+
+  <script>
+    fetch("/api/recommendations")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("results");
+        if (data.length === 0) {
+          container.innerHTML = "<p>برندی با اولویت مشابه پیدا نشد.</p>";
+        } else {
+          data.forEach(brand => {
+            const div = document.createElement("div");
+            div.className = "brand-card";
+            div.innerHTML = `
+              <div class="brand-name">${brand.name}</div>
+              <div>حوزه فعالیت: ${brand.field}</div>
+            `;
+            container.appendChild(div);
+          });
+        }
+      })
+      .catch(() => {
+        document.getElementById("results").innerHTML = "<p>خطا در دریافت اطلاعات.</p>";
+      });
+  </script>
+
+</body>
+</html>

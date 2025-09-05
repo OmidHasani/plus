@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>ویرایش برند</title>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: #f8faff;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      direction: rtl;
+      line-height: 1.8;
+      color: #222;
+    }
+    h2, h3 {
+      color: #1e3a8a;
+      margin-bottom: 15px;
+    }
+    .form-row {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    /* اجبار فونت و یکدستی همه متن‌ها */
+textarea,
+.dropdown-toggle,
+.dropdown-menu div,
+.priority-item span {
+  font-family: 'Vazirmatn', sans-serif !important;
+  font-size: 15px;
+  color: #1e293b;
+}
+
+/* برای اطمینان از ظاهر بهتر متن‌های لود شده */
+textarea {
+  font-weight: 400;
+  line-height: 1.8;
+}
+.priority-item span:first-child {
+  font-weight: 500;
+}
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-toggle {
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #fff;
+      font-size: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+    .dropdown-toggle:hover {
+      border-color: #3b82f6;
+    }
+    .dropdown-menu {
+      position: absolute;
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      display: none;
+      z-index: 100;
+      margin-top: 5px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .dropdown-menu div {
+      padding: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .dropdown-menu div:hover {
+      background: #f1f5f9;
+    }
+    /* Questions */
+    .section {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .section strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #1e293b;
+      font-weight: 500;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px;
+      resize: vertical;
+      font-size: 14px;
+      outline: none;
+      background: #f9fafb;
+      transition: border 0.2s;
+    }
+    textarea:focus {
+      border-color: #3b82f6;
+      background: #fff;
+    }
+    /* Priorities */
+    #priority-list {
+      margin-top: 10px;
+    }
+    .priority-item {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background-color: #fff;
+      cursor: move;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .priority-number {
+      font-weight: bold;
+      color: #3b82f6;
+    }
+    /* Save button */
+    .save-button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.2s ease;
+      display: block;
+      margin-top: 20px;
+    }
+    .save-button:hover {
+      background: #1e40af;
+    }
+  </style>
+</head>
+<body>
+
+<h2>ویرایش برند</h2>
+
+<div class="form-row">
+  <label>دسته‌بندی صنعت:</label>
+  <div class="dropdown" id="industry-dropdown">
+    <div class="dropdown-toggle" onclick="toggleMenu('industry')">انتخاب کنید ▼</div>
+    <div class="dropdown-menu" id="industry-menu">
+      <div onclick="selectOption('industry', 'فناوری اطلاعات')">فناوری اطلاعات</div>
+      <div onclick="selectOption('industry', 'غذا و دارو')">غذا و دارو</div>
+      <div onclick="selectOption('industry', 'ساختمان')">ساختمان</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-row">
+  <label>تعداد نیروی انسانی:</label>
+  <div class="dropdown" id="staff-dropdown">
+    <div class="dropdown-toggle" onclick="toggleMenu('staff')">انتخاب کنید ▼</div>
+    <div class="dropdown-menu" id="staff-menu">
+      <div onclick="selectOption('staff', '۱–۱۰ نفر')">۱–۱۰ نفر</div>
+      <div onclick="selectOption('staff', '۱۱–۵۰ نفر')">۱۱–۵۰ نفر</div>
+      <div onclick="selectOption('staff', '۵۱–۲۰۰ نفر')">۵۱–۲۰۰ نفر</div>
+    </div>
+  </div>
+</div>
+
+<h3>سؤالات</h3>
+<div id="essentials-questions"></div>
+<div id="extra-questions"></div>
+
+<h3>اولویت‌ها</h3>
+<div id="priority-list"></div>
+
+<button class="save-button" onclick="saveChanges()">ذخیره تغییرات</button>
+
+<script>
+// ==== همه ۲۹ سؤال ====
+const essentialsQuestions = [
+  {id: 1,  q: "برند خود را در یک جمله معرفی کنید."},
+  {id: 2,  q: "چه جایگاهی در بازار دارید؟"},
+  {id: 3,  q: "در چه فازی از رشد هستید؟"},
+  {id: 4,  q: "۳ اولویت اصلی برندتان در ۱۲ ماه آینده چیست؟"},
+  {id: 5,  q: "در چه چیزهایی حاضرید سرمایه‌گذاری کنید؟"},
+  {id: 6,  q: "محصولات / خدمات اصلی شما چیست؟"},
+  {id: 7,  q: "چطور درآمدزایی می‌کنید؟"},
+  {id: 8,  q: "کدام‌یک از محصولاتتان قابلیت ترکیب با برندهای دیگر را دارد؟"},
+  {id: 9,  q: "کدام بخش‌های کسب‌وکارتان مقیاس‌پذیر است؟"},
+  {id: 10, q: "از چه کانال‌هایی فروش دارید؟"},
+  {id: 11, q: "محصولی دارید که بشه به‌عنوان هدیه یا پیشنهاد ترکیبی استفاده کرد؟"},
+  {id: 12, q: "چه ظرفیت‌هایی دارید که می‌توانند در همکاری مشترک استفاده شوند؟"},
+  {id: 13, q: "کدام منابع فعلاً کمتر از ظرفیت واقعی استفاده می‌شوند؟"},
+  {id: 14, q: "آیا مجاز به ارائه این منابع به بیرون هستید؟"},
+  {id: 15, q: "مشتری ایده‌آل شما کیست؟"},
+  {id: 16, q: "بیشتر مشتری‌ها از کجا جذب می‌شوند؟"},
+  {id: 17, q: "تعداد مخاطبین فعال شما چقدر است؟"},
+  {id: 18, q: "مخاطبین شما بیشتر چه ویژگی روانی‌ای دارند؟"},
+  {id: 19, q: "مخاطب شما به چه برندهای دیگری علاقه‌مند است؟"},
+  {id: 20, q: "تجربه‌ای از همکاری با برندهای دیگر داشتید؟"},
+  {id: 21, q: "چه چیزی دارید که معمولاً به بیرون نمی‌دهید، ولی در همکاری خوب می‌توانید بدهید؟"},
+  {id: 22, q: "چه چیزی باعث می‌شود یک همکاری را متوقف کنید؟"}
+];
+const extraQuestions = [
+  {id: 23, q: "برای رشد کسب‌وکارتان در یک سال آینده، چه قابلیت‌ها یا منابعی نیاز دارید که الان ندارید؟"},
+  {id: 24, q: "در حال حاضر کدام بخش از فعالیت‌هایتان زمان یا انرژی بیشتری می‌گیرد و چرا؟"},
+  {id: 25, q: "اخیراً چه فرصت مهمی در بازار وجود داشته که حس می‌کنید به خاطر نداشتن آمادگی آن را از دست داده‌اید؟"},
+  {id: 26, q: "رقبای شما در چه زمینه‌ای عملکرد بهتری داشته‌اند یا چه کاری انجام داده‌اند که شما هنوز شروع نکرده‌اید؟"},
+  {id: 27, q: "فکر می‌کنید کدام معیار یا شاخص در کسب‌وکارتان نیازمند توجه بیشتر است؟"},
+  {id: 28, q: "در حال حاضر بزرگترین چالش‌هایی که برای توسعه کسب‌وکارتان دارید کدامند؟"},
+  {id: 29, q: "معمولاً مشتریان چه پیشنهاداتی برای بهبود محصولات یا خدمات شما دارند؟"}
+];
+const allQuestions = [...essentialsQuestions, ...extraQuestions];
+
+// ==== ساخت سوالات ====
+function buildQuestions(containerId, questionsArr) {
+  const parent = document.getElementById(containerId);
+  questionsArr.forEach(({id, q}) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'section';
+    const txt = document.createElement('textarea');
+    txt.id = `answer-${id}`;
+    wrap.innerHTML = `<strong>${id}. ${q}</strong>`;
+    wrap.appendChild(txt);
+    parent.appendChild(wrap);
+  });
+}
+
+// ==== Dropdown ====
+function toggleMenu(type) {
+  const menu = document.getElementById(`${type}-menu`);
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+function selectOption(type, val) {
+  document.querySelector(`#${type}-dropdown .dropdown-toggle`).innerText = val;
+  document.getElementById(`${type}-menu`).style.display = 'none';
+}
+
+// ==== لود برند ====
+let brandId = null;
+async function loadBrand() {
+  brandId = new URLSearchParams(window.location.search).get('id');
+  if (!brandId) return alert('شناسه برند یافت نشد');
+  const res = await fetch(`/api/brand/${brandId}`, {credentials:'include'});
+  const brand = await res.json();
+
+  document.querySelector('#industry-dropdown .dropdown-toggle').innerText = brand.field;
+  document.querySelector('#staff-dropdown .dropdown-toggle').innerText = brand.staff;
+
+  brand.questions.forEach(({id, answer})=>{
+    const el = document.getElementById(`answer-${id}`);
+    if (el) el.value = answer;
+  });
+
+  const list = document.getElementById('priority-list');
+  list.innerHTML = '';
+  brand.priorities.forEach((p,i)=>{
+    const div = document.createElement('div');
+    div.className = 'priority-item';
+    div.innerHTML = `<span>${p}</span><span class="priority-number">${i+1}</span>`;
+    list.appendChild(div);
+  });
+  new Sortable(list,{animation:150,onEnd:updatePriorityNumbers});
+}
+function updatePriorityNumbers(){
+  Array.from(document.querySelectorAll('#priority-list .priority-item')).forEach((el,i)=>{
+    el.querySelector('.priority-number').textContent = i+1;
+  });
+}
+
+// ==== ذخیره تغییرات ====
+async function saveChanges() {
+  const industry = document.querySelector('#industry-dropdown .dropdown-toggle').innerText;
+  const staff = document.querySelector('#staff-dropdown .dropdown-toggle').innerText;
+  const questions = allQuestions.map(({id,q})=>({
+    id,question:q,answer:document.getElementById(`answer-${id}`).value
+  }));
+  const priorities = Array.from(document.querySelectorAll('#priority-list .priority-item span:first-child')).map(el=>el.innerText);
+
+  const brandData = {field:industry, staff, questions, priorities};
+
+  const res = await fetch(`/api/brand/${brandId}`, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    credentials:'include',
+    body:JSON.stringify(brandData)
+  });
+  const data = await res.json();
+  if(res.ok){ alert('تغییرات ذخیره شد'); window.location='brands.html'; }
+  else alert(data.error||'خطا در ذخیره');
+}
+
+// ==== شروع ====
+window.addEventListener('DOMContentLoaded',()=>{
+  buildQuestions('essentials-questions',essentialsQuestions);
+  buildQuestions('extra-questions',extraQuestions);
+  loadBrand();
+});
+</script>
+
+</body>
+</html>

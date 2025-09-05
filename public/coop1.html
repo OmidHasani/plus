@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>بررسی فرصت‌های همکاری</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  line-height: 1.8;
+  direction: rtl;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  font-weight: 700;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 10px;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#ideasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.idea-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 25px 30px;
+  position: relative;
+}
+
+.idea-number {
+  position: absolute;
+  top: 25px;
+  right: 30px; /* تغییر از left به right */
+  background: #3498db;
+  color: white;
+  font-weight: 700;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  user-select: none;
+}
+
+.idea-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #2c3e50;
+  /* حذف خط عمودی */
+  /* border-right: 5px solid #3498db; */
+  padding-right: 50px;
+  display: inline-block;
+}
+
+
+.section-label {
+  font-weight: 700;
+  color: #2980b9;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.section-content {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+#generateBtn {
+  display: block;
+  margin: 40px auto 0;
+  background-color: #0057a3;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: 'Vazirmatn', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 87, 163, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#generateBtn:hover {
+  background-color: #003e7e;
+  transform: translateY(-2px);
+}
+
+#generateBtn:active {
+  transform: translateY(0);
+}
+
+#loadingText {
+  text-align: center;
+  color: #888;
+  margin-top: 25px;
+  font-style: italic;
+  font-size: 15px;
+}
+
+#errorText {
+  text-align: center;
+  color: #e74c3c;
+  margin-top: 25px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.btn-detail {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 10px;
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.4);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.btn-detail:hover {
+  background-color: #217dbb;
+  transform: translateY(-2px);
+}
+
+.btn-detail:active {
+  transform: translateY(0);
+}
+
+
+  </style>
+</head>
+<body>
+
+<h1>💡 فرصت‌های همکاری پیشنهادی</h1>
+
+<div id="ideasContainer"></div>
+<div id="loadingText" style="display:none;">⏳ در حال دریافت ایده‌ها...</div>
+<div id="errorText" style="display:none;"></div>
+<div style="margin-bottom:20px;">
+  <label for="priorityInput" style="font-weight:700; color:#2c3e50;">اولویت اول برند شما:</label>
+  <input id="priorityInput" type="text" placeholder="مثلاً: افزایش فروش" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-top:8px; font-family:'Vazirmatn',sans-serif;">
+</div>
+
+<button id="generateBtn">🔄 دریافت ایده‌های جدید</button>
+
+<script>
+function getTargetBrandId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("target");
+}
+
+async function fetchTargetBrand(id) {
+  const res = await fetch(`/api/brand/${id}`, { credentials: "include" });
+  if (!res.ok) throw new Error("برند هدف یافت نشد.");
+  return await res.json();
+}
+
+function parseIdeas(text) {
+  console.log("متن ورودی برای پارس:", text);
+  
+  const ideas = [];
+  
+  // روش 1: تقسیم بر اساس شماره ایده
+  let ideaSections = text.split(/(?:^|\n)(?:\d+\.|🎯|ایده\s*\d+)/).filter(section => section.trim());
+  
+  // اگر روش 1 کار نکرد، روش 2: تقسیم بر اساس 🎯
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/🎯/).filter(section => section.trim());
+  }
+  
+  // اگر هنوز کار نکرد، روش 3: تقسیم بر اساس خطوط خالی
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/\n\s*\n/).filter(section => section.trim());
+  }
+  
+  console.log("بخش‌های پیدا شده:", ideaSections.length);
+  
+  for (let i = 0; i < ideaSections.length; i++) {
+    const section = ideaSections[i].trim();
+    if (!section) continue;
+    
+    console.log(`پردازش بخش ${i + 1}:`, section.substring(0, 100) + "...");
+    
+    let title = '';
+    let description = '';
+    let whyEffective = '';
+    
+    // پیدا کردن عنوان (قبل از 🧠)
+    const titleMatch = section.match(/^([^🧠]*?)(?=🧠|$)/s);
+    if (titleMatch) {
+      title = titleMatch[1].trim().replace(/^[🎯\s]*/, '');
+    }
+    
+    // پیدا کردن شرح (بین 🧠 و 💎 یا 📈)
+    const descriptionMatch = section.match(/🧠\s*([^💎📈]*?)(?=💎|📈|$)/s);
+    if (descriptionMatch) {
+      description = descriptionMatch[1].trim();
+    }
+    
+    // پیدا کردن مزایا (بعد از 💎 یا 📈)
+    const whyMatch = section.match(/(?:💎|📈)\s*([^]*?)$/s);
+    if (whyMatch) {
+      whyEffective = whyMatch[1].trim();
+    }
+    
+    // اگر عنوان و شرح داشته باشد اضافه کن
+    if (title && description) {
+      console.log(`ایده ${i + 1} اضافه شد:`, { title: title.substring(0, 50), description: description.substring(0, 50) });
+      ideas.push({
+        title: title,
+        description: description,
+        whyEffective: whyEffective
+      });
+    } else {
+      console.log(`ایده ${i + 1} ناقص بود:`, { title: !!title, description: !!description });
+    }
+  }
+  
+  // اگر هیچ ایده‌ای پیدا نشد، سعی کن کل متن را به عنوان یک ایده در نظر بگیر
+  if (ideas.length === 0 && text.trim()) {
+    console.log("هیچ ایده‌ای پیدا نشد، سعی در پارس کل متن...");
+    ideas.push({
+      title: "ایده همکاری",
+      description: text.trim(),
+      whyEffective: ""
+    });
+  }
+  
+  console.log(`تعداد ایده‌های پارس شده: ${ideas.length}`);
+  return ideas;
+}
+
+let currentIdeas = [];
+
+function addSectionTitle(title) {
+  const h2 = document.createElement("h2");
+  h2.textContent = title;
+  return h2;
+}
+
+function createIdeaCard(idea, index) {
+  const card = document.createElement("div");
+  card.className = "idea-card";
+  card.innerHTML = `
+    <div class="idea-number">${index + 1}</div>
+    <div class="idea-title">${idea.title}</div>
+    <div class="section-label">📝 شرح ایده:</div>
+    <div class="section-content">${idea.description}</div>
+    
+    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn-detail" data-idea-index="${index}" data-type="detail">🔍 بررسی بیشتر</button>
+      <button class="btn-detail" data-idea-index="${index}" data-type="value">🌟 مزایا برای طرفین</button>
+      <button class="btn-detail" data-idea-index="${index}" data-type="economy">💰 مدل‌های درآمدی</button>
+    </div>
+  `;
+  return card;
+}
+
+function setupIdeaButtons() {
+  document.querySelectorAll(".btn-detail").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const index = +btn.getAttribute("data-idea-index");
+      const type = btn.getAttribute("data-type");
+      const idea = currentIdeas[index];
+      if (!idea) return alert("ایده مورد نظر یافت نشد.");
+
+      let prompt = "";
+      if (type === "detail") {
+        prompt = `
+بر اساس اطلاعات زیر:
+عنوان ایده: ${idea.title}
+
+شرح ایده:
+${idea.description}
+
+
+
+لطفا بررسی دقیق‌تری از این ایده ارائه بده و نکات مهم، چالش‌ها و فرصت‌های احتمالی را شرح بده.
+        `;
+      } else if (type === "economy") {
+        prompt = `
+بر اساس اطلاعات زیر:
+عنوان ایده: ${idea.title}
+
+شرح ایده:
+${idea.description}
+
+لطفا توجیه اقتصادی این ایده را تحلیل کن، از نظر هزینه‌ها، درآمدها و بازگشت سرمایه به طور دقیق توضیح بده.
+        `;
+      }
+
+      sessionStorage.setItem("ideaPrompt", prompt);
+      sessionStorage.setItem("ideaType", type);
+      window.location.href = "/idea-result.html";
+    });
+  });
+}
+
+// === ذخیره و دریافت عناوین قبلی ایده‌ها در localStorage بر اساس برند ===
+function getStoredIdeaTitles(brandId) {
+  const key = `storedIdeaTitles_${brandId}`;
+  const stored = localStorage.getItem(key);
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+}
+
+function storeIdeaTitles(titles, brandId) {
+  const uniqueTitles = Array.from(new Set(titles)); // حذف تکراری در ذخیره
+  const key = `storedIdeaTitles_${brandId}`;
+  localStorage.setItem(key, JSON.stringify(uniqueTitles));
+}
+
+// === تغییر توابع buildPrompt برای ارسال عناوین قبلی به GPT ===
+
+function buildPrompt(myBrand, similarBrands, brandId) {
+  const priorityInput = document.getElementById("priorityInput").value.trim();
+  const priority = priorityInput || myBrand.priorities?.[0] || "رضایت مشتری";
+
+  const questions = myBrand.questions || [];
+  let questionsText = questions.map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+  // 🔹 همیشه قبل از ساخت پرامپت لیست به‌روز بگیر
+  const storedTitles = getStoredIdeaTitles(brandId);
+  const titlesText = storedTitles.length > 0 
+    ? storedTitles.join("، ") 
+    : "هیچ ایده‌ای تاکنون ارائه نشده است";
+
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و ایده‌پرداز خلاق هستید.  
+برند من با نام «${myBrand.name}» در حوزه «${myBrand.field}» فعالیت می‌کند.  
+اولویت اصلی برند من این است: «${priority}».  
+
+سوالات و پاسخ‌های برند من به شرح زیر است:  
+${questionsText}  
+
+برندهای مشابه زیر را نیز در نظر بگیر:  
+`;
+
+  similarBrands.forEach((b, i) => {
+    const priority = b.priorities?.[0] || "اولویت مشخص نشده";
+    const questionsText = (b.questions || []).map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+    prompt += `
+${i + 1}. نام: ${b.name}
+حوزه فعالیت: ${b.field}
+اولویت اصلی: ${priority}
+سوالات و پاسخ‌ها:
+${questionsText}
+`;
+  });
+
+  prompt += `
+
+لطفاً ایده‌هایی تولید کن که عنوان آن‌ها در لیست زیر وجود ندارد و تکراری نباشند:
+${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+
+با توجه به اطلاعات زیر درباره دو برند ، که شامل پاسخ‌های تحلیلی، اهداف، نقاط قوت، مزیت رقابتی، مشکلات و فرصت‌ها هستند، از تو می‌خواهم **دقیقاً و حتماً 5 ایده‌ی همکاری** بسیار خلاقانه، متمایز، پخته و قابل اجرا بین این دو برند ارائه بدهی.
+
+⚠️ **تأکید مهم**: باید دقیقاً 5 ایده ارائه بدهی. نه کمتر، نه بیشتر. هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5).
+
+❗ نکات مهم:
+- این ایده‌ها باید حاصل **همکاری و هم‌افزایی بین دو برند** باشند.
+- یعنی ایده‌هایی که **ترکیب ظرفیت‌ها، منابع یا خدمات** دو برند را هدف می‌گیرند و به نتیجه‌ای تازه و نوآورانه منجر می‌شوند.
+- این ایده‌ها نباید تکراری، عمومی یا صرفاً تبلیغاتی باشند. باید:
+  - نوآورانه و کاربردی باشند
+  - قابلیت اجرای عملی داشته باشند
+  - بر اساس داده‌های دقیق موجود طراحی شوند، نه فرضیات کلی
+
+📌 **ساختار خروجی اجباری**: باید دقیقاً 5 ایده ارائه بدهی، هر کدام با این فرمت:
+
+**ایده 1:**
+🎯 عنوان ایده:  
+[یک عنوان جذاب، خلاقانه و منحصر‌به‌فرد که به همکاری دو برند اشاره دارد]
+
+🧠 شرح ایده:  
+[توضیح کامل درباره نحوه عملکرد ایده. حداقل 5 خط. توضیح بده که:
+- ایده دقیقاً چیست و چگونه پیاده‌سازی می‌شود  
+- چه بخشی از آن توسط برند اول اجرا می‌شود و چه بخشی توسط برند دوم  
+- چه مشکلی را حل می‌کند یا چه مزیتی ایجاد می‌کند  
+- از چه فناوری یا ساختاری استفاده می‌کند  
+- تجربه کاربر یا مشتری در این ایده چگونه خواهد بود  
+]
+
+**ایده 2:**
+🎯 عنوان ایده:  
+[عنوان دوم]
+
+🧠 شرح ایده:  
+[شرح دوم]
+
+**ایده 3:**
+🎯 عنوان ایده:  
+[عنوان سوم]
+
+🧠 شرح ایده:  
+[شرح سوم]
+
+**ایده 4:**
+🎯 عنوان ایده:  
+[عنوان چهارم]
+
+🧠 شرح ایده:  
+[شرح چهارم]
+
+**ایده 5:**
+🎯 عنوان ایده:  
+[عنوان پنجم]
+
+🧠 شرح ایده:  
+[شرح پنجم]
+
+💎 چرا مؤثر است:  
+[تحلیل دقیق از اینکه چرا این همکاری می‌تواند موفق باشد. اشاره به مزایای استراتژیک، تفاوت با رقبا، ظرفیت‌های موجود دو برند، و اینکه چرا این ایده خاص از دل اطلاعات بالا استخراج شده.]
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 5 ایده ارائه بدهی
+- هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5)
+- تمام ایده‌ها باید بر اساس اولویت اول برند یعنی «${priority}» باشند
+- اگر کمتر از 5 ایده ارائه بدهی، پاسخ ناقص محسوب می‌شود
+
+اکنون تحلیل را شروع کن و دقیقاً 5 ایده همکاری را بنویس.
+`;
+
+  console.log("PROMPT اولویت اول:");
+  console.log(prompt);
+  return prompt;
+}
+
+function buildPromptForPriority2and3(p2, p3, similarBrands, usedTitles = [], brandId) {
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و خلاق هستید.  
+می‌خواهیم ۶ ایده همکاری (۳ ایده برای هر اولویت) تولید کنیم.  
+برند ما اولویت‌های زیر را دارد:
+1. ${p2}
+2. ${p3}
+
+برندهای مشابه ما:
+`;
+
+  similarBrands.forEach((b, i) => {
+    prompt += `${i + 1}. نام: ${b.name}، حوزه فعالیت: ${b.field}\n`;
+  });
+
+  prompt += `
+
+⚠️ **تأکید مهم**: باید دقیقاً 6 ایده همکاری تولید کنی (3 ایده برای هر اولویت). نه کمتر، نه بیشتر.
+
+**ساختار خروجی اجباری:**
+
+**اولویت دوم (${p2}):**
+**ایده 1:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 2:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 3:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**اولویت سوم (${p3}):**
+**ایده 4:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 5:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 6:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 6 ایده ارائه بدهی (3+3)
+- هر ایده باید شماره‌گذاری شده باشد
+- عناوین زیر تکراری نباشد:
+${usedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}`;
+
+  return prompt;
+}
+
+async function fetchMyBrand() {
+  const res = await fetch("/api/my-brand", { credentials: "include" });
+  if (!res.ok) throw new Error("برند شما یافت نشد.");
+  return await res.json();
+}
+
+async function fetchRecommendations() {
+  const res = await fetch("/api/recommendations", { credentials: "include" });
+  if (!res.ok) throw new Error("خطا در دریافت برندهای مشابه.");
+  return await res.json();
+}
+
+async function callOpenAI(prompt) {
+  const res = await fetch("/api/generate-ideas", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ prompt })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || "خطا در پاسخ OpenAI");
+  }
+
+  const data = await res.json();
+  console.log("خام API OpenAI:", JSON.stringify(data, null, 2));
+  return data.choices[0].message.content;
+}
+
+async function generateIdeas() {
+  
+
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+
+  container.innerHTML = "";
+  errorText.style.display = "none";
+  loadingText.style.display = "block";
+  generateBtn.disabled = true;
+
+  try {
+    const myBrand = await fetchMyBrand();
+
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
+
+
+    const targetBrand = await fetchTargetBrand(targetBrandId);
+    const similarBrands = [targetBrand];  // فقط برند هدف برای پرامپت
+
+    const allIdeas = [];
+
+    // دریافت عناوین قبلی از localStorage بر اساس برند هدف
+    let storedTitles = getStoredIdeaTitles(targetBrandId);
+
+    // ۱. ایده‌های اولویت اول (۵ تا)
+    const prompt1 = buildPrompt(myBrand, similarBrands, targetBrandId);
+    const text1 = await callOpenAI(prompt1);
+    const ideas1 = parseIdeas(text1);
+    
+    // فیلتر ایده‌های تکراری نسبت به storedTitles
+    const uniqueIdeas1 = ideas1.filter(idea => !storedTitles.includes(idea.title));
+    
+    allIdeas.push(...uniqueIdeas1);
+
+    // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
+    storedTitles = storedTitles.concat(uniqueIdeas1.map(i => i.title));
+    storeIdeaTitles(storedTitles, targetBrandId);
+
+    container.appendChild(addSectionTitle(`🟢 ایده‌ها بر اساس اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
+    uniqueIdeas1.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+
+
+
+    setupIdeaButtons();
+
+    currentIdeas = allIdeas;
+
+  } catch (err) {
+    errorText.textContent = "❌ خطا: " + err.message;
+    errorText.style.display = "block";
+  } finally {
+    loadingText.style.display = "none";
+    generateBtn.disabled = false;
+  }
+}
+
+document.getElementById("generateBtn").addEventListener("click", generateIdeas);
+window.onload = generateIdeas;
+</script>
+
+
+</body>
+</html>

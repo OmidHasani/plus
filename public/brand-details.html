@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>اطلاعات برند</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.8;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #2c3e50;
+      border-right: 5px solid #3498db;
+      padding-right: 10px;
+      display: inline-block;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .value {
+      margin-top: 5px;
+      padding: 8px 12px;
+      background-color: #f1f1f1;
+      border-radius: 8px;
+      display: inline-block;
+      min-width: 200px;
+    }
+
+    ul.priority-list {
+      list-style: decimal;
+      padding-right: 20px;
+    }
+
+    .priority-list li {
+      background-color: #f9f9f9;
+      margin-bottom: 12px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 16px;
+      color: #444;
+      transition: background-color 0.3s ease;
+    }
+
+    .priority-list li.top-priority {
+      background: linear-gradient(90deg,  #ffd745, #f1c40f);
+      color: #000;
+      font-weight: 700;
+      font-size: 17px;
+      box-shadow: 0 4px 12px rgba(241, 196, 15, 0.5);
+    }
+
+    .priority-list li.top-priority:hover {
+      background: linear-gradient(90deg, #f39c12, #e67e22);
+      cursor: pointer;
+    }
+
+    .priority-box {
+      background: #ecf0f1;
+      padding: 15px 20px;
+      border-radius: 12px;
+      min-height: 80px;
+    }
+
+    .cooperation-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 24px;
+      background-color: #0057a3;
+      color: white;
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 87, 163, 0.2);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .cooperation-btn:hover {
+      background-color: #003e7e;
+      transform: translateY(-2px);
+    }
+
+    .cooperation-btn:active {
+      transform: translateY(0);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    header div.social-icons {
+      display: flex;
+      gap: 20px;
+      order: 2;
+    }
+
+    header div.brand-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      order: 1;
+    }
+
+    header div.brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    header div.social-icons a img {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      filter: grayscale(0);
+      transition: filter 0.3s ease;
+    }
+
+    header div.social-icons a:hover img {
+      filter: grayscale(60%);
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-logo">
+      <img id="brand-logo" src="" alt="لوگوی برند" />
+    </div>
+    <div class="social-icons">
+      <a href="https://instagram.com/brand" target="_blank" aria-label="اینستاگرام">
+        <img src="https://cdn-icons-png.flaticon.com/24/2111/2111463.png" alt="Instagram" />
+      </a>
+      <a href="https://twitter.com/brand" target="_blank" aria-label="توییتر">
+        <img src="https://cdn-icons-png.flaticon.com/24/733/733579.png" alt="Twitter" />
+      </a>
+      <a href="https://linkedin.com/company/brand" target="_blank" aria-label="لینکدین">
+        <img src="https://cdn-icons-png.flaticon.com/24/174/174857.png" alt="LinkedIn" />
+      </a>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>معرفی برند</h2>
+    <p id="brand-description">
+      پایا هیدرولیک یکی از بزرگ‌ترین و محبوب‌ترین پلتفرم‌های خدمات هوشمند در ایران است...
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>اطلاعات کلی</h2>
+    <div class="field">
+      <span class="label">نام برند:</span>
+      <span class="value" id="brand-name">در حال بارگذاری...</span>
+    </div>
+    <div class="field">
+      <span class="label">حوزه کاری:</span>
+      <span class="value" id="brand-sector">در حال بارگذاری...</span>
+    </div>
+    <div class="field">
+      <span class="label">تعداد کارکنان:</span>
+      <span class="value" id="brand-employees">در حال بارگذاری...</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>نقاط قوت برند</h2>
+    <ul class="priority-list" id="brand-strengths">
+      <li>تجربه بالا در ارائه خدمات تخصصی</li>
+      <li>تیم فنی حرفه‌ای و پاسخ‌گو</li>
+      <li>پوشش سراسری در سراسر ایران</li>
+      <li>نوآوری در محصولات و خدمات دیجیتال</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>اولویت‌های برند</h2>
+    <ul class="priority-list" id="brand-priorities">
+      <li>در حال دریافت اطلاعات...</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>چکیده فعالیت های برند در 6 ماه آینده</h2>
+    <div class="priority-box" id="future-priorities"></div>
+  </div>
+
+  <button id="goToCooperation" class="cooperation-btn">بررسی فرصت‌های همکاری</button>
+
+<script>
+async function loadBrandDetails() {
+  const brandId = new URLSearchParams(window.location.search).get('id');
+  if (!brandId) {
+    alert("شناسه برند مشخص نیست!");
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/brand/${brandId}`, { credentials: 'include' });
+    const brand = await res.json();
+
+    document.getElementById("brand-name").textContent = brand.name;
+    document.getElementById("brand-sector").textContent = brand.field || '-';
+    document.getElementById("brand-employees").textContent = brand.staff || '-';
+
+    if (brand.logoUrl) {
+      document.getElementById("brand-logo").src = brand.logoUrl;
+    } else {
+      document.getElementById("brand-logo").src = "https://via.placeholder.com/72?text=Logo";
+    }
+
+    const priorityList = document.getElementById("brand-priorities");
+    priorityList.innerHTML = '';
+    if (Array.isArray(brand.priorities) && brand.priorities.length > 0) {
+      brand.priorities.forEach((p, idx) => {
+        const li = document.createElement("li");
+        li.textContent = p;
+        if (idx < 3) li.classList.add("top-priority");
+        priorityList.appendChild(li);
+      });
+    } else {
+      priorityList.innerHTML = '<li>اطلاعاتی موجود نیست.</li>';
+    }
+
+    // می‌تونی این بخش رو براساس API خودت ویرایش کنی یا دستی پر کنی
+    document.getElementById("future-priorities").textContent = 
+      "1. افزایش رضایت و وفاداری کاربران...";
+
+  } catch (err) {
+    console.error("خطا در بارگذاری برند:", err);
+    alert("خطا در دریافت اطلاعات برند.");
+  }
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const brandId = urlParams.get("id");
+
+document.getElementById("goToCooperation").addEventListener("click", () => {
+  if (brandId) {
+    window.location.href = `/coop1.html?target=${brandId}`;
+  } else {
+    alert("شناسه برند مشخص نیست.");
+  }
+});
+
+loadBrandDetails();
+</script>
+
+</body>
+</html>

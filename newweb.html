@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>سامانه ثبت و مقایسه برندها</title>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" />
+  <style>
+    /* استایل‌ها همانند قبل باقی مانده */
+    body {
+      font-family: 'Vazir', sans-serif;
+      background: #e6f7f8;
+      margin: 0; padding: 20px;
+      color: #065a60;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgb(0 0 0 / 0.1);
+      padding: 30px 40px;
+      margin-bottom: 30px;
+    }
+    h1, h2 {
+      margin-bottom: 20px;
+      font-weight: 800;
+      color: #027c90;
+      text-align: center;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 2px solid #b1d7db;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+      transition: border-color 0.3s;
+      font-family: 'Vazir', sans-serif;
+      color: #065a60;
+      resize: vertical;
+    }
+    input:focus, textarea:focus {
+      border-color: #00b4c4;
+      outline: none;
+      background: #f0fcfe;
+    }
+    button {
+      background: #00b4c4;
+      color: white;
+      border: none;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      width: 100%;
+      margin-top: 10px;
+      box-shadow: 0 4px 12px rgb(0 180 196 / 0.4);
+      transition: background-color 0.25s ease;
+      font-family: 'Vazir', sans-serif;
+    }
+    button:hover {
+      background: #028a9b;
+      box-shadow: 0 6px 18px rgb(0 138 155 / 0.6);
+    }
+    .auth-section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>سامانه ثبت و مقایسه برندها</h1>
+
+  <!-- فرم ورود و ثبت‌نام -->
+  <div class="auth-section" id="authSection">
+    <input type="email" id="authEmail" placeholder="ایمیل" />
+    <input type="password" id="authPassword" placeholder="رمز عبور" />
+    <button onclick="register()">ثبت‌نام</button>
+    <button onclick="login()">ورود</button>
+  </div>
+
+  <div id="logoutSection" style="display: none; text-align: center;">
+    <p style="margin: 10px 0; font-weight: bold; color: #027c90;">شما وارد شدید ✅</p>
+    <button onclick="logout()">خروج</button>
+  </div>
+
+  <!-- فرم ثبت برند -->
+  <div id="formSection" style="display: none;">
+    <input id="name" type="text" placeholder="نام برند *" required />
+    <input id="field" type="text" placeholder="حوزه فعالیت *" required />
+    <input id="website" type="text" placeholder="آدرس وبسایت" />
+    <textarea id="summary" rows="3" placeholder="توضیح کوتاه درباره برند *" required></textarea>
+
+    <input id="q1" placeholder="سوال 1" />
+    <input id="q2" placeholder="سوال 2" />
+    <input id="q3" placeholder="سوال 3" />
+    <input id="q4" placeholder="سوال 4" />
+    <input id="q5" placeholder="سوال 5" />
+    <input id="q6" placeholder="سوال 6" />
+    <input id="q7" placeholder="سوال 7" />
+
+    <h2>اولویت‌های خود را به ترتیب بکشید</h2>
+    <div id="priorityList"></div>
+
+    <button onclick="submitForm()">ثبت برند</button>
+  </div>
+</div>
+
+<script>
+  const priorityList = document.getElementById("priorityList");
+  const priorities = [
+    "قیمت", "کیفیت محصول", "خدمات پس از فروش", "طراحی",
+    "نوآوری", "بازاریابی", "اعتبار برند", "دسترسی بازار", "مسئولیت محیط زیستی"
+  ];
+
+  function renderPriorities() {
+    priorityList.innerHTML = "";
+    priorities.forEach((text, i) => {
+      const div = document.createElement("div");
+      div.className = "priority-item";
+      div.textContent = text;
+      div.draggable = true;
+      div.setAttribute("data-index", i + 1);
+      div.addEventListener("dragstart", e => dragged = e.target);
+      div.addEventListener("dragover", e => e.preventDefault());
+      div.addEventListener("drop", e => {
+        e.preventDefault();
+        if (dragged === e.target) return;
+        const nodes = Array.from(priorityList.children);
+        const from = nodes.indexOf(dragged);
+        const to = nodes.indexOf(e.target);
+        if (from < to) priorityList.insertBefore(dragged, e.target.nextSibling);
+        else priorityList.insertBefore(dragged, e.target);
+      });
+      priorityList.appendChild(div);
+    });
+  }
+
+  let dragged;
+  renderPriorities();
+
+  function submitForm() {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return alert("ابتدا وارد شوید");
+    const get = id => document.getElementById(id).value.trim();
+    const priorities = Array.from(priorityList.children).map(x => x.textContent);
+
+    const data = {
+      name: get("name"),
+      field: get("field"),
+      website: get("website"),
+      summary: get("summary"),
+      q1: get("q1"), q2: get("q2"), q3: get("q3"),
+      q4: get("q4"), q5: get("q5"), q6: get("q6"), q7: get("q7"),
+      priorities,
+      userId
+    };
+
+    if (!data.name || !data.field || !data.summary) return alert("فیلدهای ضروری را پر کنید");
+
+    fetch("/api/brands", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(json => alert(json.message || "ثبت شد"))
+    .catch(() => alert("خطا در ثبت برند"));
+  }
+
+  function register() {
+    const email = document.getElementById("authEmail").value.trim();
+    const password = document.getElementById("authPassword").value.trim();
+    if (!email || !password) return alert("همه فیلدها الزامی است");
+
+    fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.userId) {
+        localStorage.setItem("userId", data.userId);
+        toggleAuth(true);
+      } else {
+        alert(data.error || "خطا در ثبت‌نام");
+      }
+    });
+  }
+
+  function login() {
+    const email = document.getElementById("authEmail").value.trim();
+    const password = document.getElementById("authPassword").value.trim();
+    if (!email || !password) return alert("همه فیلدها الزامی است");
+
+    fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.userId) {
+        localStorage.setItem("userId", data.userId);
+        toggleAuth(true);
+      } else {
+        alert(data.error || "خطا در ورود");
+      }
+    });
+  }
+
+  function logout() {
+    localStorage.removeItem("userId");
+    toggleAuth(false);
+  }
+
+  function toggleAuth(loggedIn) {
+    document.getElementById("authSection").style.display = loggedIn ? "none" : "block";
+    document.getElementById("formSection").style.display = loggedIn ? "block" : "none";
+    document.getElementById("logoutSection").style.display = loggedIn ? "block" : "none";
+  }
+
+  window.onload = () => {
+    const userId = localStorage.getItem("userId");
+    toggleAuth(!!userId);
+  };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>ورود / ثبت‌نام</title>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: auto; padding: 20px; }
+    input, button { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+
+<h2>ثبت‌نام</h2>
+<input id="registerEmail" type="email" placeholder="ایمیل" />
+<input id="registerPassword" type="password" placeholder="رمز عبور" />
+<button onclick="register()">ثبت‌نام</button>
+<div id="registerMsg"></div>
+
+<hr />
+
+<h2>ورود</h2>
+<input id="loginEmail" type="email" placeholder="ایمیل" />
+<input id="loginPassword" type="password" placeholder="رمز عبور" />
+<button onclick="login()">ورود</button>
+<div id="loginMsg"></div>
+
+<script>
+async function register() {
+  const email = document.getElementById('registerEmail').value.trim();
+  const password = document.getElementById('registerPassword').value.trim();
+  const msg = document.getElementById('registerMsg');
+  msg.textContent = '';
+
+  if (!email || !password) {
+    msg.textContent = 'لطفا همه فیلدها را پر کنید.';
+    msg.className = 'error';
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      msg.textContent = data.message || 'ثبت‌نام موفق! لطفا ایمیل را تایید کنید.';
+      msg.className = 'success';
+    } else {
+      msg.textContent = data.error || 'خطا در ثبت‌نام';
+      msg.className = 'error';
+    }
+  } catch (err) {
+    msg.textContent = 'خطا در ارتباط با سرور';
+    msg.className = 'error';
+  }
+}
+
+async function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const msg = document.getElementById('loginMsg');
+  msg.textContent = '';
+
+  if (!email || !password) {
+    msg.textContent = 'لطفا همه فیلدها را پر کنید.';
+    msg.className = 'error';
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      // پس از ورود موفق، بررسی می‌کنیم که آیا برندی ثبت شده یا نه
+      const brandRes = await fetch('/api/check-brand', {
+        credentials: 'include'
+      });
+
+      const brandData = await brandRes.json();
+
+      if (brandRes.ok && brandData.hasBrand) {
+        window.location.href = 'brands.html';  // برند قبلاً ثبت شده
+      } else {
+        window.location.href = 'index.html';  // برند ثبت نشده
+      }
+
+    } else {
+      msg.textContent = data.error || 'خطا در ورود';
+      msg.className = 'error';
+    }
+  } catch (err) {
+    msg.textContent = 'خطا در ارتباط با سرور';
+    msg.className = 'error';
+  }
+}
+</script>
+
+</body>
+</html>

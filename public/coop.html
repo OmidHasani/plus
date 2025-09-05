@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>بررسی فرصت‌های همکاری</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  line-height: 1.8;
+  direction: rtl;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  font-weight: 700;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 10px;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h2 {
+  margin-top: 40px;
+  color: #34495e;
+  font-weight: 700;
+  border-right: 5px solid #3498db;
+  padding-right: 10px;
+}
+
+#ideasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.idea-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 25px 30px;
+  position: relative;
+}
+
+.idea-number {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  background: #3498db;
+  color: white;
+  font-weight: 700;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  user-select: none;
+}
+
+.idea-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #2c3e50;
+  padding-right: 50px;
+  display: inline-block;
+}
+
+.section-label {
+  font-weight: 700;
+  color: #2980b9;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.section-content {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.btn-detail {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 10px;
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.4);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.btn-detail:hover {
+  background-color: #217dbb;
+  transform: translateY(-2px);
+}
+
+.btn-detail:active {
+  transform: translateY(0);
+}
+
+#generateBtn {
+  display: block;
+  margin: 40px auto 0;
+  background-color: #0057a3;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: 'Vazirmatn', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 87, 163, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#generateBtn:hover {
+  background-color: #003e7e;
+  transform: translateY(-2px);
+}
+
+#generateBtn:active {
+  transform: translateY(0);
+}
+
+#loadingText {
+  text-align: center;
+  color: #888;
+  margin-top: 25px;
+  font-style: italic;
+  font-size: 16px;
+}
+
+/* اسپینر لودینگ */
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+  </style>
+</head>
+<body>
+
+<h1>💡 فرصت‌های همکاری پیشنهادی</h1>
+
+<div id="ideasContainer"></div>
+<div id="loadingText" style="display:none;">
+  <div class="loader"></div>
+  ⏳ در حال دریافت ایده‌ها...
+</div>
+<button id="generateBtn">🔄 دریافت ایده‌های جدید</button>
+
+<script>
+// داده‌های دستی برای سه اولویت
+const ideasPriority1 = [
+  { title: "ایده ۱ - اولویت اول", description: "شرح کامل ایده شماره ۱" },
+  { title: "ایده ۲ - اولویت اول", description: "شرح کامل ایده شماره ۲" },
+  { title: "ایده ۳ - اولویت اول", description: "شرح کامل ایده شماره ۳" },
+  { title: "ایده ۴ - اولویت اول", description: "شرح کامل ایده شماره ۴" },
+  { title: "ایده ۵ - اولویت اول", description: "شرح کامل ایده شماره ۵" },
+];
+
+const ideasPriority2 = [
+  { title: "ایده ۱ - اولویت دوم", description: "شرح کامل ایده شماره ۱" },
+  { title: "ایده ۲ - اولویت دوم", description: "شرح کامل ایده شماره ۲" },
+  { title: "ایده ۳ - اولویت دوم", description: "شرح کامل ایده شماره ۳" },
+];
+
+const ideasPriority3 = [
+  { title: "ایده ۱ - اولویت سوم", description: "شرح کامل ایده شماره ۱" },
+  { title: "ایده ۲ - اولویت سوم", description: "شرح کامل ایده شماره ۲" },
+  { title: "ایده ۳ - اولویت سوم", description: "شرح کامل ایده شماره ۳" },
+];
+
+// ایجاد کارت ایده
+function createIdeaCard(idea, index) {
+  const card = document.createElement("div");
+  card.className = "idea-card";
+  card.innerHTML = `
+    <div class="idea-number">${index + 1}</div>
+    <div class="idea-title">${idea.title}</div>
+    <div class="section-label">شرح ایده:</div>
+    <div class="section-content">${idea.description}</div>
+    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn-detail">🔍 بررسی بیشتر</button>
+      <button class="btn-detail">🌟 مزایا برای طرفین</button>
+      <button class="btn-detail">💰 مدل‌های درآمدی</button>
+    </div>
+  `;
+  return card;
+}
+
+function generateFakeIdeas() {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const generateBtn = document.getElementById("generateBtn");
+
+  container.innerHTML = "";
+  loadingText.style.display = "block";
+  generateBtn.disabled = true;
+
+  // بعد از ۵ ثانیه لودینگ فیک، ایده‌ها رو نشون می‌دیم
+  setTimeout(() => {
+    loadingText.style.display = "none";
+
+    // اولویت اول
+    const h2_1 = document.createElement("h2");
+    h2_1.textContent = "🟢 ایده‌ها بر اساس اولویت اول";
+    container.appendChild(h2_1);
+    ideasPriority1.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+
+    // اولویت دوم
+    const h2_2 = document.createElement("h2");
+    h2_2.textContent = "🔵 ایده‌ها بر اساس اولویت دوم";
+    container.appendChild(h2_2);
+    ideasPriority2.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+
+    // اولویت سوم
+    const h2_3 = document.createElement("h2");
+    h2_3.textContent = "🟣 ایده‌ها بر اساس اولویت سوم";
+    container.appendChild(h2_3);
+    ideasPriority3.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+
+    generateBtn.disabled = false;
+  }, 5000);
+}
+
+document.getElementById("generateBtn").addEventListener("click", generateFakeIdeas);
+window.onload = generateFakeIdeas;
+</script>
+
+</body>
+</html>
