@@ -112,6 +112,35 @@ h1 {
   transform: translateY(0);
 }
 
+#generateOccasionBtn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: 'Vazirmatn', sans-serif;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#generateOccasionBtn:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+#generateOccasionBtn:active {
+  transform: translateY(0);
+}
+
+#generateOccasionBtn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
 #loadingText {
   text-align: center;
   color: #888;
@@ -167,7 +196,15 @@ h1 {
   <input id="priorityInput" type="text" placeholder="مثلاً: افزایش فروش" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-top:8px; font-family:'Vazirmatn',sans-serif;">
 </div>
 
-<button id="generateBtn">🔄 دریافت ایده‌های جدید</button>
+<div id="industryInfo" style="display:none; background:#f8f9fa; padding:15px; border-radius:10px; margin-bottom:20px; border-right:4px solid #3498db;">
+  <h3 style="color:#2c3e50; margin-bottom:10px;">🏭 اطلاعات صنعتی</h3>
+  <div id="industryDetails"></div>
+</div>
+
+<div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
+  <button id="generateBtn">🔄 دریافت ایده‌های جدید</button>
+  <button id="generateOccasionBtn" style="background-color: #e74c3c;">🎉 ایده‌های مناسبتی</button>
+</div>
 
 <script>
 function getTargetBrandId() {
@@ -455,6 +492,124 @@ ${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
   return prompt;
 }
 
+// تابع برای ساخت پرامپت مناسبتی
+function buildOccasionPrompt(myBrand, similarBrands, brandId) {
+  const priorityInput = document.getElementById("priorityInput").value.trim();
+  const priority = priorityInput || myBrand.priorities?.[0] || "رضایت مشتری";
+
+  const questions = myBrand.questions || [];
+  let questionsText = questions.map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+  // 🔹 همیشه قبل از ساخت پرامپت لیست به‌روز بگیر
+  const storedTitles = getStoredIdeaTitles(brandId);
+  const titlesText = storedTitles.length > 0 
+    ? storedTitles.join("، ") 
+    : "هیچ ایده‌ای تاکنون ارائه نشده است";
+
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و ایده‌پرداز خلاق هستید که در تولید ایده‌های مناسبتی تخصص دارید.  
+برند من با نام «${myBrand.name}» در حوزه «${myBrand.field}» فعالیت می‌کند.  
+اولویت اصلی برند من این است: «${priority}».  
+
+سوالات و پاسخ‌های برند من به شرح زیر است:  
+${questionsText}  
+
+برندهای مشابه زیر را نیز در نظر بگیر:  
+`;
+
+  similarBrands.forEach((b, i) => {
+    const priority = b.priorities?.[0] || "اولویت مشخص نشده";
+    const questionsText = (b.questions || []).map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+    prompt += `
+${i + 1}. نام: ${b.name}
+حوزه فعالیت: ${b.field}
+اولویت اصلی: ${priority}
+سوالات و پاسخ‌ها:
+${questionsText}
+`;
+  });
+
+  prompt += `
+
+لطفاً ایده‌هایی تولید کن که عنوان آن‌ها در لیست زیر وجود ندارد و تکراری نباشند:
+${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+
+با توجه به اطلاعات زیر درباره دو برند ، که شامل پاسخ‌های تحلیلی، اهداف، نقاط قوت، مزیت رقابتی، مشکلات و فرصت‌ها هستند، از تو می‌خواهم **دقیقاً و حتماً 5 ایده‌ی همکاری** بسیار خلاقانه، متمایز، پخته و قابل اجرا بین این دو برند ارائه بدهی که **بر اساس مناسبت‌های صنعتی** طراحی شده باشند.
+
+⚠️ **تأکید مهم**: باید دقیقاً 5 ایده ارائه بدهی. نه کمتر، نه بیشتر. هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5).
+
+❗ نکات مهم:
+- این ایده‌ها باید حاصل **همکاری و هم‌افزایی بین دو برند** باشند.
+- **هر ایده باید بر اساس یک یا چند مناسبت صنعتی** طراحی شود (مثل روز ملی فناوری اطلاعات، روز جهانی بازاریابی، هفته پژوهش، روز معلم، روز پزشک، روز محیط زیست، و غیره)
+- ایده‌ها باید شامل **هدایای مناسبتی، برنامه‌های ویژه، کمپین‌های مشترک، رویدادهای تخصصی** مرتبط با مناسبت‌ها باشند
+- این ایده‌ها نباید تکراری، عمومی یا صرفاً تبلیغاتی باشند. باید:
+  - نوآورانه و کاربردی باشند
+  - قابلیت اجرای عملی داشته باشند
+  - بر اساس داده‌های دقیق موجود طراحی شوند، نه فرضیات کلی
+  - **مناسبت‌های صنعتی را در مرکز توجه قرار دهند**
+
+📌 **ساختار خروجی اجباری**: باید دقیقاً 5 ایده ارائه بدهی، هر کدام با این فرمت:
+
+**ایده 1:**
+🎯 عنوان ایده:  
+[یک عنوان جذاب، خلاقانه و منحصر‌به‌فرد که به همکاری دو برند و مناسبت صنعتی اشاره دارد]
+
+🧠 شرح ایده:  
+[توضیح کامل درباره نحوه عملکرد ایده. حداقل 5 خط. توضیح بده که:
+- ایده دقیقاً چیست و چگونه پیاده‌سازی می‌شود  
+- چه بخشی از آن توسط برند اول اجرا می‌شود و چه بخشی توسط برند دوم  
+- چه مشکلی را حل می‌کند یا چه مزیتی ایجاد می‌کند  
+- از چه فناوری یا ساختاری استفاده می‌کند  
+- تجربه کاربر یا مشتری در این ایده چگونه خواهد بود  
+- **چگونه مناسبت صنعتی در این ایده دخیل است**
+]
+
+**ایده 2:**
+🎯 عنوان ایده:  
+[عنوان دوم]
+
+🧠 شرح ایده:  
+[شرح دوم]
+
+**ایده 3:**
+🎯 عنوان ایده:  
+[عنوان سوم]
+
+🧠 شرح ایده:  
+[شرح سوم]
+
+**ایده 4:**
+🎯 عنوان ایده:  
+[عنوان چهارم]
+
+🧠 شرح ایده:  
+[شرح چهارم]
+
+**ایده 5:**
+🎯 عنوان ایده:  
+[عنوان پنجم]
+
+🧠 شرح ایده:  
+[شرح پنجم]
+
+💎 چرا مؤثر است:  
+[تحلیل دقیق از اینکه چرا این همکاری می‌تواند موفق باشد. اشاره به مزایای استراتژیک، تفاوت با رقبا، ظرفیت‌های موجود دو برند، و اینکه چرا این ایده خاص از دل اطلاعات بالا استخراج شده و چگونه مناسبت صنعتی آن را تقویت می‌کند.]
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 5 ایده ارائه بدهی
+- هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5)
+- تمام ایده‌ها باید بر اساس اولویت اول برند یعنی «${priority}» باشند
+- **هر ایده باید بر اساس مناسبت‌های صنعتی طراحی شود**
+- اگر کمتر از 5 ایده ارائه بدهی، پاسخ ناقص محسوب می‌شود
+
+اکنون تحلیل را شروع کن و دقیقاً 5 ایده همکاری مناسبتی را بنویس.
+`;
+
+  console.log("PROMPT مناسبتی:");
+  console.log(prompt);
+  return prompt;
+}
+
 function buildPromptForPriority2and3(p2, p3, similarBrands, usedTitles = [], brandId) {
   let prompt = `شما یک تحلیل‌گر حرفه‌ای و خلاق هستید.  
 می‌خواهیم ۶ ایده همکاری (۳ ایده برای هر اولویت) تولید کنیم.  
@@ -528,13 +683,17 @@ async function fetchRecommendations() {
   return await res.json();
 }
 
-async function callOpenAI(prompt) {
+async function callOpenAI(prompt, myBrandId, targetBrandId) {
   const res = await fetch("/api/generate-ideas", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ prompt })
+    body: JSON.stringify({ 
+      prompt, 
+      myBrandId, 
+      targetBrandId 
+    })
   });
 
   if (!res.ok) {
@@ -545,6 +704,56 @@ async function callOpenAI(prompt) {
   const data = await res.json();
   console.log("خام API OpenAI:", JSON.stringify(data, null, 2));
   return data.choices[0].message.content;
+}
+
+// تابع برای نمایش اطلاعات صنعتی
+async function displayIndustryInfo(myBrand, targetBrand) {
+  const industryInfo = document.getElementById("industryInfo");
+  const industryDetails = document.getElementById("industryDetails");
+  
+  try {
+    // دریافت اطلاعات صنعت برند من
+    const myIndustryRes = await fetch("/api/detect-industry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ field: myBrand.field })
+    });
+    const myIndustryData = await myIndustryRes.json();
+    
+    // دریافت اطلاعات صنعت برند هدف
+    const targetIndustryRes = await fetch("/api/detect-industry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ field: targetBrand.field })
+    });
+    const targetIndustryData = await targetIndustryRes.json();
+    
+    industryDetails.innerHTML = `
+      <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:200px;">
+          <h4 style="color:#2980b9; margin-bottom:8px;">🏢 برند شما</h4>
+          <p><strong>صنعت:</strong> ${myIndustryData.industry}</p>
+          <p><strong>مناسبت‌های مرتبط:</strong></p>
+          <ul style="margin:5px 0; padding-right:15px;">
+            ${myIndustryData.occasions.map(occ => `<li>${occ.name}</li>`).join("")}
+          </ul>
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <h4 style="color:#e74c3c; margin-bottom:8px;">🎯 برند هدف</h4>
+          <p><strong>صنعت:</strong> ${targetIndustryData.industry}</p>
+          <p><strong>مناسبت‌های مرتبط:</strong></p>
+          <ul style="margin:5px 0; padding-right:15px;">
+            ${targetIndustryData.occasions.map(occ => `<li>${occ.name}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+    `;
+    
+    industryInfo.style.display = "block";
+  } catch (err) {
+    console.log("خطا در دریافت اطلاعات صنعتی:", err);
+    industryInfo.style.display = "none";
+  }
 }
 
 async function generateIdeas() {
@@ -570,6 +779,9 @@ async function generateIdeas() {
     const targetBrand = await fetchTargetBrand(targetBrandId);
     const similarBrands = [targetBrand];  // فقط برند هدف برای پرامپت
 
+    // نمایش اطلاعات صنعتی
+    await displayIndustryInfo(myBrand, targetBrand);
+
     const allIdeas = [];
 
     // دریافت عناوین قبلی از localStorage بر اساس برند هدف
@@ -577,7 +789,7 @@ async function generateIdeas() {
 
     // ۱. ایده‌های اولویت اول (۵ تا)
     const prompt1 = buildPrompt(myBrand, similarBrands, targetBrandId);
-    const text1 = await callOpenAI(prompt1);
+    const text1 = await callOpenAI(prompt1, myBrand._id, targetBrandId);
     const ideas1 = parseIdeas(text1);
     
     // فیلتر ایده‌های تکراری نسبت به storedTitles
@@ -607,7 +819,68 @@ async function generateIdeas() {
   }
 }
 
+// تابع برای تولید ایده‌های مناسبتی
+async function generateOccasionIdeas() {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+  const generateOccasionBtn = document.getElementById("generateOccasionBtn");
+
+  container.innerHTML = "";
+  errorText.style.display = "none";
+  loadingText.style.display = "block";
+  generateBtn.disabled = true;
+  generateOccasionBtn.disabled = true;
+
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
+
+    const targetBrand = await fetchTargetBrand(targetBrandId);
+    const similarBrands = [targetBrand];
+    
+    // نمایش اطلاعات صنعتی
+    await displayIndustryInfo(myBrand, targetBrand);
+
+    const allIdeas = [];
+
+    // دریافت عناوین قبلی از localStorage بر اساس برند هدف
+    let storedTitles = getStoredIdeaTitles(targetBrandId);
+
+    // ۱. ایده‌های اولویت اول (۵ تا) با تمرکز بر مناسبت‌ها
+    const prompt1 = buildOccasionPrompt(myBrand, similarBrands, targetBrandId);
+    const text1 = await callOpenAI(prompt1, myBrand._id, targetBrandId);
+    const ideas1 = parseIdeas(text1);
+    
+    // فیلتر ایده‌های تکراری نسبت به storedTitles
+    const uniqueIdeas1 = ideas1.filter(idea => !storedTitles.includes(idea.title));
+    
+    allIdeas.push(...uniqueIdeas1);
+
+    // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
+    storedTitles = storedTitles.concat(uniqueIdeas1.map(i => i.title));
+    storeIdeaTitles(storedTitles, targetBrandId);
+
+    container.appendChild(addSectionTitle(`🎉 ایده‌های مناسبتی بر اساس اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
+    uniqueIdeas1.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+
+    setupIdeaButtons();
+    currentIdeas = allIdeas;
+
+  } catch (err) {
+    errorText.textContent = "❌ خطا: " + err.message;
+    errorText.style.display = "block";
+  } finally {
+    loadingText.style.display = "none";
+    generateBtn.disabled = false;
+    generateOccasionBtn.disabled = false;
+  }
+}
+
 document.getElementById("generateBtn").addEventListener("click", generateIdeas);
+document.getElementById("generateOccasionBtn").addEventListener("click", generateOccasionIdeas);
 window.onload = generateIdeas;
 </script>
 
