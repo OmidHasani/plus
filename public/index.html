@@ -2,104 +2,265 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>فرم ثبت برند – نسخه دینامیک</title>
+  <title>فرم ثبت برند</title>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
-    body { font-family: sans-serif; background-color: #fff; padding: 20px; direction: rtl; max-width: 700px; margin: auto; }
-    .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-    .tab { border: 2px solid #000; padding: 5px 15px; cursor: pointer; }
-    .tab.active { background-color: #000; color: #fff; }
-    .container { max-width: 600px; margin: auto; }
-    .section { border: 2px solid #000; padding: 10px; margin-bottom: 15px; }
-    textarea { width: 100%; height: 110px; border: none; resize: vertical; font-size: 14px; outline: none; background: transparent; }
-    .form-instruction { font-weight: bold; font-size: 22px; margin: 35px 0 25px; color: #333; text-align: right; }
-    .dropdown, .dropdown-toggle { width: 100%; }
-    .dropdown-toggle { padding: 10px; border: 2px solid #000; cursor: pointer; background-color: #fff; position: relative; }
-    .dropdown-menu { position: absolute; width: 100%; border: 2px solid #000; border-top: none; background-color: #fff; display: none; z-index: 100; }
-    .dropdown-menu div { padding: 10px; cursor: pointer; }
-    .dropdown-menu div:hover { background-color: #f0f0f0; }
-    .form-row { display: flex; align-items: center; margin-bottom: 20px; position: relative; }
-    .form-row label { font-weight: bold; width: 150px; text-align: right; padding-left: 15px; }
-    .section-divider { border-bottom: 2px solid #000; margin: 20px 0; }
-    .priority-item { border: 2px solid #000; padding: 10px; margin-bottom: 10px; background-color: #f9f9f9; cursor: move; display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; }
-    .priority-text { flex: 1; text-align: right; padding-right: 10px; }
-    .priority-number { font-weight: bold; color: #555; min-width: 20px; text-align: center; }
-    .save-button { background-color: #000; color: #fff; border: none; padding: 10px 20px; cursor: pointer; margin-top: 10px; }
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: #f8faff;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      direction: rtl;
+      line-height: 1.8;
+      color: #222;
+    }
+    h2, h3 {
+      color: #1e3a8a;
+      margin-bottom: 15px;
+    }
+    .form-row {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    /* اجبار فونت و یکدستی همه متن‌ها */
+    textarea,
+    .dropdown-toggle,
+    .dropdown-menu div,
+    .priority-item span {
+      font-family: 'Vazirmatn', sans-serif !important;
+      font-size: 15px;
+      color: #1e293b;
+    }
+
+    /* برای اطمینان از ظاهر بهتر متن‌های لود شده */
+    textarea {
+      font-weight: 400;
+      line-height: 1.8;
+    }
+    .priority-item span:first-child {
+      font-weight: 500;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      font-weight: 500;
+      color: #64748b;
+      transition: all 0.2s ease;
+    }
+    .tab.active {
+      color: #1e3a8a;
+      border-bottom-color: #1e3a8a;
+    }
+    .tab:hover {
+      color: #1e3a8a;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-toggle {
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #fff;
+      font-size: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+    .dropdown-toggle:hover {
+      border-color: #3b82f6;
+    }
+    .dropdown-menu {
+      position: absolute;
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      display: none;
+      z-index: 100;
+      margin-top: 5px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .dropdown-menu div {
+      padding: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .dropdown-menu div:hover {
+      background: #f1f5f9;
+    }
+
+    /* Questions */
+    .section {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .section strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #1e293b;
+      font-weight: 500;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px;
+      resize: vertical;
+      font-size: 14px;
+      outline: none;
+      background: #f9fafb;
+      transition: border 0.2s;
+    }
+    textarea:focus {
+      border-color: #3b82f6;
+      background: #fff;
+    }
+
+    /* Priorities */
+    #priority-list {
+      margin-top: 10px;
+    }
+    .priority-item {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background-color: #fff;
+      cursor: move;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .priority-number {
+      font-weight: bold;
+      color: #3b82f6;
+    }
+
+    /* Save button */
+    .save-button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.2s ease;
+      display: block;
+      margin-top: 20px;
+    }
+    .save-button:hover {
+      background: #1e40af;
+    }
+
     .hidden { display: none; }
+    .form-instruction {
+      font-weight: 600;
+      font-size: 18px;
+      margin: 25px 0 20px;
+      color: #1e293b;
+      text-align: right;
+    }
+    .section-divider {
+      border-bottom: 1px solid #e2e8f0;
+      margin: 20px 0;
+    }
   </style>
 </head>
 <body>
-<div style="text-align:left; margin-bottom: 15px;">
-  <span id="userStatus"></span>
-  <button onclick="logout()" style="margin-left: 10px;">خروج</button>
+<div style="text-align:left; margin-bottom: 20px; padding: 10px; background: #f1f5f9; border-radius: 8px;">
+  <span id="userStatus" style="color: #64748b; font-weight: 500;"></span>
+  <button onclick="logout()" style="margin-left: 10px; background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Vazirmatn', sans-serif;">خروج</button>
 </div>
 
-<h2>فرم ثبت برند</h2>
+<h2>📝 فرم ثبت برند</h2>
 
 <!-- Tabs -->
 <div class="tabs">
-  <div class="tab active" onclick="switchTab('essentials')">ملزومات</div>
-  <div class="tab" onclick="switchTab('extra')">تکمیلی</div>
-  <div class="tab" onclick="switchTab('priority')">اولویت‌ها</div>
+  <div class="tab active" onclick="switchTab('essentials')">📋 ملزومات</div>
+  <div class="tab" onclick="switchTab('extra')">➕ تکمیلی</div>
+  <div class="tab" onclick="switchTab('priority')">🎯 اولویت‌ها</div>
 </div>
 
-<div class="container">
-  <!-- Essentials Tab -->
-  <div id="essentials-tab">
-    <div class="form-row">
-      <label>دسته‌بندی صنعت:</label>
-      <div class="dropdown" id="industry-dropdown">
-        <div class="dropdown-toggle" onclick="toggleMenu('industry')">فناوری اطلاعات ▼</div>
-        <div class="dropdown-menu" id="industry-menu">
-          <div onclick="selectOption('industry', 'فناوری اطلاعات')">فناوری اطلاعات</div>
-          <div onclick="selectOption('industry', 'غذا و دارو')">غذا و دارو</div>
-          <div onclick="selectOption('industry', 'ساختمان')">ساختمان</div>
-        </div>
+<!-- Essentials Tab -->
+<div id="essentials-tab">
+  <div class="form-row">
+    <label>🏭 دسته‌بندی صنعت:</label>
+    <div class="dropdown" id="industry-dropdown">
+      <div class="dropdown-toggle" onclick="toggleMenu('industry')">انتخاب کنید ▼</div>
+      <div class="dropdown-menu" id="industry-menu">
+        <!-- دسته‌بندی‌ها از سرور لود می‌شوند -->
       </div>
     </div>
+  </div>
 
-    <div class="form-row">
-      <label>تعداد نیروی انسانی:</label>
-      <div class="dropdown" id="staff-dropdown">
-        <div class="dropdown-toggle" onclick="toggleMenu('staff')">۱–۱۰ نفر ▼</div>
-        <div class="dropdown-menu" id="staff-menu">
-          <div onclick="selectOption('staff', '۱–۱۰ نفر')">۱–۱۰ نفر</div>
-          <div onclick="selectOption('staff', '۱۱–۵۰ نفر')">۱۱–۵۰ نفر</div>
-          <div onclick="selectOption('staff', '۵۱–۲۰۰ نفر')">۵۱–۲۰۰ نفر</div>
-        </div>
+  <div class="form-row">
+    <label>👥 تعداد نیروی انسانی:</label>
+    <div class="dropdown" id="staff-dropdown">
+      <div class="dropdown-toggle" onclick="toggleMenu('staff')">۱–۱۰ نفر ▼</div>
+      <div class="dropdown-menu" id="staff-menu">
+        <div onclick="selectOption('staff', '۱–۱۰ نفر')">۱–۱۰ نفر</div>
+        <div onclick="selectOption('staff', '۱۱–۵۰ نفر')">۱۱–۵۰ نفر</div>
+        <div onclick="selectOption('staff', '۵۱–۲۰۰ نفر')">۵۱–۲۰۰ نفر</div>
       </div>
     </div>
-
-    <div class="section-divider"></div>
-    <div class="form-instruction">لطفاً سؤالات زیر را پاسخ دهید:</div>
-
-    <div id="essentials-questions"></div>
-    <button class="save-button" onclick="goToTab('extra')">ذخیره و ادامه</button>
   </div>
 
-  <!-- Extra Tab -->
-  <div id="extra-tab" class="hidden">
-    <div class="form-instruction">لطفاً برای تکمیل اطلاعات برند، سؤالات زیر را پاسخ دهید:</div>
-    <div id="extra-questions"></div>
-    <button class="save-button" onclick="goToTab('priority')">ذخیره و ادامه</button>
-  </div>
+  <div class="section-divider"></div>
+  <div class="form-instruction">📝 لطفاً سؤالات زیر را پاسخ دهید:</div>
 
-  <!-- Priority Tab -->
-  <div id="priority-tab" class="hidden">
-    <div class="form-instruction">گزینه‌های زیر را بر اساس اولویت برند خود مرتب کنید:</div>
-    <div id="priority-list">
-      <div class="priority-item"><span class="priority-text">فرصت‌های توسعه بازار</span><span class="priority-number">1</span></div>
-      <div class="priority-item"><span class="priority-text">جذب سرمایه</span><span class="priority-number">2</span></div>
-      <div class="priority-item"><span class="priority-text">بهبود خدمات مشتری</span><span class="priority-number">3</span></div>
-      <div class="priority-item"><span class="priority-text">توسعه محصول</span><span class="priority-number">4</span></div>
-      <div class="priority-item"><span class="priority-text">افزایش فروش</span><span class="priority-number">5</span></div>
-      <div class="priority-item"><span class="priority-text">توسعه تیم</span><span class="priority-number">6</span></div>
-      <div class="priority-item"><span class="priority-text">ورود به بازار جدید</span><span class="priority-number">7</span></div>
-      <div class="priority-item"><span class="priority-text">تبلیغات و بازاریابی</span><span class="priority-number">8</span></div>
-      <div class="priority-item"><span class="priority-text">ارتقاء فناوری</span><span class="priority-number">9</span></div>
-    </div>
-    <button class="save-button" onclick="exportData()">ثبت نهایی اطلاعات</button>
+  <div id="essentials-questions"></div>
+  <button class="save-button" onclick="goToTab('extra')">💾 ذخیره و ادامه</button>
+</div>
+
+<!-- Extra Tab -->
+<div id="extra-tab" class="hidden">
+  <div class="form-instruction">📝 لطفاً برای تکمیل اطلاعات برند، سؤالات زیر را پاسخ دهید:</div>
+  <div id="extra-questions"></div>
+  <button class="save-button" onclick="goToTab('priority')">💾 ذخیره و ادامه</button>
+</div>
+
+<!-- Priority Tab -->
+<div id="priority-tab" class="hidden">
+  <div class="form-instruction">🎯 گزینه‌های زیر را بر اساس اولویت برند خود مرتب کنید:</div>
+  <div id="priority-list">
+    <div class="priority-item"><span class="priority-text">فرصت‌های توسعه بازار</span><span class="priority-number">1</span></div>
+    <div class="priority-item"><span class="priority-text">جذب سرمایه</span><span class="priority-number">2</span></div>
+    <div class="priority-item"><span class="priority-text">بهبود خدمات مشتری</span><span class="priority-number">3</span></div>
+    <div class="priority-item"><span class="priority-text">توسعه محصول</span><span class="priority-number">4</span></div>
+    <div class="priority-item"><span class="priority-text">افزایش فروش</span><span class="priority-number">5</span></div>
+    <div class="priority-item"><span class="priority-text">توسعه تیم</span><span class="priority-number">6</span></div>
+    <div class="priority-item"><span class="priority-text">ورود به بازار جدید</span><span class="priority-number">7</span></div>
+    <div class="priority-item"><span class="priority-text">تبلیغات و بازاریابی</span><span class="priority-number">8</span></div>
+    <div class="priority-item"><span class="priority-text">ارتقاء فناوری</span><span class="priority-number">9</span></div>
   </div>
+  <button class="save-button" onclick="exportData()">✅ ثبت نهایی اطلاعات</button>
 </div>
 
 <script>
@@ -108,7 +269,7 @@
 const essentialsQuestions = [
   {id: 1,  q: "برند خود را در یک جمله معرفی کنید.",                              ph: "ما پلتفرمی برای رزرو آنلاین آرایشگاه هستیم ..."},
   {id: 2,  q: "چه جایگاهی در بازار دارید؟",                                      ph: "ما برند مقرون‌به‌صرفه هستیم ..."},
-  {id: 3,  q: "در چه فازی از رشد هستید؟ (شروع / تثبیت / رشد سریع / بلوغ / بازطراحی)", ph: "ما در فاز رشد سریع هستیم ..."},
+  {id: 3,  q: "در چه فازی از رشد هستید؟",                                        ph: "", type: "dropdown", options: ["شروع", "تثبیت", "رشد سریع", "بلوغ", "بازطراحی"]},
   {id: 4,  q: "۳ اولویت اصلی برندتان در ۱۲ ماه آینده چیست؟ (به ترتیب اهمیت)",        ph: "۱. ورود به بازارهای جنوب کشور، ۲. ..."},
   {id: 5,  q: "در چه چیزهایی حاضرید سرمایه‌گذاری کنید؟ (پول، زمان، اعتبار)",        ph: "وقت و بودجه تبلیغاتی اختصاص می‌دهیم ..."},
   // 🔻 بخش محصول / خدمات / مدل کسب‌وکار
@@ -151,23 +312,72 @@ const allQuestions = [...essentialsQuestions, ...extraQuestions];
 /********************  UI Functions  ********************/
 function buildQuestions(containerId, questionsArr) {
   const parent = document.getElementById(containerId);
-  questionsArr.forEach(({id, q, ph}) => {
+  questionsArr.forEach(({id, q, ph, type, options}) => {
     const wrap = document.createElement('div');
     wrap.className = 'section';
 
-    const txt = document.createElement('textarea');
-    txt.id = `answer-${id}`;
-    txt.placeholder = ph || '';
     wrap.innerHTML = `<strong style="display:block; margin-bottom:8px;">${id}. ${q}</strong>`;
-    wrap.appendChild(txt);
+    
+    if (type === 'dropdown' && options) {
+      // ایجاد dropdown برای سوال 3
+      const dropdownDiv = document.createElement('div');
+      dropdownDiv.className = 'dropdown';
+      dropdownDiv.innerHTML = `
+        <div class="dropdown-toggle" onclick="toggleMenu('question-${id}')" id="question-${id}-toggle">انتخاب کنید ▼</div>
+        <div class="dropdown-menu" id="question-${id}-menu">
+          ${options.map(option => `<div onclick="selectQuestionOption('${id}', '${option}')">${option}</div>`).join('')}
+        </div>
+      `;
+      wrap.appendChild(dropdownDiv);
+    } else {
+      // ایجاد textarea برای سوالات عادی
+      const txt = document.createElement('textarea');
+      txt.id = `answer-${id}`;
+      txt.placeholder = ph || '';
+      wrap.appendChild(txt);
+    }
+    
     parent.appendChild(wrap);
   });
+}
+
+// تابع لود دسته‌بندی‌ها
+async function loadCategories() {
+  try {
+    const res = await fetch('/api/brand-categories', { credentials: 'include' });
+    if (!res.ok) throw new Error('خطا در دریافت دسته‌بندی‌ها');
+    const data = await res.json();
+    
+    const menu = document.getElementById('industry-menu');
+    menu.innerHTML = '';
+    
+    if (data.categories.length === 0) {
+      menu.innerHTML = '<div>هیچ دسته‌بندی موجود نیست</div>';
+    } else {
+      data.categories.forEach(category => {
+        const div = document.createElement('div');
+        div.textContent = category;
+        div.onclick = () => selectOption('industry', category);
+        menu.appendChild(div);
+      });
+    }
+  } catch (err) {
+    console.error('خطا در لود دسته‌بندی‌ها:', err);
+    // در صورت خطا، دسته‌بندی‌های پیش‌فرض را نمایش بده
+    const menu = document.getElementById('industry-menu');
+    menu.innerHTML = `
+      <div onclick="selectOption('industry', 'فناوری اطلاعات')">فناوری اطلاعات</div>
+      <div onclick="selectOption('industry', 'غذا و دارو')">غذا و دارو</div>
+      <div onclick="selectOption('industry', 'ساختمان')">ساختمان</div>
+    `;
+  }
 }
 
 // Build on load
 window.addEventListener('DOMContentLoaded', () => {
   buildQuestions('essentials-questions', essentialsQuestions);
   buildQuestions('extra-questions', extraQuestions);
+  loadCategories();
 });
 
 /********************  Tabs  ********************/
@@ -192,15 +402,32 @@ function toggleMenu(type) {
   const menu = document.getElementById(`${type}-menu`);
   menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
+
 function selectOption(type, val) {
   document.querySelector(`#${type}-dropdown .dropdown-toggle`).innerText = val;
   document.getElementById(`${type}-menu`).style.display = 'none';
 }
+
+function selectQuestionOption(questionId, val) {
+  document.getElementById(`question-${questionId}-toggle`).innerText = val;
+  document.getElementById(`question-${questionId}-menu`).style.display = 'none';
+}
+
 document.addEventListener('click', e => {
+  // بستن dropdown های اصلی
   ['industry', 'staff'].forEach(type => {
     const toggle = document.querySelector(`#${type}-dropdown .dropdown-toggle`);
     const menu = document.getElementById(`${type}-menu`);
     if (!toggle.contains(e.target) && !menu.contains(e.target)) menu.style.display = 'none';
+  });
+  
+  // بستن dropdown های سوالات
+  document.querySelectorAll('[id^="question-"][id$="-menu"]').forEach(menu => {
+    const questionId = menu.id.replace('-menu', '');
+    const toggle = document.getElementById(`${questionId}-toggle`);
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+      menu.style.display = 'none';
+    }
   });
 });
 
@@ -247,8 +474,17 @@ async function exportData() {
   const staff    = document.querySelector('#staff-dropdown .dropdown-toggle').innerText;
 
   // Collect answers
-  const qa = allQuestions.map(({id, q}) => {
-    const ans = document.getElementById(`answer-${id}`).value.trim();
+  const qa = allQuestions.map(({id, q, type}) => {
+    let ans = '';
+    if (type === 'dropdown') {
+      // برای سوال dropdown (سوال 3)
+      const toggle = document.getElementById(`question-${id}-toggle`);
+      ans = toggle ? toggle.innerText.replace(' ▼', '') : '';
+    } else {
+      // برای سوالات textarea
+      const textarea = document.getElementById(`answer-${id}`);
+      ans = textarea ? textarea.value.trim() : '';
+    }
     return {id, question: q, answer: ans};
   });
 
@@ -285,8 +521,10 @@ async function exportData() {
 
 /********************  Logout  ********************/
 async function logout() {
-  await fetch('/api/logout', {method: 'POST', credentials: 'include'});
-  window.location.href = 'login.html';
+  if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+    await fetch('/api/logout', {method: 'POST', credentials: 'include'});
+    window.location.href = 'login.html';
+  }
 }
 </script>
 
