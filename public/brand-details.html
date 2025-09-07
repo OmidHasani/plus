@@ -50,6 +50,27 @@
       min-width: 200px;
     }
 
+    .question-answer {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-right: 4px solid #3498db;
+    }
+
+    .question-answer .question-title {
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .question-answer .question-text {
+      color: #555;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
     ul.priority-list {
       list-style: decimal;
       padding-right: 20px;
@@ -179,7 +200,7 @@
   <div class="card">
     <h2>معرفی برند</h2>
     <p id="brand-description">
-      پایا هیدرولیک یکی از بزرگ‌ترین و محبوب‌ترین پلتفرم‌های خدمات هوشمند در ایران است...
+      در حال بارگذاری...
     </p>
   </div>
 
@@ -190,8 +211,8 @@
       <span class="value" id="brand-name">در حال بارگذاری...</span>
     </div>
     <div class="field">
-      <span class="label">حوزه کاری:</span>
-      <span class="value" id="brand-sector">در حال بارگذاری...</span>
+      <span class="label">صنعت:</span>
+      <span class="value" id="brand-industry">در حال بارگذاری...</span>
     </div>
     <div class="field">
       <span class="label">تعداد کارکنان:</span>
@@ -200,13 +221,10 @@
   </div>
 
   <div class="card">
-    <h2>نقاط قوت برند</h2>
-    <ul class="priority-list" id="brand-strengths">
-      <li>تجربه بالا در ارائه خدمات تخصصی</li>
-      <li>تیم فنی حرفه‌ای و پاسخ‌گو</li>
-      <li>پوشش سراسری در سراسر ایران</li>
-      <li>نوآوری در محصولات و خدمات دیجیتال</li>
-    </ul>
+    <h2>پاسخ‌های کلیدی برند</h2>
+    <div id="brand-questions">
+      <p>در حال بارگذاری...</p>
+    </div>
   </div>
 
   <div class="card">
@@ -217,8 +235,10 @@
   </div>
 
   <div class="card">
-    <h2>چکیده فعالیت های برند در 6 ماه آینده</h2>
-    <div class="priority-box" id="future-priorities"></div>
+    <h2>چکیده فعالیت‌های برند در 12 ماه آینده</h2>
+    <div class="priority-box" id="future-priorities">
+      <p>در حال بارگذاری...</p>
+    </div>
   </div>
 
   <button id="goToCooperation" class="cooperation-btn">بررسی فرصت‌های همکاری</button>
@@ -235,16 +255,39 @@ async function loadBrandDetails() {
     const res = await fetch(`/api/brand/${brandId}`, { credentials: 'include' });
     const brand = await res.json();
 
-    document.getElementById("brand-name").textContent = brand.name;
-    document.getElementById("brand-sector").textContent = brand.field || '-';
+    // اطلاعات کلی
+    document.getElementById("brand-name").textContent = brand.name || 'نامشخص';
+    
+    // ترکیب حوزه کاری و صنعت
+    let industryText = '';
+    if (brand.field && brand.industry) {
+      industryText = `${brand.field} - ${brand.industry}`;
+    } else if (brand.field) {
+      industryText = brand.field;
+    } else if (brand.industry) {
+      industryText = brand.industry;
+    } else {
+      industryText = '-';
+    }
+    document.getElementById("brand-industry").textContent = industryText;
+    
     document.getElementById("brand-employees").textContent = brand.staff || '-';
 
+    // لوگو
     if (brand.logoUrl) {
       document.getElementById("brand-logo").src = brand.logoUrl;
     } else {
-      document.getElementById("brand-logo").src = "https://via.placeholder.com/72?text=Logo";
+      document.getElementById("brand-logo").src = "https://via.placeholder.com/72?text=" + (brand.name ? brand.name.charAt(0) : 'B');
     }
 
+    // معرفی برند (از سوال 1)
+    const brandDescription = brand.questions?.find(q => q.id === 1)?.answer || 'اطلاعاتی موجود نیست.';
+    document.getElementById("brand-description").textContent = brandDescription;
+
+    // پاسخ‌های کلیدی
+    displayBrandQuestions(brand.questions || []);
+
+    // اولویت‌ها
     const priorityList = document.getElementById("brand-priorities");
     priorityList.innerHTML = '';
     if (Array.isArray(brand.priorities) && brand.priorities.length > 0) {
@@ -258,14 +301,69 @@ async function loadBrandDetails() {
       priorityList.innerHTML = '<li>اطلاعاتی موجود نیست.</li>';
     }
 
-    // می‌تونی این بخش رو براساس API خودت ویرایش کنی یا دستی پر کنی
-    document.getElementById("future-priorities").textContent = 
-      "1. افزایش رضایت و وفاداری کاربران...";
+    // اولویت‌های آینده (از سوال 4)
+    const futurePriorities = brand.questions?.find(q => q.id === 4)?.answer || 'اطلاعاتی موجود نیست.';
+    document.getElementById("future-priorities").innerHTML = `<p>${futurePriorities}</p>`;
 
   } catch (err) {
     console.error("خطا در بارگذاری برند:", err);
     alert("خطا در دریافت اطلاعات برند.");
   }
+}
+
+function displayBrandQuestions(questions) {
+  const container = document.getElementById("brand-questions");
+  container.innerHTML = '';
+
+  if (!questions || questions.length === 0) {
+    container.innerHTML = '<p>هیچ پاسخی موجود نیست.</p>';
+    return;
+  }
+
+  // سوالات مهم برای نمایش
+  const importantQuestions = [2, 3, 6, 7, 15, 16, 17, 20];
+  
+  importantQuestions.forEach(qId => {
+    const question = questions.find(q => q.id === qId);
+    if (question && question.answer && question.answer.trim()) {
+      const questionDiv = document.createElement('div');
+      questionDiv.className = 'question-answer';
+      questionDiv.innerHTML = `
+        <div class="question-title">${getQuestionTitle(qId)}</div>
+        <div class="question-text">${question.answer}</div>
+      `;
+      container.appendChild(questionDiv);
+    }
+  });
+
+  // اگر هیچ سوال مهمی پاسخ داده نشده، همه سوالات را نمایش بده
+  if (container.children.length === 0) {
+    questions.forEach(question => {
+      if (question.answer && question.answer.trim()) {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question-answer';
+        questionDiv.innerHTML = `
+          <div class="question-title">${question.question}</div>
+          <div class="question-text">${question.answer}</div>
+        `;
+        container.appendChild(questionDiv);
+      }
+    });
+  }
+}
+
+function getQuestionTitle(id) {
+  const titles = {
+    2: 'جایگاه در بازار',
+    3: 'فاز رشد',
+    6: 'محصولات/خدمات اصلی',
+    7: 'مدل درآمدزایی',
+    15: 'مشتری ایده‌آل',
+    16: 'کانال‌های جذب مشتری',
+    17: 'تعداد مخاطبین فعال',
+    20: 'تجربه همکاری'
+  };
+  return titles[id] || `سوال ${id}`;
 }
 
 const urlParams = new URLSearchParams(window.location.search);
