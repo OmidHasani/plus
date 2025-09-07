@@ -85,60 +85,71 @@ h1 {
   font-size: 15px;
   line-height: 1.6;
   white-space: pre-line;
+  text-align: justify;
 }
 
-#generateBtn {
-  display: block;
-  margin: 40px auto 0;
-  background-color: #0057a3;
+/* استایل‌های مدرن برای دکمه‌ها */
+.btn-modern {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 14px 30px;
-  font-size: 17px;
-  border-radius: 12px;
-  cursor: pointer;
+  padding: 16px 32px;
+  border-radius: 16px;
+  font-size: 16px;
   font-weight: 700;
-  font-family: 'Vazirmatn', sans-serif;
-  box-shadow: 0 4px 12px rgba(0, 87, 163, 0.3);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#generateBtn:hover {
-  background-color: #003e7e;
-  transform: translateY(-2px);
-}
-
-#generateBtn:active {
-  transform: translateY(0);
-}
-
-#generateOccasionBtn {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 14px 30px;
-  font-size: 17px;
-  border-radius: 12px;
   cursor: pointer;
-  font-weight: 700;
+  transition: all 0.3s ease;
   font-family: 'Vazirmatn', sans-serif;
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  min-width: 200px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-#generateOccasionBtn:hover {
-  background-color: #c0392b;
-  transform: translateY(-2px);
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
 }
 
-#generateOccasionBtn:active {
-  transform: translateY(0);
+.btn-modern:hover::before {
+  left: 100%;
 }
 
-#generateOccasionBtn:disabled {
-  background-color: #bdc3c7;
+.btn-modern:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+}
+
+.btn-modern:active {
+  transform: translateY(-1px);
+}
+
+.btn-modern:disabled {
+  background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
   cursor: not-allowed;
   transform: none;
+  box-shadow: 0 4px 15px rgba(189, 195, 199, 0.3);
+}
+
+.btn-occasion {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+}
+
+.btn-occasion:hover {
+  box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+}
+
+.btn-occasion:disabled {
+  background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+  box-shadow: 0 4px 15px rgba(189, 195, 199, 0.3);
 }
 
 #loadingText {
@@ -181,8 +192,136 @@ h1 {
   transform: translateY(0);
 }
 
+/* استایل‌های پاپ‌آپ */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+
+.popup-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.popup-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.popup-body {
+  padding: 25px;
+  text-align: center;
+}
+
+.popup-body p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.popup-footer {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #eee;
+}
+
+.popup-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.popup-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
   </style>
+  
+  <!-- پاپ‌آپ زیبا -->
+  <div id="popup-overlay" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3 id="popup-title">اطلاعیه</h3>
+        <button class="popup-close" onclick="closePopup()">&times;</button>
+      </div>
+      <div class="popup-body">
+        <p id="popup-message">پیام در اینجا نمایش داده می‌شود</p>
+      </div>
+      <div class="popup-footer">
+        <button class="popup-btn" onclick="closePopup()">متوجه شدم</button>
+      </div>
+    </div>
+  </div>
 </head>
 <body>
 
@@ -201,9 +340,9 @@ h1 {
   <div id="industryDetails"></div>
 </div>
 
-<div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
-  <button id="generateBtn">🔄 دریافت ایده‌های جدید</button>
-  <button id="generateOccasionBtn" style="background-color: #e74c3c;">🎉 ایده‌های مناسبتی</button>
+<div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
+  <button id="generateBtn" class="btn-modern">🔄 دریافت ایده‌های جدید</button>
+  <button id="generateOccasionBtn" class="btn-modern btn-occasion">🎉 ایده‌های مناسبتی</button>
 </div>
 
 <script>
@@ -223,15 +362,20 @@ function parseIdeas(text) {
   
   const ideas = [];
   
-  // روش 1: تقسیم بر اساس شماره ایده
-  let ideaSections = text.split(/(?:^|\n)(?:\d+\.|🎯|ایده\s*\d+)/).filter(section => section.trim());
+  // روش 1: تقسیم بر اساس **ایده X:**
+  let ideaSections = text.split(/\*\*ایده\s*\d+:\*\*/).filter(section => section.trim());
   
-  // اگر روش 1 کار نکرد، روش 2: تقسیم بر اساس 🎯
+  // اگر روش 1 کار نکرد، روش 2: تقسیم بر اساس شماره ایده
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/(?:^|\n)(?:\d+\.|🎯|ایده\s*\d+)/).filter(section => section.trim());
+  }
+  
+  // اگر روش 2 کار نکرد، روش 3: تقسیم بر اساس 🎯
   if (ideaSections.length <= 1) {
     ideaSections = text.split(/🎯/).filter(section => section.trim());
   }
   
-  // اگر هنوز کار نکرد، روش 3: تقسیم بر اساس خطوط خالی
+  // اگر هنوز کار نکرد، روش 4: تقسیم بر اساس خطوط خالی
   if (ideaSections.length <= 1) {
     ideaSections = text.split(/\n\s*\n/).filter(section => section.trim());
   }
@@ -251,13 +395,19 @@ function parseIdeas(text) {
     // پیدا کردن عنوان (قبل از 🧠)
     const titleMatch = section.match(/^([^🧠]*?)(?=🧠|$)/s);
     if (titleMatch) {
-      title = titleMatch[1].trim().replace(/^[🎯\s]*/, '');
+      title = titleMatch[1].trim()
+        .replace(/^[🎯\s]*/, '')
+        .replace(/^\*\*ایده\s*\d+:\*\*\s*/, '')
+        .replace(/^\*\*عنوان\s*ایده:\*\*\s*/, '')
+        .replace(/^عنوان\s*ایده:\s*/, '');
     }
     
     // پیدا کردن شرح (بین 🧠 و 💎 یا 📈)
     const descriptionMatch = section.match(/🧠\s*([^💎📈]*?)(?=💎|📈|$)/s);
     if (descriptionMatch) {
-      description = descriptionMatch[1].trim();
+      description = descriptionMatch[1].trim()
+        .replace(/^\*\*شرح\s*ایده:\*\*\s*/, '')
+        .replace(/^شرح\s*ایده:\s*/, '');
     }
     
     // پیدا کردن مزایا (بعد از 💎 یا 📈)
@@ -319,42 +469,56 @@ function createIdeaCard(idea, index) {
   return card;
 }
 
+// توابع پاپ‌آپ
+function showPopup(title, message) {
+  document.getElementById('popup-title').textContent = title;
+  document.getElementById('popup-message').textContent = message;
+  document.getElementById('popup-overlay').style.display = 'flex';
+}
+
+function closePopup() {
+  document.getElementById('popup-overlay').style.display = 'none';
+}
+
+// توابع ذخیره و بارگذاری ایده‌ها
+function saveIdeasToStorage(ideas, myBrandId, targetBrandId) {
+  const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
+  const existingIdeas = getSavedIdeas(myBrandId, targetBrandId);
+  const allIdeas = [...existingIdeas, ...ideas];
+  localStorage.setItem(key, JSON.stringify(allIdeas));
+}
+
+function getSavedIdeas(myBrandId, targetBrandId) {
+  const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
+  const saved = localStorage.getItem(key);
+  return saved ? JSON.parse(saved) : [];
+}
+
+function clearSavedIdeas(myBrandId, targetBrandId) {
+  const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
+  localStorage.removeItem(key);
+}
+
+
 function setupIdeaButtons() {
   document.querySelectorAll(".btn-detail").forEach(btn => {
     btn.addEventListener("click", () => {
-      const index = +btn.getAttribute("data-idea-index");
       const type = btn.getAttribute("data-type");
-      const idea = currentIdeas[index];
-      if (!idea) return alert("ایده مورد نظر یافت نشد.");
-
-      let prompt = "";
+      let title = "";
+      let message = "";
+      
       if (type === "detail") {
-        prompt = `
-بر اساس اطلاعات زیر:
-عنوان ایده: ${idea.title}
-
-شرح ایده:
-${idea.description}
-
-
-
-لطفا بررسی دقیق‌تری از این ایده ارائه بده و نکات مهم، چالش‌ها و فرصت‌های احتمالی را شرح بده.
-        `;
+        title = "🔍 بررسی بیشتر";
+        message = "این قابلیت به زودی فعال می‌شود و امکان بررسی دقیق‌تر ایده‌ها را فراهم می‌کند.";
+      } else if (type === "value") {
+        title = "🌟 مزایا برای طرفین";
+        message = "این قابلیت به زودی فعال می‌شود و مزایای همکاری برای هر دو طرف را نشان می‌دهد.";
       } else if (type === "economy") {
-        prompt = `
-بر اساس اطلاعات زیر:
-عنوان ایده: ${idea.title}
-
-شرح ایده:
-${idea.description}
-
-لطفا توجیه اقتصادی این ایده را تحلیل کن، از نظر هزینه‌ها، درآمدها و بازگشت سرمایه به طور دقیق توضیح بده.
-        `;
+        title = "💰 مدل‌های درآمدی";
+        message = "این قابلیت به زودی فعال می‌شود و مدل‌های مختلف درآمدزایی را ارائه می‌دهد.";
       }
-
-      sessionStorage.setItem("ideaPrompt", prompt);
-      sessionStorage.setItem("ideaType", type);
-      window.location.href = "/idea-result.html";
+      
+      showPopup(title, message);
     });
   });
 }
@@ -422,15 +586,19 @@ ${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 
 با توجه به اطلاعات زیر درباره دو برند ، که شامل پاسخ‌های تحلیلی، اهداف، نقاط قوت، مزیت رقابتی، مشکلات و فرصت‌ها هستند، از تو می‌خواهم **دقیقاً و حتماً 5 ایده‌ی همکاری** بسیار خلاقانه، متمایز، پخته و قابل اجرا بین این دو برند ارائه بدهی.
 
+⚠️ **تأکید مهم**: این ایده‌ها باید **بدون در نظر گیری مناسبت‌های خاص** و بر اساس **نیازهای واقعی و فرصت‌های همکاری** طراحی شوند.
+
 ⚠️ **تأکید مهم**: باید دقیقاً 5 ایده ارائه بدهی. نه کمتر، نه بیشتر. هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5).
 
 ❗ نکات مهم:
 - این ایده‌ها باید حاصل **همکاری و هم‌افزایی بین دو برند** باشند.
 - یعنی ایده‌هایی که **ترکیب ظرفیت‌ها، منابع یا خدمات** دو برند را هدف می‌گیرند و به نتیجه‌ای تازه و نوآورانه منجر می‌شوند.
+- **این ایده‌ها باید بر اساس نیازهای واقعی و فرصت‌های همکاری** طراحی شوند، نه مناسبت‌های خاص
 - این ایده‌ها نباید تکراری، عمومی یا صرفاً تبلیغاتی باشند. باید:
   - نوآورانه و کاربردی باشند
   - قابلیت اجرای عملی داشته باشند
   - بر اساس داده‌های دقیق موجود طراحی شوند، نه فرضیات کلی
+  - **بدون وابستگی به مناسبت‌های خاص** طراحی شوند
 
 📌 **ساختار خروجی اجباری**: باید دقیقاً 5 ایده ارائه بدهی، هر کدام با این فرمت:
 
@@ -445,6 +613,7 @@ ${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 - چه مشکلی را حل می‌کند یا چه مزیتی ایجاد می‌کند  
 - از چه فناوری یا ساختاری استفاده می‌کند  
 - تجربه کاربر یا مشتری در این ایده چگونه خواهد بود  
+- **این ایده بر اساس نیازهای واقعی و فرصت‌های همکاری** طراحی شده است
 ]
 
 **ایده 2:**
@@ -536,12 +705,15 @@ ${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 
 با توجه به اطلاعات زیر درباره دو برند ، که شامل پاسخ‌های تحلیلی، اهداف، نقاط قوت، مزیت رقابتی، مشکلات و فرصت‌ها هستند، از تو می‌خواهم **دقیقاً و حتماً 5 ایده‌ی همکاری** بسیار خلاقانه، متمایز، پخته و قابل اجرا بین این دو برند ارائه بدهی که **بر اساس مناسبت‌های صنعتی** طراحی شده باشند.
 
+⚠️ **تأکید مهم**: این ایده‌ها باید **حتماً بر اساس مناسبت‌های صنعتی** طراحی شوند و مناسبت‌ها در مرکز توجه قرار گیرند.
+
 ⚠️ **تأکید مهم**: باید دقیقاً 5 ایده ارائه بدهی. نه کمتر، نه بیشتر. هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5).
 
 ❗ نکات مهم:
 - این ایده‌ها باید حاصل **همکاری و هم‌افزایی بین دو برند** باشند.
 - **هر ایده باید بر اساس یک یا چند مناسبت صنعتی** طراحی شود (مثل روز ملی فناوری اطلاعات، روز جهانی بازاریابی، هفته پژوهش، روز معلم، روز پزشک، روز محیط زیست، و غیره)
 - ایده‌ها باید شامل **هدایای مناسبتی، برنامه‌های ویژه، کمپین‌های مشترک، رویدادهای تخصصی** مرتبط با مناسبت‌ها باشند
+- **مناسبت‌های صنعتی باید در مرکز توجه قرار گیرند** و ایده‌ها حول آن‌ها طراحی شوند
 - این ایده‌ها نباید تکراری، عمومی یا صرفاً تبلیغاتی باشند. باید:
   - نوآورانه و کاربردی باشند
   - قابلیت اجرای عملی داشته باشند
@@ -561,7 +733,8 @@ ${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 - چه مشکلی را حل می‌کند یا چه مزیتی ایجاد می‌کند  
 - از چه فناوری یا ساختاری استفاده می‌کند  
 - تجربه کاربر یا مشتری در این ایده چگونه خواهد بود  
-- **چگونه مناسبت صنعتی در این ایده دخیل است**
+- **چگونه مناسبت صنعتی در این ایده دخیل است و چه تأثیری دارد**
+- **چه نوع هدایا، برنامه‌ها یا رویدادهای مناسبتی** در این ایده گنجانده شده است
 ]
 
 **ایده 2:**
@@ -730,20 +903,26 @@ async function displayIndustryInfo(myBrand, targetBrand) {
     
     industryDetails.innerHTML = `
       <div style="display:flex; gap:20px; flex-wrap:wrap;">
-        <div style="flex:1; min-width:200px;">
-          <h4 style="color:#2980b9; margin-bottom:8px;">🏢 برند شما</h4>
-          <p><strong>صنعت:</strong> ${myIndustryData.industry}</p>
-          <p><strong>مناسبت‌های مرتبط:</strong></p>
-          <ul style="margin:5px 0; padding-right:15px;">
-            ${myIndustryData.occasions.map(occ => `<li>${occ.name}</li>`).join("")}
+        <div style="flex:1; min-width:200px; background:white; padding:15px; border-radius:8px; border:1px solid #e0e0e0;">
+          <h4 style="color:#2980b9; margin-bottom:12px; font-size:16px;">🏢 برند شما</h4>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${myBrand.field || 'نامشخص'}</p>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>مناسبت‌های مرتبط:</strong></p>
+          <ul style="margin:8px 0; padding-right:15px; max-height:120px; overflow-y:auto;">
+            ${myIndustryData.occasions && myIndustryData.occasions.length > 0 
+              ? myIndustryData.occasions.map(occ => `<li style="margin:4px 0; color:#555; font-size:14px;">${occ.name}</li>`).join("")
+              : '<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد</li>'
+            }
           </ul>
         </div>
-        <div style="flex:1; min-width:200px;">
-          <h4 style="color:#e74c3c; margin-bottom:8px;">🎯 برند هدف</h4>
-          <p><strong>صنعت:</strong> ${targetIndustryData.industry}</p>
-          <p><strong>مناسبت‌های مرتبط:</strong></p>
-          <ul style="margin:5px 0; padding-right:15px;">
-            ${targetIndustryData.occasions.map(occ => `<li>${occ.name}</li>`).join("")}
+        <div style="flex:1; min-width:200px; background:white; padding:15px; border-radius:8px; border:1px solid #e0e0e0;">
+          <h4 style="color:#e74c3c; margin-bottom:12px; font-size:16px;">🎯 برند هدف</h4>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${targetBrand.field || 'نامشخص'}</p>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>مناسبت‌های مرتبط:</strong></p>
+          <ul style="margin:8px 0; padding-right:15px; max-height:120px; overflow-y:auto;">
+            ${targetIndustryData.occasions && targetIndustryData.occasions.length > 0 
+              ? targetIndustryData.occasions.map(occ => `<li style="margin:4px 0; color:#555; font-size:14px;">${occ.name}</li>`).join("")
+              : '<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد</li>'
+            }
           </ul>
         </div>
       </div>
@@ -752,29 +931,68 @@ async function displayIndustryInfo(myBrand, targetBrand) {
     industryInfo.style.display = "block";
   } catch (err) {
     console.log("خطا در دریافت اطلاعات صنعتی:", err);
-    industryInfo.style.display = "none";
+    industryDetails.innerHTML = `
+      <div style="text-align:center; color:#e74c3c; padding:20px;">
+        <p>⚠️ خطا در دریافت اطلاعات صنعتی</p>
+        <p style="font-size:14px; color:#999;">لطفاً صفحه را رفرش کنید</p>
+      </div>
+    `;
+    industryInfo.style.display = "block";
   }
 }
 
 async function generateIdeas() {
-  
-
   const container = document.getElementById("ideasContainer");
   const loadingText = document.getElementById("loadingText");
   const errorText = document.getElementById("errorText");
   const generateBtn = document.getElementById("generateBtn");
 
-  container.innerHTML = "";
+  // بارگذاری ایده‌های قبلی
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    
+    if (targetBrandId) {
+      const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+      if (savedIdeas.length > 0) {
+        container.innerHTML = "";
+        container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
+        savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        setupIdeaButtons();
+        
+        // اگر ایده‌های قبلی موجود است، فقط ایده‌های جدید تولید کن
+        await generateNewIdeas(myBrand, targetBrandId, savedIdeas.length);
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("خطا در بارگذاری ایده‌های قبلی:", err);
+  }
+
+  // اگر ایده‌های قبلی موجود نیست، ایده‌های جدید تولید کن
+  await generateNewIdeas();
+}
+
+async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCount = 0) {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+
   errorText.style.display = "none";
   loadingText.style.display = "block";
   generateBtn.disabled = true;
 
   try {
-    const myBrand = await fetchMyBrand();
-
-    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    if (!myBrand) {
+      myBrand = await fetchMyBrand();
+    }
+    
+    if (!targetBrandId) {
+      targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    }
+    
     if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
-
 
     const targetBrand = await fetchTargetBrand(targetBrandId);
     const similarBrands = [targetBrand];  // فقط برند هدف برای پرامپت
@@ -787,7 +1005,7 @@ async function generateIdeas() {
     // دریافت عناوین قبلی از localStorage بر اساس برند هدف
     let storedTitles = getStoredIdeaTitles(targetBrandId);
 
-    // ۱. ایده‌های اولویت اول (۵ تا)
+    // ۱. ایده‌های اولویت اول (۵ تا) - بدون مناسبت
     const prompt1 = buildPrompt(myBrand, similarBrands, targetBrandId);
     const text1 = await callOpenAI(prompt1, myBrand._id, targetBrandId);
     const ideas1 = parseIdeas(text1);
@@ -797,14 +1015,24 @@ async function generateIdeas() {
     
     allIdeas.push(...uniqueIdeas1);
 
+    // ذخیره ایده‌های جدید
+    saveIdeasToStorage(uniqueIdeas1, myBrand._id, targetBrandId);
+    
     // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
     storedTitles = storedTitles.concat(uniqueIdeas1.map(i => i.title));
     storeIdeaTitles(storedTitles, targetBrandId);
 
-    container.appendChild(addSectionTitle(`🟢 ایده‌ها بر اساس اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
-    uniqueIdeas1.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
-
-
+    // نمایش ایده‌های جدید
+    if (existingCount > 0) {
+      container.appendChild(addSectionTitle(`🟢 ایده‌های جدید (${existingCount + 1} تا ${existingCount + uniqueIdeas1.length}):`));
+    } else {
+      container.appendChild(addSectionTitle(`🟢 ایده‌های اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
+    }
+    
+    uniqueIdeas1.forEach((idea, i) => {
+      const card = createIdeaCard(idea, existingCount + i);
+      container.appendChild(card);
+    });
 
     setupIdeaButtons();
 
@@ -827,15 +1055,53 @@ async function generateOccasionIdeas() {
   const generateBtn = document.getElementById("generateBtn");
   const generateOccasionBtn = document.getElementById("generateOccasionBtn");
 
-  container.innerHTML = "";
+  // بارگذاری ایده‌های قبلی
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    
+    if (targetBrandId) {
+      const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+      if (savedIdeas.length > 0) {
+        container.innerHTML = "";
+        container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
+        savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        setupIdeaButtons();
+        
+        // تولید ایده‌های مناسبتی جدید
+        await generateNewOccasionIdeas(myBrand, targetBrandId, savedIdeas.length);
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("خطا در بارگذاری ایده‌های قبلی:", err);
+  }
+
+  // اگر ایده‌های قبلی موجود نیست، ایده‌های مناسبتی جدید تولید کن
+  await generateNewOccasionIdeas();
+}
+
+async function generateNewOccasionIdeas(myBrand = null, targetBrandId = null, existingCount = 0) {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+  const generateOccasionBtn = document.getElementById("generateOccasionBtn");
+
   errorText.style.display = "none";
   loadingText.style.display = "block";
   generateBtn.disabled = true;
   generateOccasionBtn.disabled = true;
 
   try {
-    const myBrand = await fetchMyBrand();
-    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    if (!myBrand) {
+      myBrand = await fetchMyBrand();
+    }
+    
+    if (!targetBrandId) {
+      targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    }
+    
     if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
 
     const targetBrand = await fetchTargetBrand(targetBrandId);
@@ -859,12 +1125,24 @@ async function generateOccasionIdeas() {
     
     allIdeas.push(...uniqueIdeas1);
 
+    // ذخیره ایده‌های جدید
+    saveIdeasToStorage(uniqueIdeas1, myBrand._id, targetBrandId);
+
     // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
     storedTitles = storedTitles.concat(uniqueIdeas1.map(i => i.title));
     storeIdeaTitles(storedTitles, targetBrandId);
 
-    container.appendChild(addSectionTitle(`🎉 ایده‌های مناسبتی بر اساس اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
-    uniqueIdeas1.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+    // نمایش ایده‌های جدید
+    if (existingCount > 0) {
+      container.appendChild(addSectionTitle(`🎉 ایده‌های مناسبتی جدید (${existingCount + 1} تا ${existingCount + uniqueIdeas1.length}):`));
+    } else {
+      container.appendChild(addSectionTitle(`🎉 ایده‌های مناسبتی بر اساس اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
+    }
+    
+    uniqueIdeas1.forEach((idea, i) => {
+      const card = createIdeaCard(idea, existingCount + i);
+      container.appendChild(card);
+    });
 
     setupIdeaButtons();
     currentIdeas = allIdeas;
@@ -881,7 +1159,32 @@ async function generateOccasionIdeas() {
 
 document.getElementById("generateBtn").addEventListener("click", generateIdeas);
 document.getElementById("generateOccasionBtn").addEventListener("click", generateOccasionIdeas);
-window.onload = generateIdeas;
+
+// بارگذاری ایده‌های قبلی در هنگام لود صفحه
+window.onload = async () => {
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    
+    if (targetBrandId) {
+      // نمایش اطلاعات صنعتی
+      const targetBrand = await fetchTargetBrand(targetBrandId);
+      await displayIndustryInfo(myBrand, targetBrand);
+      
+      // بارگذاری ایده‌های قبلی
+      const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+      if (savedIdeas.length > 0) {
+        const container = document.getElementById("ideasContainer");
+        container.innerHTML = "";
+        container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
+        savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        setupIdeaButtons();
+      }
+    }
+  } catch (err) {
+    console.error("خطا در بارگذاری ایده‌های قبلی:", err);
+  }
+};
 </script>
 
 
