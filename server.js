@@ -273,6 +273,47 @@ app.get("/api/brands", async (req, res) => {
   }
 });
 
+// -- دریافت دسته‌بندی‌های موجود --
+app.get("/api/brand-categories", async (req, res) => {
+  try {
+    const brands = await Brand.find({}, 'field industry');
+    console.log(`📊 تعداد برندها در دیتابیس: ${brands.length}`);
+    
+    const categories = new Set();
+    const fields = [];
+    const industries = [];
+    
+    brands.forEach(brand => {
+      if (brand.field) {
+        const field = brand.field.trim();
+        categories.add(field);
+        fields.push(field);
+      }
+      if (brand.industry) {
+        const industry = brand.industry.trim();
+        categories.add(industry);
+        industries.push(industry);
+      }
+    });
+    
+    console.log('🏷️ فیلدهای موجود:', fields);
+    console.log('🏭 صنایع موجود:', industries);
+    
+    const uniqueCategories = Array.from(categories).sort();
+    console.log('📋 دسته‌بندی‌های نهایی:', uniqueCategories);
+    
+    res.json({ 
+      categories: uniqueCategories,
+      totalBrands: brands.length,
+      fields: Array.from(new Set(fields)).sort(),
+      industries: Array.from(new Set(industries)).sort()
+    });
+  } catch (err) {
+    console.error("خطا در دریافت دسته‌بندی‌ها:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
 // -- دریافت پیشنهادها --
 app.get("/api/recommendations", async (req, res) => {
   try {
@@ -387,7 +428,7 @@ app.post("/api/detect-industry", (req, res) => {
     res.json({ 
       field, 
       industry, 
-      occasions: occasions.slice(0, 3) // فقط 3 مناسبت اول
+      occasions: occasions // همه مناسبت‌ها
     });
   } catch (error) {
     console.error("خطا در تشخیص صنعت:", error);
