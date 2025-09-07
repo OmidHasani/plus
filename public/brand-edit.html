@@ -163,9 +163,7 @@ textarea {
   <div class="dropdown" id="industry-dropdown">
     <div class="dropdown-toggle" onclick="toggleMenu('industry')">انتخاب کنید ▼</div>
     <div class="dropdown-menu" id="industry-menu">
-      <div onclick="selectOption('industry', 'فناوری اطلاعات')">فناوری اطلاعات</div>
-      <div onclick="selectOption('industry', 'غذا و دارو')">غذا و دارو</div>
-      <div onclick="selectOption('industry', 'ساختمان')">ساختمان</div>
+      <!-- دسته‌بندی‌ها از سرور لود می‌شوند -->
     </div>
   </div>
 </div>
@@ -196,7 +194,7 @@ textarea {
 const essentialsQuestions = [
   {id: 1,  q: "برند خود را در یک جمله معرفی کنید."},
   {id: 2,  q: "چه جایگاهی در بازار دارید؟"},
-  {id: 3,  q: "در چه فازی از رشد هستید؟"},
+  {id: 3,  q: "در چه فازی از رشد هستید؟", type: "dropdown", options: ["شروع", "تثبیت", "رشد سریع", "بلوغ", "بازطراحی"]},
   {id: 4,  q: "۳ اولویت اصلی برندتان در ۱۲ ماه آینده چیست؟"},
   {id: 5,  q: "در چه چیزهایی حاضرید سرمایه‌گذاری کنید؟"},
   {id: 6,  q: "محصولات / خدمات اصلی شما چیست؟"},
@@ -210,7 +208,7 @@ const essentialsQuestions = [
   {id: 14, q: "آیا مجاز به ارائه این منابع به بیرون هستید؟"},
   {id: 15, q: "مشتری ایده‌آل شما کیست؟"},
   {id: 16, q: "بیشتر مشتری‌ها از کجا جذب می‌شوند؟"},
-  {id: 17, q: "تعداد مخاطبین فعال شما چقدر است؟"},
+  {id: 17, q: "درصد مخاطبین فعال شما چقدر است؟"},
   {id: 18, q: "مخاطبین شما بیشتر چه ویژگی روانی‌ای دارند؟"},
   {id: 19, q: "مخاطب شما به چه برندهای دیگری علاقه‌مند است؟"},
   {id: 20, q: "تجربه‌ای از همکاری با برندهای دیگر داشتید؟"},
@@ -231,13 +229,29 @@ const allQuestions = [...essentialsQuestions, ...extraQuestions];
 // ==== ساخت سوالات ====
 function buildQuestions(containerId, questionsArr) {
   const parent = document.getElementById(containerId);
-  questionsArr.forEach(({id, q}) => {
+  questionsArr.forEach(({id, q, type, options}) => {
     const wrap = document.createElement('div');
     wrap.className = 'section';
-    const txt = document.createElement('textarea');
-    txt.id = `answer-${id}`;
     wrap.innerHTML = `<strong>${id}. ${q}</strong>`;
-    wrap.appendChild(txt);
+    
+    if (type === 'dropdown' && options) {
+      // ایجاد dropdown برای سوال 3
+      const dropdownDiv = document.createElement('div');
+      dropdownDiv.className = 'dropdown';
+      dropdownDiv.innerHTML = `
+        <div class="dropdown-toggle" onclick="toggleMenu('question-${id}')" id="question-${id}-toggle">انتخاب کنید ▼</div>
+        <div class="dropdown-menu" id="question-${id}-menu">
+          ${options.map(option => `<div onclick="selectQuestionOption('${id}', '${option}')">${option}</div>`).join('')}
+        </div>
+      `;
+      wrap.appendChild(dropdownDiv);
+    } else {
+      // ایجاد textarea برای سوالات عادی
+      const txt = document.createElement('textarea');
+      txt.id = `answer-${id}`;
+      wrap.appendChild(txt);
+    }
+    
     parent.appendChild(wrap);
   });
 }
@@ -247,10 +261,35 @@ function toggleMenu(type) {
   const menu = document.getElementById(`${type}-menu`);
   menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
+
 function selectOption(type, val) {
   document.querySelector(`#${type}-dropdown .dropdown-toggle`).innerText = val;
   document.getElementById(`${type}-menu`).style.display = 'none';
 }
+
+function selectQuestionOption(questionId, val) {
+  document.getElementById(`question-${questionId}-toggle`).innerText = val;
+  document.getElementById(`question-${questionId}-menu`).style.display = 'none';
+}
+
+// بستن dropdown ها هنگام کلیک خارج
+document.addEventListener('click', e => {
+  // بستن dropdown های اصلی
+  ['industry', 'staff'].forEach(type => {
+    const toggle = document.querySelector(`#${type}-dropdown .dropdown-toggle`);
+    const menu = document.getElementById(`${type}-menu`);
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) menu.style.display = 'none';
+  });
+  
+  // بستن dropdown های سوالات
+  document.querySelectorAll('[id^="question-"][id$="-menu"]').forEach(menu => {
+    const questionId = menu.id.replace('-menu', '');
+    const toggle = document.getElementById(`${questionId}-toggle`);
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+      menu.style.display = 'none';
+    }
+  });
+});
 
 // ==== لود برند ====
 let brandId = null;
@@ -264,8 +303,15 @@ async function loadBrand() {
   document.querySelector('#staff-dropdown .dropdown-toggle').innerText = brand.staff;
 
   brand.questions.forEach(({id, answer})=>{
-    const el = document.getElementById(`answer-${id}`);
-    if (el) el.value = answer;
+    if (id === 3) {
+      // برای سوال 3 که dropdown است
+      const toggle = document.getElementById(`question-${id}-toggle`);
+      if (toggle) toggle.innerText = answer || 'انتخاب کنید';
+    } else {
+      // برای سوالات textarea
+      const el = document.getElementById(`answer-${id}`);
+      if (el) el.value = answer;
+    }
   });
 
   const list = document.getElementById('priority-list');
@@ -288,9 +334,19 @@ function updatePriorityNumbers(){
 async function saveChanges() {
   const industry = document.querySelector('#industry-dropdown .dropdown-toggle').innerText;
   const staff = document.querySelector('#staff-dropdown .dropdown-toggle').innerText;
-  const questions = allQuestions.map(({id,q})=>({
-    id,question:q,answer:document.getElementById(`answer-${id}`).value
-  }));
+  const questions = allQuestions.map(({id, q, type})=>{
+    let answer = '';
+    if (type === 'dropdown') {
+      // برای سوال dropdown (سوال 3)
+      const toggle = document.getElementById(`question-${id}-toggle`);
+      answer = toggle ? toggle.innerText.replace(' ▼', '') : '';
+    } else {
+      // برای سوالات textarea
+      const textarea = document.getElementById(`answer-${id}`);
+      answer = textarea ? textarea.value : '';
+    }
+    return {id, question: q, answer};
+  });
   const priorities = Array.from(document.querySelectorAll('#priority-list .priority-item span:first-child')).map(el=>el.innerText);
 
   const brandData = {field:industry, staff, questions, priorities};
@@ -306,10 +362,43 @@ async function saveChanges() {
   else alert(data.error||'خطا در ذخیره');
 }
 
+// ==== لود دسته‌بندی‌ها ====
+async function loadCategories() {
+  try {
+    const res = await fetch('/api/brand-categories', { credentials: 'include' });
+    if (!res.ok) throw new Error('خطا در دریافت دسته‌بندی‌ها');
+    const data = await res.json();
+    
+    const menu = document.getElementById('industry-menu');
+    menu.innerHTML = '';
+    
+    if (data.categories.length === 0) {
+      menu.innerHTML = '<div>هیچ دسته‌بندی موجود نیست</div>';
+    } else {
+      data.categories.forEach(category => {
+        const div = document.createElement('div');
+        div.textContent = category;
+        div.onclick = () => selectOption('industry', category);
+        menu.appendChild(div);
+      });
+    }
+  } catch (err) {
+    console.error('خطا در لود دسته‌بندی‌ها:', err);
+    // در صورت خطا، دسته‌بندی‌های پیش‌فرض را نمایش بده
+    const menu = document.getElementById('industry-menu');
+    menu.innerHTML = `
+      <div onclick="selectOption('industry', 'فناوری اطلاعات')">فناوری اطلاعات</div>
+      <div onclick="selectOption('industry', 'غذا و دارو')">غذا و دارو</div>
+      <div onclick="selectOption('industry', 'ساختمان')">ساختمان</div>
+    `;
+  }
+}
+
 // ==== شروع ====
 window.addEventListener('DOMContentLoaded',()=>{
   buildQuestions('essentials-questions',essentialsQuestions);
   buildQuestions('extra-questions',extraQuestions);
+  loadCategories();
   loadBrand();
 });
 </script>
