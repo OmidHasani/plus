@@ -280,39 +280,18 @@ function createIdeaCard(idea, index) {
 function setupIdeaButtons() {
   document.querySelectorAll(".btn-detail").forEach(btn => {
     btn.addEventListener("click", () => {
-      const index = +btn.getAttribute("data-idea-index");
       const type = btn.getAttribute("data-type");
-      const idea = currentIdeas[index];
-      if (!idea) return alert("ایده مورد نظر یافت نشد.");
-
-      let prompt = "";
+      let message = "";
+      
       if (type === "detail") {
-        prompt = `
-بر اساس اطلاعات زیر:
-عنوان ایده: ${idea.title}
-
-شرح ایده:
-${idea.description}
-
-
-
-لطفا بررسی دقیق‌تری از این ایده ارائه بده و نکات مهم، چالش‌ها و فرصت‌های احتمالی را شرح بده.
-        `;
+        message = "🔍 بررسی بیشتر به زودی فعال می‌شود";
+      } else if (type === "value") {
+        message = "🌟 مزایا برای طرفین به زودی فعال می‌شود";
       } else if (type === "economy") {
-        prompt = `
-بر اساس اطلاعات زیر:
-عنوان ایده: ${idea.title}
-
-شرح ایده:
-${idea.description}
-
-لطفا توجیه اقتصادی این ایده را تحلیل کن، از نظر هزینه‌ها، درآمدها و بازگشت سرمایه به طور دقیق توضیح بده.
-        `;
+        message = "💰 مدل‌های درآمدی به زودی فعال می‌شود";
       }
-
-      sessionStorage.setItem("ideaPrompt", prompt);
-      sessionStorage.setItem("ideaType", type);
-      window.location.href = "/idea-result.html";
+      
+      alert(message);
     });
   });
 }
@@ -333,6 +312,31 @@ function storeIdeaTitles(titles, brandId) {
   const uniqueTitles = Array.from(new Set(titles)); // حذف تکراری در ذخیره
   const key = `storedIdeaTitles_${brandId}`;
   localStorage.setItem(key, JSON.stringify(uniqueTitles));
+}
+
+// === ذخیره ایده‌ها در دیتابیس ===
+async function saveIdeasToDatabase(ideas, myBrandId, targetBrandId) {
+  try {
+    for (const idea of ideas) {
+      const response = await fetch('/api/ideas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          title: idea.title,
+          description: idea.description,
+          partnerBrandId: targetBrandId
+        })
+      });
+
+      if (!response.ok) {
+        console.error('خطا در ذخیره ایده:', idea.title);
+      }
+    }
+    console.log('✅ تمام ایده‌ها در دیتابیس ذخیره شدند');
+  } catch (error) {
+    console.error('خطا در ذخیره ایده‌ها در دیتابیس:', error);
+  }
 }
 
 // === تغییر توابع buildPrompt برای ارسال عناوین قبلی به GPT ===
@@ -580,6 +584,9 @@ async function generateIdeas() {
     setupIdeaButtons();
 
     currentIdeas = allIdeas;
+
+    // ذخیره ایده‌ها در دیتابیس
+    await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
 
   } catch (err) {
     errorText.textContent = "❌ خطا: " + err.message;
