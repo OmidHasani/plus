@@ -46,6 +46,16 @@
       font-family: 'Vazirmatn', sans-serif;
       transition: background-color 0.3s ease, transform 0.2s ease;
       box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+      margin-left: 10px;
+    }
+
+    .top-bar button.dashboard-btn {
+      background-color: #9b59b6;
+      box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+    }
+
+    .top-bar button.dashboard-btn:hover {
+      background-color: #8e44ad;
     }
 
     .top-bar button:hover {
@@ -213,11 +223,16 @@
 <body>
 
 <div class="top-bar">
-  <button onclick="logout()">خروج</button>
-  <input id="searchInput" type="text" placeholder="جستجوی برندها..." />
-  <select id="fieldFilter" onchange="filterByField()">
-    <option value="">همه حوزه‌ها</option>
-  </select>
+  <div>
+    <button onclick="logout()">خروج</button>
+    <button class="dashboard-btn" onclick="goToDashboard()">📊 داشبورد</button>
+  </div>
+  <div>
+    <input id="searchInput" type="text" placeholder="جستجوی برندها..." />
+    <select id="fieldFilter" onchange="filterByField()">
+      <option value="">همه حوزه‌ها</option>
+    </select>
+  </div>
 </div>
 <button onclick="goToEdit()">ویرایش برند</button>
 <h2 id="filteredTitle" style="display:none;">برندهای مرتبط با حوزه کاری انتخاب‌شده</h2>
@@ -401,6 +416,10 @@
     fetch('/api/logout', { method: 'POST', credentials: 'include' }).then(() => {
       window.location.href = 'login.html';
     });
+  }
+
+  function goToDashboard() {
+    window.location.href = 'dashboard.html';
   }
 
   function showDetails(id) {
