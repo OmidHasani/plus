@@ -538,3 +538,147 @@ app.put("/api/brand/:id", authMiddleware, async (req, res) => {
   }
 });
 
+// --- Schema برای ایده‌ها ---
+const ideaSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  myBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
+  partnerBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
+  status: { type: String, enum: ['draft', 'active', 'completed', 'cancelled'], default: 'draft' },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const Idea = mongoose.model("Idea", ideaSchema);
+
+// --- Schema برای پیام‌ها ---
+const messageSchema = new mongoose.Schema({
+  senderBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
+  recipientBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
+  subject: String,
+  content: String,
+  isRead: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Message = mongoose.model("Message", messageSchema);
+
+// --- دریافت ایده‌های همکاری ---
+app.get("/api/ideas/:partnerId", authMiddleware, async (req, res) => {
+  try {
+    const { partnerId } = req.params;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const ideas = await Idea.find({
+      $or: [
+        { myBrandId: myBrand._id, partnerBrandId: partnerId },
+        { myBrandId: partnerId, partnerBrandId: myBrand._id }
+      ]
+    }).populate('myBrandId partnerBrandId', 'name field');
+
+    res.json(ideas);
+  } catch (err) {
+    console.error("خطا در دریافت ایده‌ها:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- ذخیره ایده جدید ---
+app.post("/api/ideas", authMiddleware, async (req, res) => {
+  try {
+    const { title, description, partnerBrandId } = req.body;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const idea = new Idea({
+      title,
+      description,
+      myBrandId: myBrand._id,
+      partnerBrandId
+    });
+
+    await idea.save();
+    res.status(201).json({ message: "ایده با موفقیت ذخیره شد", idea });
+  } catch (err) {
+    console.error("خطا در ذخیره ایده:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- دریافت پیام‌های دریافتی ---
+app.get("/api/messages/received", authMiddleware, async (req, res) => {
+  try {
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const messages = await Message.find({ recipientBrandId: myBrand._id })
+      .populate('senderBrandId', 'name field')
+      .sort({ createdAt: -1 });
+
+    res.json(messages);
+  } catch (err) {
+    console.error("خطا در دریافت پیام‌ها:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- ارسال پیام ---
+app.post("/api/messages", authMiddleware, async (req, res) => {
+  try {
+    const { recipientBrandId, subject, content } = req.body;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const message = new Message({
+      senderBrandId: myBrand._id,
+      recipientBrandId,
+      subject,
+      content
+    });
+
+    await message.save();
+    res.status(201).json({ message: "پیام با موفقیت ارسال شد" });
+  } catch (err) {
+    console.error("خطا در ارسال پیام:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- آمار داشبورد ---
+app.get("/api/dashboard/stats", authMiddleware, async (req, res) => {
+  try {
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const totalPartners = await Brand.countDocuments({ _id: { $ne: myBrand._id } });
+    const totalIdeas = await Idea.countDocuments({
+      $or: [
+        { myBrandId: myBrand._id },
+        { partnerBrandId: myBrand._id }
+      ]
+    });
+    const totalMessages = await Message.countDocuments({ recipientBrandId: myBrand._id });
+    const activeCollaborations = await Idea.countDocuments({
+      $or: [
+        { myBrandId: myBrand._id },
+        { partnerBrandId: myBrand._id }
+      ],
+      status: 'active'
+    });
+
+    res.json({
+      totalPartners,
+      totalIdeas,
+      totalMessages,
+      activeCollaborations
+    });
+  } catch (err) {
+    console.error("خطا در دریافت آمار:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
