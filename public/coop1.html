@@ -499,6 +499,31 @@ function clearSavedIdeas(myBrandId, targetBrandId) {
   localStorage.removeItem(key);
 }
 
+// === ذخیره ایده‌ها در دیتابیس ===
+async function saveIdeasToDatabase(ideas, myBrandId, targetBrandId) {
+  try {
+    for (const idea of ideas) {
+      const response = await fetch('/api/ideas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          title: idea.title,
+          description: idea.description,
+          partnerBrandId: targetBrandId
+        })
+      });
+
+      if (!response.ok) {
+        console.error('خطا در ذخیره ایده:', idea.title);
+      }
+    }
+    console.log('✅ تمام ایده‌ها در دیتابیس ذخیره شدند');
+  } catch (error) {
+    console.error('خطا در ذخیره ایده‌ها در دیتابیس:', error);
+  }
+}
+
 
 function setupIdeaButtons() {
   document.querySelectorAll(".btn-detail").forEach(btn => {
@@ -1038,6 +1063,9 @@ async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCo
 
     currentIdeas = allIdeas;
 
+    // ذخیره ایده‌ها در دیتابیس
+    await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
+
   } catch (err) {
     errorText.textContent = "❌ خطا: " + err.message;
     errorText.style.display = "block";
@@ -1146,6 +1174,9 @@ async function generateNewOccasionIdeas(myBrand = null, targetBrandId = null, ex
 
     setupIdeaButtons();
     currentIdeas = allIdeas;
+
+    // ذخیره ایده‌ها در دیتابیس
+    await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
 
   } catch (err) {
     errorText.textContent = "❌ خطا: " + err.message;
