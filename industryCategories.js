@@ -96,6 +96,128 @@ const industryCategories = {
       { name: "هفته خرید", date: "2024-11-20", type: "national" },
       { name: "روز مشتری", date: "2024-03-15", type: "international" }
     ]
+  },
+  "حمل و نقل": {
+    name: "حمل و نقل",
+    occasions: [
+      { name: "روز حمل و نقل", date: "2024-09-17", type: "international" },
+      { name: "روز راننده", date: "2024-03-18", type: "national" },
+      { name: "روز راه‌آهن", date: "2024-09-15", type: "international" },
+      { name: "روز هوایی", date: "2024-12-07", type: "international" },
+      { name: "روز دریایی", date: "2024-09-26", type: "international" },
+      { name: "هفته حمل و نقل", date: "2024-09-15", type: "national" },
+      { name: "روز لوجستیک", date: "2024-06-28", type: "international" }
+    ]
+  },
+  "خودرو": {
+    name: "خودرو",
+    occasions: [
+      { name: "روز خودرو", date: "2024-01-29", type: "national" },
+      { name: "روز مهندس خودرو", date: "2024-02-24", type: "national" },
+      { name: "روز قطعات خودرو", date: "2024-03-15", type: "national" },
+      { name: "هفته خودرو", date: "2024-10-15", type: "national" },
+      { name: "روز تعمیرات خودرو", date: "2024-06-10", type: "national" }
+    ]
+  },
+  "بازاریابی و تبلیغات": {
+    name: "بازاریابی و تبلیغات",
+    occasions: [
+      { name: "روز بازاریابی", date: "2024-04-15", type: "international" },
+      { name: "روز تبلیغات", date: "2024-06-01", type: "international" },
+      { name: "روز برندینگ", date: "2024-05-20", type: "international" },
+      { name: "هفته بازاریابی دیجیتال", date: "2024-09-15", type: "international" },
+      { name: "روز خلاقیت", date: "2024-04-21", type: "international" }
+    ]
+  },
+  "فین تک": {
+    name: "فین تک",
+    occasions: [
+      { name: "روز فین تک", date: "2024-05-15", type: "international" },
+      { name: "روز پرداخت الکترونیک", date: "2024-06-15", type: "international" },
+      { name: "روز بانکداری دیجیتال", date: "2024-07-15", type: "international" },
+      { name: "هفته فناوری مالی", date: "2024-09-15", type: "international" },
+      { name: "روز ارز دیجیتال", date: "2024-10-31", type: "international" }
+    ]
+  },
+  "خیریه": {
+    name: "خیریه",
+    occasions: [
+      { name: "روز خیریه", date: "2024-09-05", type: "international" },
+      { name: "روز کمک به نیازمندان", date: "2024-12-05", type: "international" },
+      { name: "روز داوطلبی", date: "2024-12-05", type: "international" },
+      { name: "هفته خیریه", date: "2024-09-01", type: "national" },
+      { name: "روز نیکوکاری", date: "2024-03-20", type: "national" }
+    ]
+  },
+  "منابع انسانی": {
+    name: "منابع انسانی",
+    occasions: [
+      { name: "روز منابع انسانی", date: "2024-05-20", type: "international" },
+      { name: "روز کاریابی", date: "2024-06-15", type: "national" },
+      { name: "روز کارآفرینی", date: "2024-08-21", type: "international" },
+      { name: "هفته اشتغال", date: "2024-04-15", type: "national" },
+      { name: "روز مهارت‌آموزی", date: "2024-07-15", type: "national" }
+    ]
+  },
+  "نشر دیجیتال": {
+    name: "نشر دیجیتال",
+    occasions: [
+      { name: "روز کتاب", date: "2024-11-15", type: "national" },
+      { name: "روز نویسنده", date: "2024-03-21", type: "international" },
+      { name: "روز نشر دیجیتال", date: "2024-04-23", type: "international" },
+      { name: "هفته کتاب", date: "2024-11-15", type: "national" },
+      { name: "روز مطالعه", date: "2024-04-23", type: "international" }
+    ]
+  },
+  "غذایی و FMCG": {
+    name: "غذایی و FMCG",
+    occasions: [
+      { name: "روز غذا", date: "2024-10-16", type: "international" },
+      { name: "روز آشپز", date: "2024-08-20", type: "international" },
+      { name: "روز رستوران", date: "2024-05-18", type: "international" },
+      { name: "هفته غذا", date: "2024-10-15", type: "national" },
+      { name: "روز فودتک", date: "2024-06-15", type: "international" }
+    ]
+  },
+  "رسانه و پادکست": {
+    name: "رسانه و پادکست",
+    occasions: [
+      { name: "روز رسانه", date: "2024-05-03", type: "international" },
+      { name: "روز پادکست", date: "2024-01-30", type: "international" },
+      { name: "روز خبرنگار", date: "2024-08-08", type: "international" },
+      { name: "هفته رسانه", date: "2024-05-01", type: "national" },
+      { name: "روز صدا", date: "2024-02-13", type: "international" }
+    ]
+  },
+  "مد و پوشاک": {
+    name: "مد و پوشاک",
+    occasions: [
+      { name: "روز مد", date: "2024-04-15", type: "international" },
+      { name: "روز طراح مد", date: "2024-06-15", type: "international" },
+      { name: "روز پوشاک", date: "2024-08-15", type: "national" },
+      { name: "هفته مد", date: "2024-09-15", type: "international" },
+      { name: "روز سبک زندگی", date: "2024-03-21", type: "international" }
+    ]
+  },
+  "سرمایه‌گذاری": {
+    name: "سرمایه‌گذاری",
+    occasions: [
+      { name: "روز سرمایه‌گذاری", date: "2024-05-15", type: "international" },
+      { name: "روز بورس", date: "2024-07-15", type: "national" },
+      { name: "روز اقتصاد", date: "2024-10-15", type: "international" },
+      { name: "هفته مالی", date: "2024-09-15", type: "national" },
+      { name: "روز کارآفرینی", date: "2024-08-21", type: "international" }
+    ]
+  },
+  "اپراتور و زیرساخت": {
+    name: "اپراتور و زیرساخت",
+    occasions: [
+      { name: "روز مخابرات", date: "2024-05-17", type: "international" },
+      { name: "روز اینترنت", date: "2024-10-29", type: "international" },
+      { name: "روز اپراتور", date: "2024-07-15", type: "national" },
+      { name: "هفته فناوری", date: "2024-08-15", type: "national" },
+      { name: "روز زیرساخت", date: "2024-06-15", type: "international" }
+    ]
   }
 };
 
@@ -111,6 +233,18 @@ function detectIndustry(field) {
     "آموزش": ["آموزش", "مدرسه", "دانشگاه", "کتاب", "تحصیل", "معلم", "دانشجو", "دانش‌آموز"],
     "کشاورزی": ["کشاورزی", "کشاورز", "محصول", "گیاه", "دانه", "آبیاری", "مزرعه"],
     "گردشگری": ["گردشگری", "سفر", "هتل", "مسافرت", "توریست", "میراث"],
+    "حمل و نقل": ["حمل", "نقل", "ترابری", "لوجستیک", "راننده", "رانندگی", "کامیون", "اتوبوس", "قطار", "هواپیما", "کشتی", "موتور", "موتورسیکلت", "تاکسی", "ون", "ماشین", "خودرو", "وسایل نقلیه"],
+    "خودرو": ["خودرو", "ماشین", "اتومبیل", "وسایل نقلیه", "قطعات", "تعمیرات"],
+    "بازاریابی و تبلیغات": ["بازاریابی", "تبلیغات", "برندینگ", "مارکتینگ", "advertising", "marketing", "branding"],
+    "فین تک": ["فین تک", "فینتک", "فناوری مالی", "پرداخت", "الکترونیک", "بانکداری دیجیتال", "ارز دیجیتال", "fintech"],
+    "خیریه": ["خیریه", "نیکوکاری", "کمک", "داوطلبی", "charity", "ngo"],
+    "منابع انسانی": ["منابع انسانی", "کاریابی", "کارآفرینی", "اشتغال", "مهارت", "hr", "human resources"],
+    "نشر دیجیتال": ["نشر", "دیجیتال", "کتاب", "نویسنده", "مطالعه", "publishing", "digital"],
+    "غذایی و FMCG": ["غذایی", "فودتک", "fmcg", "رستوران", "آشپز", "غذا", "food", "restaurant"],
+    "رسانه و پادکست": ["رسانه", "پادکست", "خبرنگار", "صدا", "media", "podcast", "journalism"],
+    "مد و پوشاک": ["مد", "پوشاک", "طراح", "سبک زندگی", "fashion", "clothing", "design"],
+    "سرمایه‌گذاری": ["سرمایه‌گذاری", "بورس", "اقتصاد", "کارآفرینی", "investment", "finance", "economy"],
+    "اپراتور و زیرساخت": ["اپراتور", "زیرساخت", "مخابرات", "اینترنت", "operator", "infrastructure", "telecom"],
     "ورزش": ["ورزش", "فوتبال", "والیبال", "بسکتبال", "تنیس", "شنا", "دو"],
     "فرهنگ و هنر": ["فرهنگ", "هنر", "موسیقی", "سینما", "تئاتر", "نقاشی", "شعر"],
     "مالی و بانکداری": ["بانک", "مالی", "حساب", "پول", "سرمایه", "بیمه", "سرمایه‌گذاری"],
