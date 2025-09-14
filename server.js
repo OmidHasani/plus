@@ -55,7 +55,11 @@ const brandSchema = new mongoose.Schema({
   name: String,
   field: String,
   industry: String, // اضافه کردن فیلد صنعت
-  staff: String,
+  employeeCount: { 
+    type: String, 
+    enum: ['1-9', '10-49', '50-99', '100-499', '500+'],
+    required: true
+  },
   // اضافه کردن فیلد questions به شکل آرایه‌ای از آبجکت‌ها
   questions: [
     {
