@@ -81,6 +81,18 @@
       box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
     }
     
+    .card-footer {
+      padding: 20px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 0 0 16px 16px;
+    }
+    
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+    }
+    
     .btn-danger {
       background: #e53e3e;
       color: white;
@@ -289,53 +301,6 @@
       color: white;
     }
     
-    .messages-section {
-      grid-column: 1 / -1;
-    }
-    
-    .message-item {
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 12px;
-      transition: all 0.3s ease;
-    }
-    
-    .message-item:hover {
-      border-color: #667eea;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
-    }
-    
-    .message-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    
-    .message-sender {
-      font-weight: 600;
-      color: #2d3748;
-    }
-    
-    .message-time {
-      color: #718096;
-      font-size: 0.85rem;
-    }
-    
-    .message-content {
-      color: #4a5568;
-      line-height: 1.6;
-    }
-    
-    .compose-message {
-      background: #f7fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 15px;
-      padding: 20px;
-      margin-top: 20px;
-    }
     
     .form-group {
       margin-bottom: 15px;
@@ -486,10 +451,6 @@
         <p id="brandField">در حال بارگذاری...</p>
       </div>
       <div class="user-actions">
-        <a href="brands.html" class="btn btn-primary">
-          <i class="fas fa-list"></i>
-          لیست برندها
-        </a>
         <button onclick="logout()" class="btn btn-danger">
           <i class="fas fa-sign-out-alt"></i>
           خروج
@@ -500,20 +461,16 @@
     <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-number" id="totalPartners">0</div>
-        <div class="stat-label">همکاران فعال</div>
+        <div class="stat-number" id="activeBrands">0</div>
+        <div class="stat-label">برندهای فعال</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" id="totalIdeas">0</div>
-        <div class="stat-label">ایده‌های تولید شده</div>
+        <div class="stat-number" id="unreadMessages">0</div>
+        <div class="stat-label">پیام‌های خوانده نشده</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" id="totalMessages">0</div>
-        <div class="stat-label">پیام‌های دریافتی</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="activeCollaborations">0</div>
-        <div class="stat-label">همکاری‌های فعال</div>
+        <div class="stat-number" id="pendingSuggestions">0</div>
+        <div class="stat-label">پیشنهاد بی‌پاسخ</div>
       </div>
     </div>
 
@@ -532,6 +489,12 @@
             <i class="fas fa-spinner fa-spin"></i>
             در حال بارگذاری...
           </div>
+        </div>
+        <div class="card-footer">
+          <a href="brands.html" class="btn btn-primary btn-full">
+            <i class="fas fa-list"></i>
+            لیست برندها
+          </a>
         </div>
       </div>
 
@@ -555,49 +518,6 @@
       </div>
     </div>
 
-    <!-- Messages Section -->
-    <div class="card messages-section">
-      <div class="card-header">
-        <h2 class="card-title">
-          <i class="fas fa-envelope"></i>
-          پیام‌ها و ارتباطات
-        </h2>
-      </div>
-      
-      <!-- Compose Message -->
-      <div class="compose-message">
-        <h3 style="margin-bottom: 15px; color: #2d3748;">ارسال پیام جدید</h3>
-        <div class="form-group">
-          <label>انتخاب برند مقصد:</label>
-          <select class="form-control" id="messageRecipient">
-            <option value="">انتخاب کنید...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>موضوع پیام:</label>
-          <input type="text" class="form-control" id="messageSubject" placeholder="موضوع پیام را وارد کنید">
-        </div>
-        <div class="form-group">
-          <label>متن پیام:</label>
-          <textarea class="form-control" id="messageContent" rows="4" placeholder="متن پیام خود را بنویسید..."></textarea>
-        </div>
-        <button class="btn btn-primary" onclick="sendMessage()">
-          <i class="fas fa-paper-plane"></i>
-          ارسال پیام
-        </button>
-      </div>
-
-      <!-- Received Messages -->
-      <div style="margin-top: 30px;">
-        <h3 style="margin-bottom: 15px; color: #2d3748;">پیام‌های دریافتی</h3>
-        <div id="receivedMessages">
-          <div class="loading">
-            <i class="fas fa-spinner fa-spin"></i>
-            در حال بارگذاری پیام‌ها...
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -606,7 +526,6 @@
     let allBrands = [];
     let selectedPartner = null;
     let ideas = [];
-    let messages = [];
 
     // Initialize dashboard
     window.addEventListener('DOMContentLoaded', async () => {
@@ -650,13 +569,11 @@
           allBrands = await brandsResponse.json();
           // Filter out my own brand
           allBrands = allBrands.filter(brand => brand._id !== myBrand._id);
-          displayPartners();
-          populateMessageRecipients();
+          await displayPartners();
         }
 
-        // Load ideas and messages (mock data for now)
+        // Load ideas (mock data for now)
         loadIdeas();
-        loadMessages();
         updateStats();
 
         // Hide ideas header initially
@@ -667,8 +584,8 @@
       }
     }
 
-    // Display partners
-    function displayPartners() {
+    // Display partners (only brands with ideas)
+    async function displayPartners() {
       const partnersList = document.getElementById('partnersList');
       
       if (allBrands.length === 0) {
@@ -681,7 +598,33 @@
         return;
       }
 
-      partnersList.innerHTML = allBrands.map(brand => `
+      // Filter brands that have ideas
+      const brandsWithIdeas = [];
+      for (const brand of allBrands) {
+        try {
+          const ideasResponse = await fetch(`/api/ideas/${brand._id}`, { credentials: 'include' });
+          if (ideasResponse.ok) {
+            const ideas = await ideasResponse.json();
+            if (ideas.length > 0) {
+              brandsWithIdeas.push(brand);
+            }
+          }
+        } catch (error) {
+          console.error(`خطا در بررسی ایده‌های ${brand.name}:`, error);
+        }
+      }
+
+      if (brandsWithIdeas.length === 0) {
+        partnersList.innerHTML = `
+          <div class="empty-state" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <i class="fas fa-lightbulb"></i>
+            <p>هنوز با هیچ برندی ایده‌ای تولید نکرده‌اید</p>
+          </div>
+        `;
+        return;
+      }
+
+      partnersList.innerHTML = brandsWithIdeas.map(brand => `
         <div class="partner-item" onclick="selectPartner('${brand._id}')" data-brand-id="${brand._id}">
           <div class="partner-name">${brand.name}</div>
           <div class="partner-field">${brand.field || 'بدون دسته‌بندی'}</div>
@@ -796,7 +739,7 @@
       ideasSection.innerHTML = ideas.map((idea, index) => `
         <div class="idea-item">
           <div class="idea-title">${idea.title || `ایده ${index + 1}`}</div>
-          <div class="idea-description">${idea.description}</div>
+          <div class="idea-description">${idea.description || 'توضیحی موجود نیست'}</div>
           <div class="idea-actions">
             <button class="btn btn-sm btn-success" onclick="implementIdea('${idea._id}')">
               <i class="fas fa-check"></i>
@@ -859,125 +802,39 @@
       ideas = [];
     }
 
-    // Load messages from API
-    async function loadMessages() {
-      try {
-        const response = await fetch('/api/messages/received', { credentials: 'include' });
-        if (response.ok) {
-          messages = await response.json();
-          displayMessages();
-        } else {
-          throw new Error('خطا در دریافت پیام‌ها');
-        }
-      } catch (error) {
-        console.error('خطا در بارگذاری پیام‌ها:', error);
-        messages = [];
-        displayMessages();
-      }
-    }
-
-    // Display messages
-    function displayMessages() {
-      const messagesContainer = document.getElementById('receivedMessages');
-      
-      if (messages.length === 0) {
-        messagesContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-envelope-open"></i>
-            <p>هیچ پیامی دریافت نکرده‌اید</p>
-          </div>
-        `;
-        return;
-      }
-
-      messagesContainer.innerHTML = messages.map(message => `
-        <div class="message-item">
-          <div class="message-header">
-            <div class="message-sender">${message.senderBrandId ? message.senderBrandId.name : 'نامشخص'}</div>
-            <div class="message-time">${formatDate(message.createdAt)}</div>
-          </div>
-          <div class="message-content">
-            <strong>موضوع:</strong> ${message.subject || 'بدون موضوع'}<br>
-            <strong>متن:</strong> ${message.content}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Populate message recipients
-    function populateMessageRecipients() {
-      const select = document.getElementById('messageRecipient');
-      select.innerHTML = '<option value="">انتخاب کنید...</option>' +
-        allBrands.map(brand => 
-          `<option value="${brand._id}">${brand.name} (${brand.field})</option>`
-        ).join('');
-    }
-
-    // Send message
-    async function sendMessage() {
-      const recipientId = document.getElementById('messageRecipient').value;
-      const subject = document.getElementById('messageSubject').value;
-      const content = document.getElementById('messageContent').value;
-
-      if (!recipientId || !subject || !content) {
-        alert('لطفاً تمام فیلدها را پر کنید');
-        return;
-      }
-
-      try {
-        const response = await fetch('/api/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            recipientBrandId: recipientId,
-            subject: subject,
-            content: content
-          })
-        });
-
-        if (response.ok) {
-          alert('پیام با موفقیت ارسال شد!');
-          
-          // Clear form
-          document.getElementById('messageSubject').value = '';
-          document.getElementById('messageContent').value = '';
-          document.getElementById('messageRecipient').value = '';
-        } else {
-          const error = await response.json();
-          alert(error.error || 'خطا در ارسال پیام');
-        }
-        
-      } catch (error) {
-        console.error('خطا در ارسال پیام:', error);
-        alert('خطا در ارسال پیام');
-      }
-    }
 
     // Update statistics
     async function updateStats() {
       try {
-        const response = await fetch('/api/dashboard/stats', { credentials: 'include' });
-        if (response.ok) {
-          const stats = await response.json();
-          document.getElementById('totalPartners').textContent = stats.totalPartners;
-          document.getElementById('totalIdeas').textContent = stats.totalIdeas;
-          document.getElementById('totalMessages').textContent = stats.totalMessages;
-          document.getElementById('activeCollaborations').textContent = stats.activeCollaborations;
-        } else {
-          // Fallback to basic counts
-          document.getElementById('totalPartners').textContent = allBrands.length;
-          document.getElementById('totalIdeas').textContent = ideas.length;
-          document.getElementById('totalMessages').textContent = messages.length;
-          document.getElementById('activeCollaborations').textContent = 0;
+        // Count active brands (brands with ideas)
+        let activeBrandsCount = 0;
+        for (const brand of allBrands) {
+          try {
+            const ideasResponse = await fetch(`/api/ideas/${brand._id}`, { credentials: 'include' });
+            if (ideasResponse.ok) {
+              const ideas = await ideasResponse.json();
+              if (ideas.length > 0) {
+                activeBrandsCount++;
+              }
+            }
+          } catch (error) {
+            console.error(`خطا در بررسی ایده‌های ${brand.name}:`, error);
+          }
         }
+
+        // Count pending suggestions (ideas without response)
+        const pendingSuggestionsCount = ideas.filter(idea => !idea.responded).length;
+
+        // Update stats
+        document.getElementById('activeBrands').textContent = activeBrandsCount;
+        document.getElementById('unreadMessages').textContent = 0;
+        document.getElementById('pendingSuggestions').textContent = pendingSuggestionsCount;
       } catch (error) {
-        console.error('خطا در دریافت آمار:', error);
+        console.error('خطا در محاسبه آمار:', error);
         // Fallback to basic counts
-        document.getElementById('totalPartners').textContent = allBrands.length;
-        document.getElementById('totalIdeas').textContent = ideas.length;
-        document.getElementById('totalMessages').textContent = messages.length;
-        document.getElementById('activeCollaborations').textContent = 0;
+        document.getElementById('activeBrands').textContent = 0;
+        document.getElementById('unreadMessages').textContent = 0;
+        document.getElementById('pendingSuggestions').textContent = 0;
       }
     }
 
