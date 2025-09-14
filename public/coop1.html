@@ -17,6 +17,7 @@ body {
   direction: rtl;
 }
 
+
 h1 {
   text-align: center;
   margin-bottom: 30px;
@@ -330,10 +331,6 @@ h1 {
 <div id="ideasContainer"></div>
 <div id="loadingText" style="display:none;">⏳ در حال دریافت ایده‌ها...</div>
 <div id="errorText" style="display:none;"></div>
-<div style="margin-bottom:20px;">
-  <label for="priorityInput" style="font-weight:700; color:#2c3e50;">اولویت اول برند شما:</label>
-  <input id="priorityInput" type="text" placeholder="مثلاً: افزایش فروش" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-top:8px; font-family:'Vazirmatn',sans-serif;">
-</div>
 
 <div id="industryInfo" style="display:none; background:#f8f9fa; padding:15px; border-radius:10px; margin-bottom:20px; border-right:4px solid #3498db;">
   <h3 style="color:#2c3e50; margin-bottom:10px;">🏭 اطلاعات صنعتی</h3>
@@ -569,8 +566,7 @@ function storeIdeaTitles(titles, brandId) {
 // === تغییر توابع buildPrompt برای ارسال عناوین قبلی به GPT ===
 
 function buildPrompt(myBrand, similarBrands, brandId) {
-  const priorityInput = document.getElementById("priorityInput").value.trim();
-  const priority = priorityInput || myBrand.priorities?.[0] || "رضایت مشتری";
+  const priority = myBrand.priorities?.[0] || "رضایت مشتری";
 
   const questions = myBrand.questions || [];
   let questionsText = questions.map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
@@ -688,8 +684,7 @@ ${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 
 // تابع برای ساخت پرامپت مناسبتی
 function buildOccasionPrompt(myBrand, similarBrands, brandId) {
-  const priorityInput = document.getElementById("priorityInput").value.trim();
-  const priority = priorityInput || myBrand.priorities?.[0] || "رضایت مشتری";
+  const priority = myBrand.priorities?.[0] || "رضایت مشتری";
 
   const questions = myBrand.questions || [];
   let questionsText = questions.map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
@@ -910,43 +905,50 @@ async function displayIndustryInfo(myBrand, targetBrand) {
   const industryDetails = document.getElementById("industryDetails");
   
   try {
+    console.log("🔍 Debug - myBrand.field:", myBrand.field);
+    console.log("🔍 Debug - targetBrand.field:", targetBrand.field);
+    
     // دریافت اطلاعات صنعت برند من
+    const myField = myBrand.field || myBrand.industry || "عمومی";
     const myIndustryRes = await fetch("/api/detect-industry", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ field: myBrand.field })
+      body: JSON.stringify({ field: myField })
     });
     const myIndustryData = await myIndustryRes.json();
+    console.log("🔍 Debug - myIndustryData:", myIndustryData);
     
     // دریافت اطلاعات صنعت برند هدف
+    const targetField = targetBrand.field || targetBrand.industry || "عمومی";
     const targetIndustryRes = await fetch("/api/detect-industry", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ field: targetBrand.field })
+      body: JSON.stringify({ field: targetField })
     });
     const targetIndustryData = await targetIndustryRes.json();
+    console.log("🔍 Debug - targetIndustryData:", targetIndustryData);
     
     industryDetails.innerHTML = `
       <div style="display:flex; gap:20px; flex-wrap:wrap;">
         <div style="flex:1; min-width:200px; background:white; padding:15px; border-radius:8px; border:1px solid #e0e0e0;">
-          <h4 style="color:#2980b9; margin-bottom:12px; font-size:16px;">🏢 برند شما</h4>
-          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${myBrand.field || 'نامشخص'}</p>
+          <h4 style="color:#2980b9; margin-bottom:12px; font-size:16px;">🏢 ${myBrand.name || 'برند شما'}</h4>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${myField}</p>
           <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>مناسبت‌های مرتبط:</strong></p>
           <ul style="margin:8px 0; padding-right:15px; max-height:120px; overflow-y:auto;">
             ${myIndustryData.occasions && myIndustryData.occasions.length > 0 
               ? myIndustryData.occasions.map(occ => `<li style="margin:4px 0; color:#555; font-size:14px;">${occ.name}</li>`).join("")
-              : '<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد</li>'
+              : `<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد (${myIndustryData.occasions ? 'لیست خالی' : 'داده‌ای دریافت نشد'})</li>`
             }
           </ul>
         </div>
         <div style="flex:1; min-width:200px; background:white; padding:15px; border-radius:8px; border:1px solid #e0e0e0;">
-          <h4 style="color:#e74c3c; margin-bottom:12px; font-size:16px;">🎯 برند هدف</h4>
-          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${targetBrand.field || 'نامشخص'}</p>
+          <h4 style="color:#e74c3c; margin-bottom:12px; font-size:16px;">🎯 ${targetBrand.name || 'برند هدف'}</h4>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${targetField}</p>
           <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>مناسبت‌های مرتبط:</strong></p>
           <ul style="margin:8px 0; padding-right:15px; max-height:120px; overflow-y:auto;">
             ${targetIndustryData.occasions && targetIndustryData.occasions.length > 0 
               ? targetIndustryData.occasions.map(occ => `<li style="margin:4px 0; color:#555; font-size:14px;">${occ.name}</li>`).join("")
-              : '<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد</li>'
+              : `<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد (${targetIndustryData.occasions ? 'لیست خالی' : 'داده‌ای دریافت نشد'})</li>`
             }
           </ul>
         </div>
@@ -955,11 +957,14 @@ async function displayIndustryInfo(myBrand, targetBrand) {
     
     industryInfo.style.display = "block";
   } catch (err) {
-    console.log("خطا در دریافت اطلاعات صنعتی:", err);
+    console.error("❌ خطا در دریافت اطلاعات صنعتی:", err);
+    console.error("❌ myBrand:", myBrand);
+    console.error("❌ targetBrand:", targetBrand);
     industryDetails.innerHTML = `
       <div style="text-align:center; color:#e74c3c; padding:20px;">
         <p>⚠️ خطا در دریافت اطلاعات صنعتی</p>
         <p style="font-size:14px; color:#999;">لطفاً صفحه را رفرش کنید</p>
+        <p style="font-size:12px; color:#666;">خطا: ${err.message}</p>
       </div>
     `;
     industryInfo.style.display = "block";
