@@ -461,8 +461,8 @@
     <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-number" id="activeBrands">0</div>
-        <div class="stat-label">برندهای فعال</div>
+        <div class="stat-number" id="totalBrands">0</div>
+        <div class="stat-label">کل برندها</div>
       </div>
       <div class="stat-card">
         <div class="stat-number" id="unreadMessages">0</div>
@@ -491,10 +491,14 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="brands.html" class="btn btn-primary btn-full">
-            <i class="fas fa-list"></i>
-            لیست برندها
-          </a>
+        <a href="brands.html" class="btn btn-primary btn-full" style="margin-bottom: 10px;">
+          <i class="fas fa-list"></i>
+          لیست برندها
+        </a>
+        <a href="questions-management.html" class="btn btn-secondary btn-full">
+          <i class="fas fa-question-circle"></i>
+          مدیریت سوالات
+        </a>
         </div>
       </div>
 
@@ -741,17 +745,20 @@
           <div class="idea-title">${idea.title || `ایده ${index + 1}`}</div>
           <div class="idea-description">${idea.description || 'توضیحی موجود نیست'}</div>
           <div class="idea-actions">
-            <button class="btn btn-sm btn-success" onclick="implementIdea('${idea._id}')">
-              <i class="fas fa-check"></i>
-              پیاده‌سازی
-            </button>
-            <button class="btn btn-sm btn-info" onclick="shareIdea('${idea._id}')">
-              <i class="fas fa-share"></i>
-              اشتراک‌گذاری
+            <button class="btn btn-sm btn-primary" onclick="showIdeaDetails('${idea._id}', '${idea.title || `ایده ${index + 1}`}', '${(idea.description || 'توضیحی موجود نیست').replace(/'/g, "\\'")}')">
+              <i class="fas fa-info-circle"></i>
+              جزئیات بیشتر
             </button>
           </div>
         </div>
-      `).join('');
+      `).join('') + `
+        <div style="margin-top: 20px; text-align: center;">
+          <button class="btn btn-primary" onclick="goToCooperationPage('${selectedPartner._id}')">
+            <i class="fas fa-lightbulb"></i>
+            فرصت‌های همکاری پیشنهادی
+          </button>
+        </div>
+      `;
     }
 
     // Display ideas
@@ -779,21 +786,24 @@
           <div class="idea-title">ایده ${index + 1}</div>
           <div class="idea-description">${idea.trim()}</div>
           <div class="idea-actions">
-            <button class="btn btn-sm btn-success" onclick="implementIdea(${index})">
-              <i class="fas fa-check"></i>
-              پیاده‌سازی
+            <button class="btn btn-sm btn-primary" onclick="showIdeaDetails(null, 'ایده ${index + 1}', '${idea.trim().replace(/'/g, "\\'")}')">
+              <i class="fas fa-info-circle"></i>
+              جزئیات بیشتر
             </button>
-            <button class="btn btn-sm btn-info" onclick="shareIdea(${index})">
-              <i class="fas fa-share"></i>
-              اشتراک‌گذاری
-            </button>
-            <button class="btn btn-sm btn-primary" onclick="saveIdea('${idea.trim()}', ${index})">
+            <button class="btn btn-sm btn-success" onclick="saveIdea('${idea.trim()}', ${index})">
               <i class="fas fa-save"></i>
               ذخیره
             </button>
           </div>
         </div>
-      `).join('');
+      `).join('') + `
+        <div style="margin-top: 20px; text-align: center;">
+          <button class="btn btn-primary" onclick="goToCooperationPage('${selectedPartner._id}')">
+            <i class="fas fa-lightbulb"></i>
+            فرصت‌های همکاری پیشنهادی
+          </button>
+        </div>
+      `;
     }
 
     // Load ideas (mock data)
@@ -806,33 +816,20 @@
     // Update statistics
     async function updateStats() {
       try {
-        // Count active brands (brands with ideas)
-        let activeBrandsCount = 0;
-        for (const brand of allBrands) {
-          try {
-            const ideasResponse = await fetch(`/api/ideas/${brand._id}`, { credentials: 'include' });
-            if (ideasResponse.ok) {
-              const ideas = await ideasResponse.json();
-              if (ideas.length > 0) {
-                activeBrandsCount++;
-              }
-            }
-          } catch (error) {
-            console.error(`خطا در بررسی ایده‌های ${brand.name}:`, error);
-          }
-        }
+        // Count total brands (excluding my own brand)
+        const totalBrandsCount = allBrands.length;
 
         // Count pending suggestions (ideas without response)
         const pendingSuggestionsCount = ideas.filter(idea => !idea.responded).length;
 
         // Update stats
-        document.getElementById('activeBrands').textContent = activeBrandsCount;
+        document.getElementById('totalBrands').textContent = totalBrandsCount;
         document.getElementById('unreadMessages').textContent = 0;
         document.getElementById('pendingSuggestions').textContent = pendingSuggestionsCount;
       } catch (error) {
         console.error('خطا در محاسبه آمار:', error);
         // Fallback to basic counts
-        document.getElementById('activeBrands').textContent = 0;
+        document.getElementById('totalBrands').textContent = 0;
         document.getElementById('unreadMessages').textContent = 0;
         document.getElementById('pendingSuggestions').textContent = 0;
       }
@@ -871,14 +868,17 @@
       }
     }
 
-    // Implement idea
-    function implementIdea(ideaId) {
-      alert(`ایده ${ideaId} برای پیاده‌سازی انتخاب شد!`);
+    // Show idea details
+    function showIdeaDetails(ideaId, title, description) {
+      alert(`جزئیات ایده:\n\nعنوان: ${title}\n\nتوضیحات: ${description}`);
     }
 
-    // Share idea
-    function shareIdea(ideaId) {
-      alert(`ایده ${ideaId} برای اشتراک‌گذاری آماده شد!`);
+    // Go to cooperation page
+    function goToCooperationPage(partnerId) {
+      // Store the selected partner ID in sessionStorage
+      sessionStorage.setItem('targetBrandId', partnerId);
+      // Navigate to cooperation page
+      window.location.href = `coop1.html?target=${partnerId}`;
     }
 
 
