@@ -253,6 +253,109 @@ textarea {
       color: white;
       border-color: #3b82f6;
     }
+
+    /* Priority Drag and Drop Styles */
+    .priority-drag-container {
+      margin-top: 10px;
+    }
+    
+    .priority-drag-wrapper {
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      background: #f8fafc;
+    }
+    
+    .priority-drag-list {
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 60px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .priority-drag-list.empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-style: italic;
+    }
+    
+    .priority-drag-item {
+      background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: move;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .priority-drag-item .drag-handle {
+      margin-left: 8px;
+      cursor: grab;
+      font-size: 16px;
+    }
+    
+    .priority-drag-item .remove-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    
+    .priority-drag-item .remove-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(1.1);
+    }
+    
+    .available-options-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+    }
+    
+    .available-option {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+    
+    .available-option:hover {
+      border-color: #3b82f6;
+      background: #f0f9ff;
+    }
+    
+    .available-option.selected {
+      background: #e2e8f0;
+      color: #94a3b8;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
     /* Questions */
     .section {
       border: 1px solid #cbd5e1;
@@ -370,7 +473,7 @@ const essentialsQuestions = [
   {id: 5,  q: "در چه چیزهایی حاضرید سرمایه‌گذاری کنید؟"},
   {id: 6,  q: "محصولات / خدمات اصلی شما چیست؟", type: "tag-input"},
   {id: 7,  q: "چطور درآمدزایی می‌کنید؟"},
-  {id: 8,  q: "کدام‌یک از محصولاتتان قابلیت ترکیب با برندهای دیگر را دارد؟", type: "tag-input"},
+  {id: 8,  q: "کدام‌یک از محصولاتتان قابلیت ترکیب با برندهای دیگر را دارد؟", type: "checkbox"},
   {id: 9,  q: "کدام بخش‌های کسب‌وکارتان مقیاس‌پذیر است؟"},
   {id: 10, q: "مشتری‌های شما بیشتر از کجا جذب می‌شوند و از چه کانال‌هایی فروش دارید؟"},
   {id: 11, q: "محصولی دارید که بشه به‌عنوان هدیه یا پیشنهاد ترکیبی استفاده کرد؟"},
@@ -379,10 +482,8 @@ const essentialsQuestions = [
   {id: 14, q: "آیا مجاز به ارائه این منابع به بیرون هستید؟"},
   {id: 15, q: "مشتری ایده‌آل شما کیست؟"},
   {id: 16, q: "درصد مخاطبین فعال شما چقدر است؟"},
-  {id: 17, q: "مخاطبین شما بیشتر چه ویژگی روانی‌ای دارند؟"},
   {id: 18, q: "سه ویژگی مهم که در رفتار و روحیه مشتریان شما وجود دارد چیست؟"},
   {id: 19, q: "تجربه‌ای از همکاری با برندهای دیگر داشتید؟"},
-  {id: 20, q: "چه چیزی دارید که معمولاً به بیرون نمی‌دهید، ولی در همکاری خوب می‌توانید بدهید؟"},
   {id: 21, q: "چه چیزی باعث می‌شود یک همکاری را متوقف کنید؟"},
   // 🔻 سوالات جدید
   {id: 22, q: "آیا در حال حاضر برند شما برنامه‌ای برای برونسپاری پروژه‌های کوچک دارد یا تمام کارها داخل مجموعه انجام می‌گردد؟"},
@@ -419,7 +520,7 @@ function buildQuestions(containerId, questionsArr) {
       dropdownDiv.innerHTML = `
         <div class="dropdown-toggle" onclick="toggleMenu('question-${id}')" id="question-${id}-toggle">انتخاب کنید ▼</div>
         <div class="dropdown-menu" id="question-${id}-menu">
-          ${options.map(option => `<div onclick="selectQuestionOption('${id}', '${option}')">${option}</div>`).join('')}
+          ${options.map(option => `<div onclick="selectQuestionOption('${id}', \`${option.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">${option}</div>`).join('')}
         </div>
       `;
       wrap.appendChild(dropdownDiv);
@@ -449,13 +550,25 @@ function buildQuestions(containerId, questionsArr) {
       const checkboxContainer = document.createElement('div');
       checkboxContainer.className = 'checkbox-container';
       checkboxContainer.innerHTML = `
-        <div class="checkbox-options">
+        <div class="checkbox-options" id="checkbox-options-${id}">
           ${options.map(option => `
             <label class="checkbox-item">
               <input type="checkbox" name="question-${id}" value="${option}">
               <span class="checkbox-text">${option}</span>
             </label>
           `).join('')}
+        </div>
+      `;
+      wrap.appendChild(checkboxContainer);
+    } else if (type === 'checkbox' && id === 8) {
+      // ایجاد checkbox برای سوال 8 که گزینه‌هایش از سوال 6 می‌آید
+      const checkboxContainer = document.createElement('div');
+      checkboxContainer.className = 'checkbox-container';
+      checkboxContainer.innerHTML = `
+        <div class="checkbox-options" id="checkbox-options-${id}">
+          <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
+            ابتدا محصولات خود را در سوال 6 وارد کنید
+          </div>
         </div>
       `;
       wrap.appendChild(checkboxContainer);
@@ -468,7 +581,7 @@ function buildQuestions(containerId, questionsArr) {
           <div class="selected-priorities" id="selected-priorities-${id}"></div>
           <div class="priority-options">
             ${options.map(option => `
-              <div class="priority-option" onclick="selectPriority('${id}', '${option}')">${option}</div>
+              <div class="priority-option" onclick="selectPriority('${id}', \`${option.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">${option}</div>
             `).join('')}
           </div>
         </div>
@@ -543,10 +656,15 @@ function addTag(questionId, tagText) {
   tagElement.className = 'tag-item';
   tagElement.innerHTML = `
     <span class="tag-text">${tagText}</span>
-    <button class="tag-remove" onclick="removeTag(${questionId}, '${tagText}')">×</button>
+    <button class="tag-remove" onclick="removeTag(${questionId}, \`${tagText.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">×</button>
   `;
   
   tagsContainer.appendChild(tagElement);
+  
+  // به‌روزرسانی سوال 8 اگر سوال 6 است
+  if (questionId === 6) {
+    updateQuestion8Options();
+  }
 }
 
 // حذف تگ
@@ -560,6 +678,11 @@ function removeTag(questionId, tagText) {
       tag.remove();
     }
   });
+  
+  // به‌روزرسانی سوال 8 اگر سوال 6 است
+  if (questionId === 6) {
+    updateQuestion8Options();
+  }
 }
 
 // دریافت تگ‌های یک سوال
@@ -575,7 +698,7 @@ function getTagsForQuestion(questionId) {
 // انتخاب اولویت برای سوال 28
 function selectPriority(questionId, priority) {
   const selectedContainer = document.getElementById(`selected-priorities-${questionId}`);
-  const option = document.querySelector(`[onclick="selectPriority('${questionId}', '${priority}')"]`);
+  const option = document.querySelector(`[onclick="selectPriority('${questionId}', \`${priority.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)"]`);
   
   if (!selectedContainer || !option) return;
   
@@ -602,7 +725,7 @@ function selectPriority(questionId, priority) {
     selectedItem.setAttribute('data-priority', priority);
     selectedItem.innerHTML = `
       <span class="tag-text">${priority}</span>
-      <button class="tag-remove" onclick="removePriority('${questionId}', '${priority}')">×</button>
+      <button class="tag-remove" onclick="removePriority('${questionId}', \`${priority.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">×</button>
     `;
     selectedContainer.appendChild(selectedItem);
   }
@@ -611,7 +734,7 @@ function selectPriority(questionId, priority) {
 // حذف اولویت انتخاب شده
 function removePriority(questionId, priority) {
   const selectedContainer = document.getElementById(`selected-priorities-${questionId}`);
-  const option = document.querySelector(`[onclick="selectPriority('${questionId}', '${priority}')"]`);
+  const option = document.querySelector(`[onclick="selectPriority('${questionId}', \`${priority.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)"]`);
   
   if (selectedContainer && option) {
     option.classList.remove('selected');
@@ -636,6 +759,31 @@ function getSelectedCheckboxes(questionId) {
   return Array.from(checkboxes).map(cb => cb.value);
 }
 
+// به‌روزرسانی گزینه‌های سوال 8 بر اساس تگ‌های سوال 6
+function updateQuestion8Options() {
+  const tagsFromQ6 = getTagsForQuestion(6);
+  const q8Container = document.getElementById('checkbox-options-8');
+  
+  if (!q8Container) return;
+  
+  if (tagsFromQ6.length === 0) {
+    q8Container.innerHTML = `
+      <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
+        ابتدا محصولات خود را در سوال 6 وارد کنید
+      </div>
+    `;
+    return;
+  }
+  
+  q8Container.innerHTML = tagsFromQ6.map(tag => `
+    <label class="checkbox-item">
+      <input type="checkbox" name="question-8" value="${tag}">
+      <span class="checkbox-text">${tag}</span>
+    </label>
+  `).join('');
+}
+
+
 // ==== لود برند ====
 let brandId = null;
 async function loadBrand() {
@@ -647,19 +795,53 @@ async function loadBrand() {
   document.querySelector('#industry-dropdown .dropdown-toggle').innerText = brand.field;
   document.querySelector('#employeeCount-dropdown .dropdown-toggle').innerText = brand.employeeCount || 'انتخاب کنید';
 
+  // ابتدا سوال 6 را لود می‌کنیم
   brand.questions.forEach(({id, answer})=>{
-    if (id === 3) {
-      // برای سوال 3 که dropdown است
-      const toggle = document.getElementById(`question-${id}-toggle`);
-      if (toggle) toggle.innerText = answer || 'انتخاب کنید';
-    } else if (id === 6 || id === 8) {
-      // برای سوالات tag-input (سوالات 6 و 8)
+    if (id === 6) {
+      // برای سوال 6 که tag-input است
       if (answer) {
         const tags = answer.split('، ').filter(tag => tag.trim());
         tags.forEach(tag => addTag(id, tag.trim()));
       }
-    } else {
-      // برای سوالات textarea
+    }
+  });
+  
+  // سپس بقیه سوالات را لود می‌کنیم
+  brand.questions.forEach(({id, answer})=>{
+    if (id === 3 || id === 25 || id === 26) {
+      // برای سوالات dropdown (سوالات 3، 25، 26)
+      const toggle = document.getElementById(`question-${id}-toggle`);
+      if (toggle) toggle.innerText = answer || 'انتخاب کنید';
+    } else if (id === 8) {
+      // برای سوال 8 که checkbox است - ابتدا گزینه‌ها را به‌روزرسانی می‌کنیم
+      updateQuestion8Options();
+      // سپس checkbox های انتخاب شده را تیک می‌زنیم
+      if (answer) {
+        const selectedTags = answer.split('، ').filter(tag => tag.trim());
+        selectedTags.forEach(tag => {
+          const checkbox = document.querySelector(`input[name="question-8"][value="${tag.trim()}"]`);
+          if (checkbox) checkbox.checked = true;
+        });
+      }
+    } else if (id === 27) {
+      // برای سوال 27 که checkbox است
+      if (answer) {
+        const selectedOptions = answer.split('، ').filter(option => option.trim());
+        selectedOptions.forEach(option => {
+          const checkbox = document.querySelector(`input[name="question-27"][value="${option.trim()}"]`);
+          if (checkbox) checkbox.checked = true;
+        });
+      }
+    } else if (id === 28) {
+      // برای سوال 28 که priority-select است
+      if (answer) {
+        const selectedPriorities = answer.split('، ').filter(priority => priority.trim());
+        selectedPriorities.forEach(priority => {
+          selectPriority(28, priority.trim());
+        });
+      }
+    } else if (id !== 6) {
+      // برای سوالات textarea (به جز سوال 6 که قبلاً لود شده)
       const el = document.getElementById(`answer-${id}`);
       if (el) el.value = answer;
     }
@@ -732,15 +914,15 @@ async function saveChanges() {
   const questions = allQuestions.map(({id, q, type})=>{
     let answer = '';
     if (type === 'dropdown') {
-      // برای سوال dropdown (سوال 3)
+      // برای سوالات dropdown (سوالات 3، 25، 26)
       const toggle = document.getElementById(`question-${id}-toggle`);
       answer = toggle ? toggle.innerText.replace(' ▼', '') : '';
     } else if (type === 'tag-input') {
-      // برای سوالات tag-input (سوالات 6 و 8)
+      // برای سوال tag-input (سوال 6)
       const tags = getTagsForQuestion(id);
       answer = tags.join('، ');
     } else if (type === 'checkbox') {
-      // برای سوال checkbox (سوال 27)
+      // برای سوالات checkbox (سوالات 8 و 27)
       const selected = getSelectedCheckboxes(id);
       answer = selected.join('، ');
     } else if (type === 'priority-select') {
@@ -807,6 +989,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   buildQuestions('extra-questions',extraQuestions);
   loadCategories();
   loadBrand();
+  
+  // اطمینان از به‌روزرسانی سوال 8 بعد از لود کامل
+  setTimeout(() => {
+    updateQuestion8Options();
+  }, 100);
 });
 </script>
 
