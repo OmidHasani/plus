@@ -48,8 +48,22 @@ async function register() {
 
     const data = await res.json();
     if (res.ok) {
-      msg.textContent = data.message || 'ثبت‌نام موفق! لطفا ایمیل را تایید کنید.';
+      msg.textContent = data.message || 'ثبت‌نام موفق! شما وارد شدید.';
       msg.className = 'success';
+      // پس از ثبت نام موفق، بررسی می‌کنیم که آیا برندی ثبت شده یا نه
+      setTimeout(async () => {
+        const brandRes = await fetch('/api/check-brand', {
+          credentials: 'include'
+        });
+
+        const brandData = await brandRes.json();
+
+        if (brandRes.ok && brandData.hasBrand) {
+          window.location.href = 'brands.html';  // برند قبلاً ثبت شده
+        } else {
+          window.location.href = 'index.html';  // برند ثبت نشده
+        }
+      }, 1000);
     } else {
       msg.textContent = data.error || 'خطا در ثبت‌نام';
       msg.className = 'error';
