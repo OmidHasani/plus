@@ -8,27 +8,158 @@
 
 body {
   font-family: 'Vazirmatn', sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 50%, #ffffff 100%);
+  color: #2c3e50;
   max-width: 900px;
-  margin: 40px auto;
+  margin: 0 auto;
   padding: 20px;
   line-height: 1.8;
   direction: rtl;
+  min-height: 100vh;
 }
 
-
-h1 {
-  text-align: center;
+/* استایل هدر */
+.header {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 15px;
   margin-bottom: 30px;
-  color: #2c3e50;
-  font-weight: 700;
-  border-bottom: 3px solid #3498db;
-  padding-bottom: 10px;
-  display: inline-block;
-  margin-left: auto;
-  margin-right: auto;
+  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: headerSlideIn 0.8s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+@keyframes headerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.header-nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-link:hover::before {
+  left: 100%;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* استایل مخصوص دکمه داشبورد - بنفش */
+.nav-dashboard {
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important;
+  border: 1px solid rgba(155, 89, 182, 0.3) !important;
+}
+
+.nav-dashboard:hover {
+  background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%) !important;
+  box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4) !important;
+}
+
+/* استایل مخصوص دکمه لیست برندها - سفید با متن آبی */
+.nav-brands {
+  background: white !important;
+  color: #3498db !important;
+  border: 1px solid rgba(52, 152, 219, 0.3) !important;
+}
+
+.nav-brands:hover {
+  background: #f8f9fa !important;
+  color: #2980b9 !important;
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2) !important;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .header-nav {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .nav-link {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+
+/* استایل h1 حذف شد چون حالا در هدر قرار دارد */
 
 #ideasContainer {
   display: flex;
@@ -37,9 +168,10 @@ h1 {
 }
 
 .idea-card {
-  background-color: white;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.1);
   padding: 25px 30px;
   position: relative;
 }
@@ -47,8 +179,8 @@ h1 {
 .idea-number {
   position: absolute;
   top: 25px;
-  right: 30px; /* تغییر از left به right */
-  background: #3498db;
+  right: 30px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   font-weight: 700;
   width: 34px;
@@ -59,6 +191,7 @@ h1 {
   justify-content: center;
   font-size: 18px;
   user-select: none;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
 }
 
 .idea-title {
@@ -91,21 +224,22 @@ h1 {
 
 /* استایل‌های مدرن برای دکمه‌ها */
 .btn-modern {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-size: 16px;
+  padding: 18px 36px;
+  border-radius: 20px;
+  font-size: 17px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Vazirmatn', sans-serif;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-  min-width: 200px;
+  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+  min-width: 220px;
   text-align: center;
   position: relative;
   overflow: hidden;
+  border: 2px solid transparent;
 }
 
 .btn-modern::before {
@@ -124,8 +258,9 @@ h1 {
 }
 
 .btn-modern:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(52, 152, 219, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .btn-modern:active {
@@ -140,12 +275,13 @@ h1 {
 }
 
 .btn-occasion {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+  box-shadow: 0 8px 25px rgba(26, 188, 156, 0.3);
 }
 
 .btn-occasion:hover {
-  box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 15px 40px rgba(26, 188, 156, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .btn-occasion:disabled {
@@ -170,7 +306,7 @@ h1 {
 }
 
 .btn-detail {
-  background-color: #3498db;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
   padding: 8px 18px;
@@ -180,13 +316,14 @@ h1 {
   cursor: pointer;
   margin-right: 10px;
   box-shadow: 0 3px 8px rgba(52, 152, 219, 0.4);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
   font-family: 'Vazirmatn', sans-serif;
 }
 
 .btn-detail:hover {
-  background-color: #217dbb;
+  background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
   transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.5);
 }
 
 .btn-detail:active {
@@ -220,7 +357,7 @@ h1 {
 }
 
 .popup-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   padding: 20px;
   display: flex;
@@ -273,7 +410,7 @@ h1 {
 }
 
 .popup-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
   padding: 12px 30px;
@@ -287,7 +424,7 @@ h1 {
 
 .popup-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
 }
 
 @keyframes fadeIn {
@@ -304,6 +441,38 @@ h1 {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+/* استایل کنتینر دکمه‌ها */
+.buttons-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  padding: 25px;
+  background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.buttons-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3498db, #1abc9c, #3498db);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
   </style>
@@ -326,23 +495,36 @@ h1 {
 </head>
 <body>
 
-<h1>💡 فرصت‌های همکاری پیشنهادی</h1>
+<!-- هدر صفحه -->
+<header class="header">
+  <div class="header-content">
+    <h1 class="header-title">💡 فرصت‌های همکاری پیشنهادی</h1>
+    <nav class="header-nav">
+      <a href="dashboard.html" class="nav-link nav-dashboard">داشبورد</a>
+      <a href="brands.html" class="nav-link nav-brands">لیست برندها</a>
+    </nav>
+  </div>
+</header>
+
+<!-- دکمه‌های تولید ایده در بالای صفحه -->
+<div class="buttons-container">
+  <button id="generateBtn" class="btn-modern">🔄 دریافت ایده‌های جدید</button>
+  <button id="generateOccasionBtn" class="btn-modern btn-occasion">🎉 ایده‌های مناسبتی</button>
+</div>
+
+<div id="industryInfo" style="display:none; background:#f8f9fa; padding:15px; border-radius:10px; margin-bottom:20px; border-right:4px solid #3498db;">
+  <h3 style="color:#2c3e50; margin-bottom:10px;">🏭 جزئیات بیشتر صنایع </h3>
+  <div id="industryDetails"></div>
+</div>
 
 <div id="ideasContainer"></div>
 <div id="loadingText" style="display:none;">⏳ در حال دریافت ایده‌ها...</div>
 <div id="errorText" style="display:none;"></div>
 
-<div id="industryInfo" style="display:none; background:#f8f9fa; padding:15px; border-radius:10px; margin-bottom:20px; border-right:4px solid #3498db;">
-  <h3 style="color:#2c3e50; margin-bottom:10px;">🏭 اطلاعات صنعتی</h3>
-  <div id="industryDetails"></div>
-</div>
-
-<div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
-  <button id="generateBtn" class="btn-modern">🔄 دریافت ایده‌های جدید</button>
-  <button id="generateOccasionBtn" class="btn-modern btn-occasion">🎉 ایده‌های مناسبتی</button>
-</div>
-
 <script>
+// متغیر global برای ذخیره ایده‌ها
+let ideas = [];
+
 function getTargetBrandId() {
   const params = new URLSearchParams(window.location.search);
   return params.get("target");
@@ -357,7 +539,7 @@ async function fetchTargetBrand(id) {
 function parseIdeas(text) {
   console.log("متن ورودی برای پارس:", text);
   
-  const ideas = [];
+  ideas = [];
   
   // روش 1: تقسیم بر اساس **ایده X:**
   let ideaSections = text.split(/\*\*ایده\s*\d+:\*\*/).filter(section => section.trim());
@@ -451,11 +633,13 @@ function addSectionTitle(title) {
 function createIdeaCard(idea, index) {
   const card = document.createElement("div");
   card.className = "idea-card";
+  // حذف خطوط --- از متن شرح ایده
+  const cleanDescription = idea.description ? idea.description.replace(/^---+$/gm, '').replace(/\n\s*\n\s*\n/g, '\n\n').trim() : '';
+  
   card.innerHTML = `
     <div class="idea-number">${index + 1}</div>
     <div class="idea-title">${idea.title}</div>
-    <div class="section-label">📝 شرح ایده:</div>
-    <div class="section-content">${idea.description}</div>
+    <div class="section-content">${cleanDescription}</div>
     
     <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
       <button class="btn-detail" data-idea-index="${index}" data-type="detail">🔍 بررسی بیشتر</button>
@@ -530,8 +714,21 @@ function setupIdeaButtons() {
       let message = "";
       
       if (type === "detail") {
-        title = "🔍 بررسی بیشتر";
-        message = "این قابلیت به زودی فعال می‌شود و امکان بررسی دقیق‌تر ایده‌ها را فراهم می‌کند.";
+        // هدایت به صفحه تحلیل ایده
+        const ideaIndex = btn.getAttribute("data-idea-index");
+        const idea = ideas[ideaIndex];
+        
+        if (idea) {
+          // ذخیره اطلاعات ایده در sessionStorage
+          const ideaData = `ایده: ${idea.title}\n\nتوضیحات: ${idea.description}`;
+          sessionStorage.setItem("ideaPrompt", ideaData);
+          // هدایت به صفحه تحلیل
+          window.location.href = "idea-analysis.html";
+        } else {
+          console.error("Idea not found at index:", ideaIndex);
+          alert("خطا: ایده یافت نشد");
+        }
+        return;
       } else if (type === "value") {
         title = "🌟 مزایا برای طرفین";
         message = "این قابلیت به زودی فعال می‌شود و مزایای همکاری برای هر دو طرف را نشان می‌دهد.";
@@ -988,6 +1185,7 @@ async function generateIdeas() {
         container.innerHTML = "";
         container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
         savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        
         setupIdeaButtons();
         
         // اگر ایده‌های قبلی موجود است، فقط ایده‌های جدید تولید کن
@@ -1064,9 +1262,11 @@ async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCo
       container.appendChild(card);
     });
 
-    setupIdeaButtons();
-
+    // به‌روزرسانی متغیر global ideas
+    ideas = allIdeas;
     currentIdeas = allIdeas;
+
+    setupIdeaButtons();
 
     // ذخیره ایده‌ها در دیتابیس
     await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
@@ -1099,6 +1299,7 @@ async function generateOccasionIdeas() {
         container.innerHTML = "";
         container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
         savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        
         setupIdeaButtons();
         
         // تولید ایده‌های مناسبتی جدید
@@ -1177,8 +1378,11 @@ async function generateNewOccasionIdeas(myBrand = null, targetBrandId = null, ex
       container.appendChild(card);
     });
 
-    setupIdeaButtons();
+    // به‌روزرسانی متغیر global ideas
+    ideas = allIdeas;
     currentIdeas = allIdeas;
+
+    setupIdeaButtons();
 
     // ذخیره ایده‌ها در دیتابیس
     await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
@@ -1200,7 +1404,12 @@ document.getElementById("generateOccasionBtn").addEventListener("click", generat
 window.onload = async () => {
   try {
     const myBrand = await fetchMyBrand();
-    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    let targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    
+    // اگر targetBrandId در sessionStorage نیست، آن را ذخیره کن
+    if (targetBrandId && !sessionStorage.getItem("targetBrandId")) {
+      sessionStorage.setItem("targetBrandId", targetBrandId);
+    }
     
     if (targetBrandId) {
       // نمایش اطلاعات صنعتی
@@ -1214,6 +1423,10 @@ window.onload = async () => {
         container.innerHTML = "";
         container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
         savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        
+        // به‌روزرسانی متغیر global ideas
+        ideas = savedIdeas;
+        
         setupIdeaButtons();
       }
     }
