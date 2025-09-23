@@ -8,12 +8,13 @@
 
     body {
       font-family: 'Vazirmatn', sans-serif;
-      background-color: #f9f9f9;
+      background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 50%, #ffffff 100%);
       color: #333;
       max-width: 900px;
-      margin: 40px auto;
+      margin: 20px auto;
       padding: 20px;
       line-height: 1.8;
+      min-height: 100vh;
     }
 
     .card {
@@ -132,6 +133,164 @@
       transform: translateY(0);
     }
 
+    /* استایل هدر */
+    .header {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+      animation: headerSlideIn 0.8s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes headerSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      gap: 20px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* استایل مخصوص دکمه ویرایش - سبز */
+    .nav-edit {
+      background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
+      border: 1px solid rgba(39, 174, 96, 0.3) !important;
+      cursor: pointer;
+    }
+
+    .nav-edit:hover {
+      background: linear-gradient(135deg, #229954 0%, #27ae60 100%) !important;
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4) !important;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-link:hover::before {
+      left: 100%;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-link.active {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* استایل مخصوص دکمه داشبورد - بنفش */
+    .nav-dashboard {
+      background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important;
+      border: 1px solid rgba(155, 89, 182, 0.3) !important;
+    }
+
+    .nav-dashboard:hover {
+      background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%) !important;
+      box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4) !important;
+    }
+
+    /* استایل مخصوص دکمه لیست برندها - سفید با متن آبی */
+    .nav-brands {
+      background: white !important;
+      color: #3498db !important;
+      border: 1px solid rgba(52, 152, 219, 0.3) !important;
+    }
+
+    .nav-brands:hover {
+      background: #f8f9fa !important;
+      color: #2980b9 !important;
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2) !important;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .header-nav {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      .nav-link {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+    }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -176,26 +335,94 @@
       filter: grayscale(60%);
     }
 
+    /* فرصت‌های همکاری */
+    .cooperation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .cooperation-box {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      border-right: 4px solid #3498db;
+    }
+
+    .cooperation-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-right-color: #2980b9;
+    }
+
+    .cooperation-box.ai-analysis {
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      border-right-color: #f39c12;
+      color: #000;
+    }
+
+    .cooperation-box.ai-analysis:hover {
+      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+      color: white;
+    }
+
+    .cooperation-box h3 {
+      margin: 0 0 15px 0;
+      color: #2c3e50;
+      font-size: 16px;
+      font-weight: 700;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 8px;
+    }
+
+    .cooperation-box.ai-analysis h3 {
+      color: #000;
+      border-bottom-color: #f39c12;
+    }
+
+    .cooperation-box.ai-analysis:hover h3 {
+      color: white;
+      border-bottom-color: #fff;
+    }
+
+    .cooperation-content {
+      color: #555;
+      line-height: 1.6;
+      white-space: pre-line;
+      font-size: 14px;
+    }
+
+    .cooperation-box.ai-analysis .cooperation-content {
+      color: #000;
+      font-weight: 500;
+    }
+
+    .cooperation-box.ai-analysis:hover .cooperation-content {
+      color: white;
+    }
+
+
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="brand-logo">
-      <img id="brand-logo" src="" alt="لوگوی برند" />
-    </div>
-    <div class="social-icons">
-      <a href="https://instagram.com/brand" target="_blank" aria-label="اینستاگرام">
-        <img src="https://cdn-icons-png.flaticon.com/24/2111/2111463.png" alt="Instagram" />
-      </a>
-      <a href="https://twitter.com/brand" target="_blank" aria-label="توییتر">
-        <img src="https://cdn-icons-png.flaticon.com/24/733/733579.png" alt="Twitter" />
-      </a>
-      <a href="https://linkedin.com/company/brand" target="_blank" aria-label="لینکدین">
-        <img src="https://cdn-icons-png.flaticon.com/24/174/174857.png" alt="LinkedIn" />
-      </a>
+  <!-- هدر صفحه -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <h1 class="header-title" id="brand-name-header">📊 اطلاعات برند</h1>
+      </div>
+      <nav class="header-nav">
+        <a href="dashboard.html" class="nav-link nav-dashboard">داشبورد</a>
+        <a href="brands.html" class="nav-link nav-brands">لیست برندها</a>
+        <button class="nav-link nav-edit" onclick="editBrand()">✏️ ویرایش</button>
+      </nav>
     </div>
   </header>
+
 
   <div class="card">
     <h2>معرفی برند</h2>
@@ -241,6 +468,68 @@
     </div>
   </div>
 
+  <!-- فرصت‌های همکاری -->
+  <div class="card">
+    <h2>فرصت‌های همکاری</h2>
+    <div class="cooperation-grid">
+      <!-- مناسبت‌های مهم -->
+      <div class="cooperation-box">
+        <h3>مناسبت‌های مهم</h3>
+        <div class="cooperation-content" id="important-occasions">
+          <p>در حال بارگذاری...</p>
+        </div>
+      </div>
+
+      <!-- امکان ارائه هدیه -->
+      <div class="cooperation-box">
+        <h3>امکان ارائه هدیه</h3>
+        <div class="cooperation-content" id="gift-possibility">
+          <p>در حال بارگذاری...</p>
+        </div>
+      </div>
+
+      <!-- شرایط اسپانسری -->
+      <div class="cooperation-box">
+        <h3>شرایط اسپانسری</h3>
+        <div class="cooperation-content" id="sponsorship-conditions">
+          <p>در حال بارگذاری...</p>
+        </div>
+      </div>
+
+      <!-- ظرفیت‌های موجود -->
+      <div class="cooperation-box">
+        <h3>ظرفیت‌های موجود</h3>
+        <div class="cooperation-content" id="existing-capacities">
+          <p>در حال بارگذاری...</p>
+        </div>
+      </div>
+
+      <!-- نقطه تعامل -->
+      <div class="cooperation-box">
+        <h3>نقطه تعامل</h3>
+        <div class="cooperation-content" id="interaction-point">
+          <p>در حال بارگذاری...</p>
+        </div>
+      </div>
+
+      <!-- خط قرمزها -->
+      <div class="cooperation-box">
+        <h3>خط قرمزها و عوامل توقف همکاری</h3>
+        <div class="cooperation-content" id="red-lines">
+          <p>در حال بارگذاری...</p>
+        </div>
+      </div>
+
+      <!-- تحلیل هوش مصنوعی -->
+      <div class="cooperation-box ai-analysis">
+        <h3>تحلیل عمیق و حرفه‌ای هوش مصنوعی</h3>
+        <div class="cooperation-content" id="ai-analysis">
+          <p>بزودی...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <button id="goToCooperation" class="cooperation-btn">بررسی فرصت‌های همکاری</button>
 
 <script>
@@ -256,7 +545,9 @@ async function loadBrandDetails() {
     const brand = await res.json();
 
     // اطلاعات کلی
-    document.getElementById("brand-name").textContent = brand.name || 'نامشخص';
+    const brandName = brand.name || 'نامشخص';
+    document.getElementById("brand-name").textContent = brandName;
+    document.getElementById("brand-name-header").textContent = `📊 ${brandName}`;
     
     // ترکیب حوزه کاری و صنعت
     let industryText = '';
@@ -271,14 +562,8 @@ async function loadBrandDetails() {
     }
     document.getElementById("brand-industry").textContent = industryText;
     
-    document.getElementById("brand-employees").textContent = brand.staff || '-';
-
-    // لوگو
-    if (brand.logoUrl) {
-      document.getElementById("brand-logo").src = brand.logoUrl;
-    } else {
-      document.getElementById("brand-logo").src = "https://via.placeholder.com/72?text=" + (brand.name ? brand.name.charAt(0) : 'B');
-    }
+    const employeeCount = brand.employeeCount || '-';
+    document.getElementById("brand-employees").textContent = employeeCount;
 
     // معرفی برند (از سوال 1)
     const brandDescription = brand.questions?.find(q => q.id === 1)?.answer || 'اطلاعاتی موجود نیست.';
@@ -305,13 +590,27 @@ async function loadBrandDetails() {
     const futurePriorities = brand.questions?.find(q => q.id === 4)?.answer || 'اطلاعاتی موجود نیست.';
     document.getElementById("future-priorities").innerHTML = `<p>${futurePriorities}</p>`;
 
+    // بارگذاری محتویات فرصت‌های همکاری
+    loadCooperationOpportunities(brand.questions || []);
+
   } catch (err) {
     console.error("خطا در بارگذاری برند:", err);
     alert("خطا در دریافت اطلاعات برند.");
   }
 }
 
-function displayBrandQuestions(questions) {
+
+// تابع ویرایش برند
+function editBrand() {
+  const brandId = new URLSearchParams(window.location.search).get('id');
+  if (brandId) {
+    window.location.href = `brand-edit.html?id=${brandId}`;
+  } else {
+    alert('شناسه برند مشخص نیست.');
+  }
+}
+
+async function displayBrandQuestions(questions) {
   const container = document.getElementById("brand-questions");
   container.innerHTML = '';
 
@@ -320,16 +619,30 @@ function displayBrandQuestions(questions) {
     return;
   }
 
+  // دریافت سوالات از دیتابیس
+  let questionTemplates = [];
+  try {
+    const response = await fetch('/api/questions/public');
+    if (response.ok) {
+      questionTemplates = await response.json();
+    }
+  } catch (error) {
+    console.error('خطا در دریافت سوالات از دیتابیس:', error);
+  }
+
   // سوالات مهم برای نمایش
-  const importantQuestions = [2, 3, 6, 7, 15, 16, 17, 20];
+  const importantQuestions = [2, 3, 6, 7, 10, 15, 16, 17, 18, 20, 23];
   
   importantQuestions.forEach(qId => {
     const question = questions.find(q => q.id === qId);
     if (question && question.answer && question.answer.trim()) {
+      const questionTemplate = questionTemplates.find(qt => qt.id === qId);
+      const questionTitle = questionTemplate ? questionTemplate.q : getQuestionTitle(qId);
+      
       const questionDiv = document.createElement('div');
       questionDiv.className = 'question-answer';
       questionDiv.innerHTML = `
-        <div class="question-title">${getQuestionTitle(qId)}</div>
+        <div class="question-title">${questionTitle}</div>
         <div class="question-text">${question.answer}</div>
       `;
       container.appendChild(questionDiv);
@@ -340,10 +653,13 @@ function displayBrandQuestions(questions) {
   if (container.children.length === 0) {
     questions.forEach(question => {
       if (question.answer && question.answer.trim()) {
+        const questionTemplate = questionTemplates.find(qt => qt.id === question.id);
+        const questionTitle = questionTemplate ? questionTemplate.q : question.question;
+        
         const questionDiv = document.createElement('div');
         questionDiv.className = 'question-answer';
         questionDiv.innerHTML = `
-          <div class="question-title">${question.question}</div>
+          <div class="question-title">${questionTitle}</div>
           <div class="question-text">${question.answer}</div>
         `;
         container.appendChild(questionDiv);
@@ -352,16 +668,45 @@ function displayBrandQuestions(questions) {
   }
 }
 
+function loadCooperationOpportunities(questions) {
+  // مناسبت‌های مهم (سوال 24)
+  const importantOccasions = questions.find(q => q.id === 24)?.answer || 'اطلاعاتی موجود نیست.';
+  document.getElementById('important-occasions').textContent = importantOccasions;
+
+  // امکان ارائه هدیه (سوال 11)
+  const giftPossibility = questions.find(q => q.id === 11)?.answer || 'اطلاعاتی موجود نیست.';
+  document.getElementById('gift-possibility').textContent = giftPossibility;
+
+  // شرایط اسپانسری (سوال 27)
+  const sponsorshipConditions = questions.find(q => q.id === 27)?.answer || 'اطلاعاتی موجود نیست.';
+  document.getElementById('sponsorship-conditions').textContent = sponsorshipConditions;
+
+  // ظرفیت‌های موجود (سوال 12)
+  const existingCapacities = questions.find(q => q.id === 12)?.answer || 'اطلاعاتی موجود نیست.';
+  document.getElementById('existing-capacities').textContent = existingCapacities;
+
+  // نقطه تعامل (سوال 29)
+  const interactionPoint = questions.find(q => q.id === 29)?.answer || 'اطلاعاتی موجود نیست.';
+  document.getElementById('interaction-point').textContent = interactionPoint;
+
+  // خط قرمزها (سوال 21)
+  const redLines = questions.find(q => q.id === 21)?.answer || 'اطلاعاتی موجود نیست.';
+  document.getElementById('red-lines').textContent = redLines;
+}
+
 function getQuestionTitle(id) {
   const titles = {
     2: 'جایگاه در بازار',
-    3: 'فاز رشد',
+    3: 'فاز فعلی',
     6: 'محصولات/خدمات اصلی',
     7: 'مدل درآمدزایی',
+    10: 'کانال‌های فروش',
     15: 'مشتری ایده‌آل',
     16: 'کانال‌های جذب مشتری',
     17: 'تعداد مخاطبین فعال',
-    20: 'تجربه همکاری'
+    18: 'ویژگی‌های رفتاری مخاطبان هدف',
+    20: 'تجربه همکاری',
+    23: 'صنعت هدف'
   };
   return titles[id] || `سوال ${id}`;
 }
