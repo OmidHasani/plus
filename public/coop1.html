@@ -156,6 +156,19 @@ body {
     padding: 10px 16px;
     font-size: 13px;
   }
+  
+  .buttons-container {
+    position: sticky;
+    top: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .btn-modern {
+    min-width: 180px;
+    padding: 15px 25px;
+    font-size: 15px;
+  }
 }
 
 
@@ -455,8 +468,17 @@ body {
   border-radius: 20px;
   box-shadow: 0 6px 20px rgba(52, 152, 219, 0.1);
   border: 1px solid rgba(52, 152, 219, 0.2);
-  position: relative;
+  position: sticky;
+  top: 20px;
+  z-index: 100;
   overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+/* سایه بیشتر وقتی دکمه‌ها در حالت sticky هستند */
+.buttons-container.sticky {
+  box-shadow: 0 8px 30px rgba(52, 152, 219, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .buttons-container::before {
@@ -527,7 +549,10 @@ let ideas = [];
 
 function getTargetBrandId() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("target");
+  const targetId = params.get("target");
+  console.log("🔍 دریافت targetBrandId از URL:", targetId);
+  console.log("🔍 URL کامل:", window.location.href);
+  return targetId;
 }
 
 async function fetchTargetBrand(id) {
@@ -636,13 +661,19 @@ function createIdeaCard(idea, index) {
   // حذف خطوط --- از متن شرح ایده
   const cleanDescription = idea.description ? idea.description.replace(/^---+$/gm, '').replace(/\n\s*\n\s*\n/g, '\n\n').trim() : '';
   
+  // بررسی صحت ایندکس
+  if (index < 0 || index >= ideas.length) {
+    console.warn(`ایده در ایندکس ${index} یافت نشد. تعداد ایده‌ها: ${ideas.length}`);
+    return null;
+  }
+  
   card.innerHTML = `
     <div class="idea-number">${index + 1}</div>
     <div class="idea-title">${idea.title}</div>
     <div class="section-content">${cleanDescription}</div>
     
     <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-      <button class="btn-detail" data-idea-index="${index}" data-type="detail">🔍 بررسی بیشتر</button>
+      <button class="btn-detail" data-idea-index="${index}" data-type="detail">🔍 جزئیات بیشتر</button>
       <button class="btn-detail" data-idea-index="${index}" data-type="value">🌟 مزایا برای طرفین</button>
       <button class="btn-detail" data-idea-index="${index}" data-type="economy">💰 مدل‌های درآمدی</button>
     </div>
@@ -666,12 +697,20 @@ function saveIdeasToStorage(ideas, myBrandId, targetBrandId) {
   const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
   const existingIdeas = getSavedIdeas(myBrandId, targetBrandId);
   const allIdeas = [...existingIdeas, ...ideas];
+  console.log('🔍 ذخیره ایده‌ها در localStorage:');
+  console.log('🔍 کلید:', key);
+  console.log('🔍 ایده‌های موجود:', existingIdeas.length);
+  console.log('🔍 ایده‌های جدید:', ideas.length);
+  console.log('🔍 کل ایده‌ها:', allIdeas.length);
   localStorage.setItem(key, JSON.stringify(allIdeas));
 }
 
 function getSavedIdeas(myBrandId, targetBrandId) {
   const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
   const saved = localStorage.getItem(key);
+  console.log('🔍 جستجو برای ایده‌های ذخیره شده:');
+  console.log('🔍 کلید:', key);
+  console.log('🔍 داده‌های ذخیره شده:', saved);
   return saved ? JSON.parse(saved) : [];
 }
 
@@ -707,23 +746,127 @@ async function saveIdeasToDatabase(ideas, myBrandId, targetBrandId) {
 
 
 function setupIdeaButtons() {
+  // اطمینان از اینکه آرایه ideas مقداردهی شده است
+  if (!ideas || ideas.length === 0) {
+    console.warn("آرایه ideas خالی است یا مقداردهی نشده است");
+    return;
+  }
+  
   document.querySelectorAll(".btn-detail").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       const type = btn.getAttribute("data-type");
       let title = "";
       let message = "";
       
       if (type === "detail") {
         // هدایت به صفحه تحلیل ایده
-        const ideaIndex = btn.getAttribute("data-idea-index");
+        const ideaIndex = parseInt(btn.getAttribute("data-idea-index"));
+        
+        console.log('🔍 بررسی ایده:');
+        console.log('ایده ایندکس:', ideaIndex);
+        console.log('تعداد ایده‌ها:', ideas.length);
+        console.log('ایده‌های موجود:', ideas);
+        
+        // بررسی صحت ایندکس
+        if (ideaIndex < 0 || ideaIndex >= ideas.length) {
+          console.error("Idea not found at index:", ideaIndex);
+          alert("خطا: ایده یافت نشد. لطفاً صفحه را رفرش کنید.");
+          return;
+        }
+        
         const idea = ideas[ideaIndex];
+        console.log('ایده پیدا شده:', idea);
         
         if (idea) {
+          // دریافت اطلاعات برند من
+          const myBrand = await fetchMyBrand();
+          
+          // دریافت targetBrandId و ذخیره آن
+          const targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
+          if (targetBrandId) {
+            sessionStorage.setItem("targetBrandId", targetBrandId);
+            
+            // دریافت و ذخیره نام برند همکار
+            try {
+              const response = await fetch(`/api/brand/${targetBrandId}`, { credentials: 'include' });
+              if (response.ok) {
+                const targetBrand = await response.json();
+                sessionStorage.setItem("partnerName", targetBrand.name);
+              }
+            } catch (error) {
+              console.error("خطا در دریافت اطلاعات برند همکار:", error);
+            }
+          }
+          
+          // جستجو برای یافتن ایده در دیتابیس
+          let ideaId = null;
+          try {
+            console.log('🔍 جستجو برای ایده در دیتابیس با عنوان:', idea.title);
+            const response = await fetch(`/api/ideas/partner/${targetBrandId}`, { credentials: 'include' });
+            if (response.ok) {
+              const ideasFromDB = await response.json();
+              console.log('🔍 ایده‌های موجود در دیتابیس:', ideasFromDB);
+              const foundIdea = ideasFromDB.find(dbIdea => dbIdea.title === idea.title);
+              if (foundIdea) {
+                ideaId = foundIdea._id;
+                sessionStorage.setItem("ideaId", ideaId);
+                console.log('🔍 ایده پیدا شد با ID:', ideaId);
+              } else {
+                console.log('🔍 ایده در دیتابیس یافت نشد');
+              }
+            }
+          } catch (error) {
+            console.error("خطا در جستجوی ایده در دیتابیس:", error);
+          }
+          
+          // اگر ایده در دیتابیس یافت نشد، آن را ایجاد کن
+          if (!ideaId) {
+            try {
+              console.log('🔍 ایجاد ایده جدید در دیتابیس...');
+              const response = await fetch('/api/ideas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                  title: idea.title,
+                  description: idea.description,
+                  partnerBrandId: targetBrandId
+                })
+              });
+              
+              if (response.ok) {
+                const newIdea = await response.json();
+                ideaId = newIdea.idea._id;
+                sessionStorage.setItem("ideaId", ideaId);
+                console.log('🔍 ایده جدید ایجاد شد با ID:', ideaId);
+              } else {
+                const errorData = await response.json();
+                console.error('🔍 خطا در ایجاد ایده:', errorData);
+              }
+            } catch (error) {
+              console.error("خطا در ایجاد ایده در دیتابیس:", error);
+            }
+          }
+          
           // ذخیره اطلاعات ایده در sessionStorage
           const ideaData = `ایده: ${idea.title}\n\nتوضیحات: ${idea.description}`;
           sessionStorage.setItem("ideaPrompt", ideaData);
-          // هدایت به صفحه تحلیل
-          window.location.href = "idea-analysis.html";
+          sessionStorage.setItem("ideaTitle", idea.title);
+          sessionStorage.setItem("ideaDescription", idea.description);
+          sessionStorage.setItem("myBrandId", myBrand._id);
+          sessionStorage.setItem("ideaType", "my_idea"); // مشخص کردن نوع ایده
+          
+          console.log('🔍 اطلاعات ذخیره شده در sessionStorage:');
+          console.log('🔍 ideaId:', sessionStorage.getItem("ideaId"));
+          console.log('🔍 ideaTitle:', sessionStorage.getItem("ideaTitle"));
+          console.log('🔍 targetBrandId:', sessionStorage.getItem("targetBrandId"));
+          
+          // بررسی وضعیت دکمه قبل از هدایت
+          await checkIdeaStatus(idea.title, targetBrandId);
+          
+          // هدایت به صفحه جزئیات ایده
+          console.log('🔍 هدایت به صفحه idea-details.html');
+          window.location.href = "idea-details.html";
         } else {
           console.error("Idea not found at index:", ideaIndex);
           alert("خطا: ایده یافت نشد");
@@ -1179,19 +1322,38 @@ async function generateIdeas() {
     const myBrand = await fetchMyBrand();
     const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
     
+    console.log('🔍 بارگذاری ایده‌های قبلی:');
+    console.log('🔍 myBrand._id:', myBrand._id);
+    console.log('🔍 targetBrandId:', targetBrandId);
+    
     if (targetBrandId) {
       const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+      console.log('🔍 ایده‌های ذخیره شده:', savedIdeas);
+      
       if (savedIdeas.length > 0) {
         container.innerHTML = "";
         container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
-        savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        // به‌روزرسانی متغیر global ideas قبل از ایجاد کارت‌ها
+        ideas = savedIdeas;
+        currentIdeas = savedIdeas;
+        
+        savedIdeas.forEach((idea, i) => {
+          const card = createIdeaCard(idea, i);
+          if (card) {
+            container.appendChild(card);
+          }
+        });
         
         setupIdeaButtons();
         
         // اگر ایده‌های قبلی موجود است، فقط ایده‌های جدید تولید کن
         await generateNewIdeas(myBrand, targetBrandId, savedIdeas.length);
         return;
+      } else {
+        console.log('🔍 هیچ ایده‌ای ذخیره نشده است');
       }
+    } else {
+      console.log('🔍 targetBrandId یافت نشد');
     }
   } catch (err) {
     console.error("خطا در بارگذاری ایده‌های قبلی:", err);
@@ -1217,7 +1379,7 @@ async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCo
     }
     
     if (!targetBrandId) {
-      targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+      targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
     }
     
     if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
@@ -1238,12 +1400,17 @@ async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCo
     const text1 = await callOpenAI(prompt1, myBrand._id, targetBrandId);
     const ideas1 = parseIdeas(text1);
     
+    console.log('🔍 ایده‌های تولید شده:', ideas1);
+    
     // فیلتر ایده‌های تکراری نسبت به storedTitles
     const uniqueIdeas1 = ideas1.filter(idea => !storedTitles.includes(idea.title));
+    
+    console.log('🔍 ایده‌های منحصر به فرد:', uniqueIdeas1);
     
     allIdeas.push(...uniqueIdeas1);
 
     // ذخیره ایده‌های جدید
+    console.log('🔍 ذخیره ایده‌های جدید در localStorage...');
     saveIdeasToStorage(uniqueIdeas1, myBrand._id, targetBrandId);
     
     // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
@@ -1259,7 +1426,9 @@ async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCo
     
     uniqueIdeas1.forEach((idea, i) => {
       const card = createIdeaCard(idea, existingCount + i);
-      container.appendChild(card);
+      if (card) {
+        container.appendChild(card);
+      }
     });
 
     // به‌روزرسانی متغیر global ideas
@@ -1269,6 +1438,7 @@ async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCo
     setupIdeaButtons();
 
     // ذخیره ایده‌ها در دیتابیس
+    console.log('🔍 ذخیره ایده‌ها در دیتابیس...');
     await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
 
   } catch (err) {
@@ -1298,7 +1468,16 @@ async function generateOccasionIdeas() {
       if (savedIdeas.length > 0) {
         container.innerHTML = "";
         container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
-        savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        // به‌روزرسانی متغیر global ideas قبل از ایجاد کارت‌ها
+        ideas = savedIdeas;
+        currentIdeas = savedIdeas;
+        
+        savedIdeas.forEach((idea, i) => {
+          const card = createIdeaCard(idea, i);
+          if (card) {
+            container.appendChild(card);
+          }
+        });
         
         setupIdeaButtons();
         
@@ -1333,7 +1512,7 @@ async function generateNewOccasionIdeas(myBrand = null, targetBrandId = null, ex
     }
     
     if (!targetBrandId) {
-      targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+      targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
     }
     
     if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
@@ -1375,7 +1554,9 @@ async function generateNewOccasionIdeas(myBrand = null, targetBrandId = null, ex
     
     uniqueIdeas1.forEach((idea, i) => {
       const card = createIdeaCard(idea, existingCount + i);
-      container.appendChild(card);
+      if (card) {
+        container.appendChild(card);
+      }
     });
 
     // به‌روزرسانی متغیر global ideas
@@ -1404,16 +1585,41 @@ document.getElementById("generateOccasionBtn").addEventListener("click", generat
 window.onload = async () => {
   try {
     const myBrand = await fetchMyBrand();
-    let targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
     
-    // اگر targetBrandId در sessionStorage نیست، آن را ذخیره کن
-    if (targetBrandId && !sessionStorage.getItem("targetBrandId")) {
+    // همیشه ابتدا از URL دریافت کن، سپس از sessionStorage
+    let targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
+    
+    console.log("🔍 targetBrandId از URL:", getTargetBrandId());
+    console.log("🔍 targetBrandId از sessionStorage:", sessionStorage.getItem("targetBrandId"));
+    console.log("🔍 targetBrandId نهایی:", targetBrandId);
+    console.log("🔍 URL کامل:", window.location.href);
+    
+    // targetBrandId را در sessionStorage ذخیره کن
+    if (targetBrandId) {
       sessionStorage.setItem("targetBrandId", targetBrandId);
+      console.log("🔍 targetBrandId در sessionStorage ذخیره شد:", targetBrandId);
+    }
+    
+    // اگر targetBrandId هنوز null است، خطا نمایش بده
+    if (!targetBrandId) {
+      console.error("❌ targetBrandId یافت نشد!");
+      document.getElementById("ideasContainer").innerHTML = `
+        <div class="error">
+          <h4>❌ خطا در بارگذاری</h4>
+          <p>شناسه برند هدف یافت نشد. لطفاً از طریق داشبورد وارد شوید.</p>
+          <button onclick="window.location.href='dashboard.html'" class="btn">
+            🔙 بازگشت به داشبورد
+          </button>
+        </div>
+      `;
+      return;
     }
     
     if (targetBrandId) {
+      console.log("🔍 در حال دریافت اطلاعات برند هدف:", targetBrandId);
       // نمایش اطلاعات صنعتی
       const targetBrand = await fetchTargetBrand(targetBrandId);
+      console.log("🔍 برند هدف دریافت شده:", targetBrand);
       await displayIndustryInfo(myBrand, targetBrand);
       
       // بارگذاری ایده‌های قبلی
@@ -1422,18 +1628,108 @@ window.onload = async () => {
         const container = document.getElementById("ideasContainer");
         container.innerHTML = "";
         container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
-        savedIdeas.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+        // به‌روزرسانی متغیر global ideas قبل از ایجاد کارت‌ها
+        ideas = savedIdeas;
+        currentIdeas = savedIdeas;
+        
+        savedIdeas.forEach((idea, i) => {
+          const card = createIdeaCard(idea, i);
+          if (card) {
+            container.appendChild(card);
+          }
+        });
         
         // به‌روزرسانی متغیر global ideas
         ideas = savedIdeas;
+        currentIdeas = savedIdeas;
         
         setupIdeaButtons();
       }
     }
+    
+    // اضافه کردن observer برای تشخیص حالت sticky
+    setupStickyObserver();
   } catch (err) {
     console.error("خطا در بارگذاری ایده‌های قبلی:", err);
   }
 };
+
+// بررسی وضعیت ایده
+async function checkIdeaStatus(ideaTitle, targetBrandId) {
+  try {
+    const response = await fetch(`/api/cooperation-requests/check/${encodeURIComponent(ideaTitle)}/${targetBrandId}`, {
+      credentials: 'include'
+    });
+    
+    if (response.ok) {
+      const status = await response.json();
+      
+      // ذخیره وضعیت در sessionStorage
+      sessionStorage.setItem('ideaStatus', JSON.stringify(status));
+      
+      // ذخیره شناسه درخواست دریافتی
+      if (status.receivedRequestId) {
+        sessionStorage.setItem('receivedRequestId', status.receivedRequestId);
+      }
+    }
+  } catch (error) {
+    console.error('خطا در بررسی وضعیت ایده:', error);
+  }
+}
+
+// ارسال درخواست همکاری
+async function sendCooperationRequest(ideaTitle, ideaDescription, targetBrandId) {
+  try {
+    const response = await fetch('/api/cooperation-requests', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        targetBrandId: targetBrandId,
+        ideaTitle: ideaTitle,
+        ideaDescription: ideaDescription
+      })
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      showPopup("موفقیت", "درخواست همکاری با موفقیت ارسال شد!");
+      return true;
+    } else {
+      const error = await response.json();
+      showPopup("خطا", error.error || "خطا در ارسال درخواست همکاری");
+      return false;
+    }
+  } catch (error) {
+    console.error("خطا در ارسال درخواست همکاری:", error);
+    showPopup("خطا", "خطا در ارسال درخواست همکاری");
+    return false;
+  }
+}
+
+// تابع برای تشخیص حالت sticky دکمه‌ها
+function setupStickyObserver() {
+  const buttonsContainer = document.querySelector('.buttons-container');
+  if (!buttonsContainer) return;
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.intersectionRatio < 1) {
+        // دکمه‌ها در حالت sticky هستند
+        buttonsContainer.classList.add('sticky');
+      } else {
+        // دکمه‌ها در حالت عادی هستند
+        buttonsContainer.classList.remove('sticky');
+      }
+    });
+  }, {
+    threshold: 1.0
+  });
+  
+  observer.observe(buttonsContainer);
+}
 </script>
 
 
