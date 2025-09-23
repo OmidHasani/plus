@@ -300,6 +300,180 @@
       background: #4299e1;
       color: white;
     }
+
+    .message-preview {
+      color: #718096;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    .message-time {
+      color: #a0aec0;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+
+    .partner-item.unread {
+      border-left: 4px solid #667eea;
+      background: #f7fafc;
+    }
+
+    .partner-item.unread .partner-name {
+      font-weight: 700;
+    }
+
+    .message-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .message-item:hover {
+      border-color: #667eea;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    .message-item.unread {
+      border-left: 4px solid #667eea;
+      background: #f8fafc;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0;
+    }
+
+    .message-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 1.1rem;
+      flex: 1;
+    }
+
+    .message-title i {
+      color: #667eea;
+      font-size: 1.1rem;
+    }
+
+    .message-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .partner-name {
+      color: #718096;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .message-time {
+      color: #a0aec0;
+      font-size: 0.8rem;
+    }
+
+    .message-details {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+
+    .message-content {
+      margin-bottom: 0;
+    }
+
+    .idea-preview {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 0;
+    }
+
+    .idea-title-preview {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .idea-description-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .label {
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 0.9rem;
+    }
+
+    .value {
+      color: #2d3748;
+      line-height: 1.6;
+      white-space: pre-line;
+      font-size: 0.95rem;
+    }
+
+    .message-text {
+      color: #4a5568;
+      line-height: 1.6;
+      white-space: pre-line;
+      font-size: 0.95rem;
+    }
+
+    .message-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .message-actions .btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+      }
+    }
     
     
     .form-group {
@@ -522,6 +696,41 @@
       </div>
     </div>
 
+    <!-- Messages Section -->
+    <div class="dashboard-grid" style="margin-top: 30px;">
+      <!-- Received Messages -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-inbox"></i>
+            پیام‌های دریافتی
+          </h2>
+        </div>
+        <div class="partners-list" id="receivedMessages">
+          <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            در حال بارگذاری...
+          </div>
+        </div>
+      </div>
+
+      <!-- Sent Messages -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-paper-plane"></i>
+            پیام‌های ارسالی
+          </h2>
+        </div>
+        <div class="partners-list" id="sentMessages">
+          <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            در حال بارگذاری...
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -563,7 +772,7 @@
         const brandResponse = await fetch('/api/my-brand', { credentials: 'include' });
         if (brandResponse.ok) {
           myBrand = await brandResponse.json();
-          document.getElementById('brandName').textContent = `داشبورد ${myBrand.name}`;
+          document.getElementById('brandName').textContent = 'داشبورد ' + myBrand.name;
           document.getElementById('brandField').textContent = myBrand.field || 'بدون دسته‌بندی';
         }
 
@@ -580,6 +789,9 @@
         loadIdeas();
         updateStats();
 
+        // Load messages
+        await loadMessages();
+
         // Hide ideas header initially
         document.getElementById('ideasHeader').style.display = 'none';
 
@@ -591,6 +803,8 @@
     // Display partners (only brands with ideas)
     async function displayPartners() {
       const partnersList = document.getElementById('partnersList');
+      
+      console.log('🔍 نمایش همکاران - تعداد برندها:', allBrands.length);
       
       if (allBrands.length === 0) {
         partnersList.innerHTML = `
@@ -606,9 +820,12 @@
       const brandsWithIdeas = [];
       for (const brand of allBrands) {
         try {
-          const ideasResponse = await fetch(`/api/ideas/${brand._id}`, { credentials: 'include' });
+          console.log(`🔍 بررسی ایده‌های ${brand.name}...`);
+          // استفاده از endpoint صحیح برای دریافت ایده‌های برند
+          const ideasResponse = await fetch('/api/ideas/partner/' + brand._id, { credentials: 'include' });
           if (ideasResponse.ok) {
             const ideas = await ideasResponse.json();
+            console.log(`🔍 ایده‌های ${brand.name}:`, ideas.length);
             if (ideas.length > 0) {
               brandsWithIdeas.push(brand);
             }
@@ -617,6 +834,8 @@
           console.error(`خطا در بررسی ایده‌های ${brand.name}:`, error);
         }
       }
+      
+      console.log('🔍 برندهای با ایده:', brandsWithIdeas.length);
 
       if (brandsWithIdeas.length === 0) {
         partnersList.innerHTML = `
@@ -652,7 +871,7 @@
       // Show ideas header with partner name
       const ideasHeader = document.getElementById('ideasHeader');
       const selectedPartnerName = document.getElementById('selectedPartnerName');
-      selectedPartnerName.textContent = `ایده‌های همکاری با: ${selectedPartner.name}`;
+      selectedPartnerName.textContent = 'ایده‌های همکاری با: ' + selectedPartner.name;
       ideasHeader.style.display = 'block';
       
       // Clear any previous loading states
@@ -677,15 +896,18 @@
       
       try {
         // First, try to load existing ideas
-        const ideasResponse = await fetch(`/api/ideas/${partnerId}`, { credentials: 'include' });
+        console.log('🔍 بارگذاری ایده‌های موجود برای برند:', partnerId);
+        const ideasResponse = await fetch('/api/ideas/partner/' + partnerId, { credentials: 'include' });
         
         if (ideasResponse.ok) {
           const existingIdeas = await ideasResponse.json();
+          console.log('🔍 ایده‌های موجود:', existingIdeas);
           if (existingIdeas.length > 0) {
             displayExistingIdeas(existingIdeas);
             return;
           } else {
             // No existing ideas, show empty state
+            console.log('🔍 هیچ ایده‌ای یافت نشد');
             ideasSection.innerHTML = `
               <div class="empty-state">
                 <i class="fas fa-lightbulb"></i>
@@ -694,6 +916,8 @@
             `;
             return;
           }
+        } else {
+          console.error('🔍 خطا در بارگذاری ایده‌ها:', ideasResponse.status, ideasResponse.statusText);
         }
 
         // If no existing ideas, generate new ones using OpenAI API
@@ -730,6 +954,8 @@
     function displayExistingIdeas(ideas) {
       const ideasSection = document.getElementById('ideasSection');
       
+      console.log('🔍 نمایش ایده‌های موجود:', ideas);
+      
       if (ideas.length === 0) {
         ideasSection.innerHTML = `
           <div class="empty-state">
@@ -740,25 +966,29 @@
         return;
       }
 
-      ideasSection.innerHTML = ideas.map((idea, index) => `
-        <div class="idea-item">
-          <div class="idea-title">${idea.title || `ایده ${index + 1}`}</div>
-          <div class="idea-description">${idea.description || 'توضیحی موجود نیست'}</div>
-          <div class="idea-actions">
-            <button class="btn btn-sm btn-primary" onclick="showIdeaDetails('${idea._id}', '${idea.title || `ایده ${index + 1}`}', '${(idea.description || 'توضیحی موجود نیست').replace(/'/g, "\\'")}')">
-              <i class="fas fa-info-circle"></i>
-              جزئیات بیشتر
-            </button>
-          </div>
-        </div>
-      `).join('') + `
-        <div style="margin-top: 20px; text-align: center;">
-          <button class="btn btn-primary" onclick="goToCooperationPage('${selectedPartner._id}')">
-            <i class="fas fa-lightbulb"></i>
-            فرصت‌های همکاری پیشنهادی
-          </button>
-        </div>
-      `;
+      ideasSection.innerHTML = ideas.map((idea, index) => {
+        const ideaTitle = idea.title || 'ایده ' + (index + 1);
+        const ideaDescription = idea.description || 'توضیحی موجود نیست';
+        const safeDescription = ideaDescription.replace(/'/g, "\\'");
+        const safeTitle = ideaTitle.replace(/'/g, "\\'");
+        
+        return '<div class="idea-item">' +
+          '<div class="idea-title">' + ideaTitle + '</div>' +
+          '<div class="idea-description">' + ideaDescription + '</div>' +
+          '<div class="idea-actions">' +
+            '<button class="btn btn-sm btn-primary" onclick="showIdeaDetails(\'' + idea._id + '\', \'' + safeTitle + '\', \'' + safeDescription + '\')">' +
+              '<i class="fas fa-info-circle"></i>' +
+              'جزئیات بیشتر' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('') + 
+        '<div style="margin-top: 20px; text-align: center;">' +
+          '<button class="btn btn-primary" onclick="goToCooperationPage(\'' + selectedPartner._id + '\')">' +
+            '<i class="fas fa-lightbulb"></i>' +
+            'فرصت‌های همکاری پیشنهادی' +
+          '</button>' +
+        '</div>';
     }
 
     // Display ideas
@@ -781,29 +1011,33 @@
         return;
       }
 
-      ideasSection.innerHTML = ideaLines.map((idea, index) => `
-        <div class="idea-item">
-          <div class="idea-title">ایده ${index + 1}</div>
-          <div class="idea-description">${idea.trim()}</div>
-          <div class="idea-actions">
-            <button class="btn btn-sm btn-primary" onclick="showIdeaDetails(null, 'ایده ${index + 1}', '${idea.trim().replace(/'/g, "\\'")}')">
-              <i class="fas fa-info-circle"></i>
-              جزئیات بیشتر
-            </button>
-            <button class="btn btn-sm btn-success" onclick="saveIdea('${idea.trim()}', ${index})">
-              <i class="fas fa-save"></i>
-              ذخیره
-            </button>
-          </div>
-        </div>
-      `).join('') + `
-        <div style="margin-top: 20px; text-align: center;">
-          <button class="btn btn-primary" onclick="goToCooperationPage('${selectedPartner._id}')">
-            <i class="fas fa-lightbulb"></i>
-            فرصت‌های همکاری پیشنهادی
-          </button>
-        </div>
-      `;
+      ideasSection.innerHTML = ideaLines.map((idea, index) => {
+        const ideaTitle = 'ایده ' + (index + 1);
+        const ideaText = idea.trim();
+        const safeIdeaText = ideaText.replace(/'/g, "\\'");
+        const safeTitle = ideaTitle.replace(/'/g, "\\'");
+        
+        return '<div class="idea-item">' +
+          '<div class="idea-title">' + ideaTitle + '</div>' +
+          '<div class="idea-description">' + ideaText + '</div>' +
+          '<div class="idea-actions">' +
+            '<button class="btn btn-sm btn-primary" onclick="showIdeaDetails(null, \'' + safeTitle + '\', \'' + safeIdeaText + '\')">' +
+              '<i class="fas fa-info-circle"></i>' +
+              'جزئیات بیشتر' +
+            '</button>' +
+            '<button class="btn btn-sm btn-success" onclick="saveIdea(\'' + safeIdeaText + '\', ' + index + ')">' +
+              '<i class="fas fa-save"></i>' +
+              'ذخیره' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('') + 
+        '<div style="margin-top: 20px; text-align: center;">' +
+          '<button class="btn btn-primary" onclick="goToCooperationPage(\'' + selectedPartner._id + '\')">' +
+            '<i class="fas fa-lightbulb"></i>' +
+            'فرصت‌های همکاری پیشنهادی' +
+          '</button>' +
+        '</div>';
     }
 
     // Load ideas (mock data)
@@ -822,9 +1056,21 @@
         // Count pending suggestions (ideas without response)
         const pendingSuggestionsCount = ideas.filter(idea => !idea.responded).length;
 
+        // Count unread messages
+        let unreadMessagesCount = 0;
+        try {
+          const response = await fetch('/api/messages/received', { credentials: 'include' });
+          if (response.ok) {
+            const messages = await response.json();
+            unreadMessagesCount = messages.filter(message => !message.isRead).length;
+          }
+        } catch (error) {
+          console.error('خطا در دریافت پیام‌ها:', error);
+        }
+
         // Update stats
         document.getElementById('totalBrands').textContent = totalBrandsCount;
-        document.getElementById('unreadMessages').textContent = 0;
+        document.getElementById('unreadMessages').textContent = unreadMessagesCount;
         document.getElementById('pendingSuggestions').textContent = pendingSuggestionsCount;
       } catch (error) {
         console.error('خطا در محاسبه آمار:', error);
@@ -848,7 +1094,7 @@
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify({
-            title: `ایده ${index + 1}`,
+            title: 'ایده ' + (index + 1),
             description: ideaText,
             partnerBrandId: selectedPartner._id
           })
@@ -870,7 +1116,43 @@
 
     // Show idea details
     function showIdeaDetails(ideaId, title, description) {
-      alert(`جزئیات ایده:\n\nعنوان: ${title}\n\nتوضیحات: ${description}`);
+      console.log('🔍 showIdeaDetails فراخوانی شد:');
+      console.log('ایده ID:', ideaId);
+      console.log('عنوان:', title);
+      console.log('توضیحات:', description);
+      console.log('برند من:', myBrand._id);
+      console.log('برند انتخاب شده:', selectedPartner);
+      
+      // Store idea data in sessionStorage for the analysis page
+      sessionStorage.setItem('ideaPrompt', title + '\n\n' + description);
+      sessionStorage.setItem('ideaTitle', title);
+      sessionStorage.setItem('ideaDescription', description);
+      sessionStorage.setItem('myBrandId', myBrand._id);
+      sessionStorage.setItem('ideaType', 'my_idea'); // مشخص کردن نوع ایده
+      
+      // Also store partner information if available
+      if (selectedPartner) {
+        sessionStorage.setItem('targetBrandId', selectedPartner._id);
+        sessionStorage.setItem('partnerName', selectedPartner.name);
+        console.log('✅ اطلاعات برند همکار ذخیره شد:', selectedPartner.name);
+      } else {
+        console.log('⚠️ برند همکار انتخاب نشده است');
+        // اگر برند همکار انتخاب نشده، از لیست برندها یکی را انتخاب کن
+        if (allBrands && allBrands.length > 0) {
+          const randomPartner = allBrands[0];
+          sessionStorage.setItem('targetBrandId', randomPartner._id);
+          sessionStorage.setItem('partnerName', randomPartner.name);
+          console.log('✅ برند همکار تصادفی انتخاب شد:', randomPartner.name);
+        }
+      }
+      
+      // Store idea ID if available
+      if (ideaId) {
+        sessionStorage.setItem('ideaId', ideaId);
+      }
+      
+      // Navigate to idea details page
+      window.location.href = 'idea-details.html';
     }
 
     // Go to cooperation page
@@ -878,7 +1160,7 @@
       // Store the selected partner ID in sessionStorage
       sessionStorage.setItem('targetBrandId', partnerId);
       // Navigate to cooperation page
-      window.location.href = `coop1.html?target=${partnerId}`;
+      window.location.href = 'coop1.html?target=' + partnerId;
     }
 
 
@@ -896,6 +1178,329 @@
         const diffInDays = Math.floor(diffInHours / 24);
         return `${diffInDays} روز پیش`;
       }
+    }
+
+    // Load messages
+    async function loadMessages() {
+      try {
+        await loadReceivedMessages();
+        await loadSentMessages();
+      } catch (error) {
+        console.error('خطا در بارگذاری پیام‌ها:', error);
+      }
+    }
+
+    // Load received messages
+    async function loadReceivedMessages() {
+      try {
+        console.log('🔍 در حال بارگذاری پیام‌های دریافتی...');
+        const response = await fetch('/api/messages/received', { credentials: 'include' });
+        if (response.ok) {
+          const messages = await response.json();
+          console.log('🔍 پیام‌های دریافتی:', messages);
+          displayReceivedMessages(messages);
+        } else if (response.status === 401) {
+          // کاربر وارد نشده است
+          document.getElementById('receivedMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-sign-in-alt"></i>
+              <p>ابتدا وارد شوید</p>
+            </div>
+          `;
+        } else if (response.status === 404) {
+          // API endpoint یافت نشد
+          document.getElementById('receivedMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>سرویس پیام‌رسانی در دسترس نیست</p>
+            </div>
+          `;
+        } else {
+          document.getElementById('receivedMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>خطا در بارگذاری پیام‌های دریافتی</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('خطا در بارگذاری پیام‌های دریافتی:', error);
+        document.getElementById('receivedMessages').innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>خطا در بارگذاری پیام‌های دریافتی</p>
+          </div>
+        `;
+      }
+    }
+
+    // Load sent messages
+    async function loadSentMessages() {
+      try {
+        const response = await fetch('/api/messages/sent', { credentials: 'include' });
+        if (response.ok) {
+          const messages = await response.json();
+          displaySentMessages(messages);
+        } else if (response.status === 401) {
+          // کاربر وارد نشده است
+          document.getElementById('sentMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-sign-in-alt"></i>
+              <p>ابتدا وارد شوید</p>
+            </div>
+          `;
+        } else if (response.status === 404) {
+          // API endpoint یافت نشد
+          document.getElementById('sentMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>سرویس پیام‌رسانی در دسترس نیست</p>
+            </div>
+          `;
+        } else {
+          document.getElementById('sentMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>خطا در بارگذاری پیام‌های ارسالی</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('خطا در بارگذاری پیام‌های ارسالی:', error);
+        document.getElementById('sentMessages').innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>خطا در بارگذاری پیام‌های ارسالی</p>
+          </div>
+        `;
+      }
+    }
+
+    // Display received messages
+    function displayReceivedMessages(messages) {
+      const container = document.getElementById('receivedMessages');
+      
+      console.log('🔍 نمایش پیام‌های دریافتی:', messages);
+      
+      if (messages.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>هیچ پیام دریافتی ندارید</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map((message, index) => {
+        // پارس کردن اطلاعات ایده از متن پیام
+        const ideaInfo = parseIdeaFromMessage(message.content);
+        const messageId = `message-${index}`;
+        
+        return `
+          <div class="message-item ${!message.isRead ? 'unread' : ''}" onclick="toggleMessageDetails('${messageId}')">
+            <div class="message-header">
+              <div class="message-title">
+                <i class="fas fa-envelope"></i>
+                <span>${message.subject}</span>
+              </div>
+              <div class="message-meta">
+                <div class="partner-name">از: ${message.senderBrandId.name}</div>
+                <div class="message-time">${formatDate(message.createdAt)}</div>
+              </div>
+            </div>
+            
+            <div class="message-details" id="${messageId}" style="display: none;">
+              <div class="message-content">
+                ${ideaInfo ? `
+                  <div class="idea-preview">
+                    <div class="idea-title-preview">
+                      <span class="label">عنوان ایده:</span>
+                      <span class="value">${ideaInfo.title}</span>
+                    </div>
+                    <div class="idea-description-preview">
+                      <span class="label">شرح ایده:</span>
+                      <span class="value">${ideaInfo.description}</span>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="message-text">${message.content}</div>
+                `}
+              </div>
+              ${ideaInfo && !ideaInfo.isAccepted ? `
+                <div class="message-actions">
+                  <button class="btn btn-sm btn-primary idea-details-btn" 
+                          data-message-id="${message._id}" 
+                          data-title="${ideaInfo.title.replace(/"/g, '&quot;')}" 
+                          data-description="${ideaInfo.description.replace(/"/g, '&quot;')}" 
+                          data-sender-id="${message.senderBrandId._id}" 
+                          data-sender-name="${message.senderBrandId.name.replace(/"/g, '&quot;')}">
+                    <i class="fas fa-info-circle"></i>
+                    جزئیات بیشتر
+                  </button>
+                </div>
+              ` : ideaInfo && ideaInfo.isAccepted ? `
+                <div class="message-actions">
+                  <div class="btn btn-sm btn-success" style="cursor: default;">
+                    <i class="fas fa-check-circle"></i>
+                    همکاری پذیرفته شده
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // اضافه کردن event listener برای دکمه‌های جزئیات بیشتر
+      container.querySelectorAll('.idea-details-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const messageId = btn.getAttribute('data-message-id');
+          const title = btn.getAttribute('data-title');
+          const description = btn.getAttribute('data-description');
+          const senderId = btn.getAttribute('data-sender-id');
+          const senderName = btn.getAttribute('data-sender-name');
+          goToIdeaAnalysis(messageId, title, description, senderId, senderName);
+        });
+      });
+    }
+
+    // Display sent messages
+    function displaySentMessages(messages) {
+      const container = document.getElementById('sentMessages');
+      
+      if (messages.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-paper-plane"></i>
+            <p>هیچ پیام ارسالی ندارید</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map((message, index) => {
+        // پارس کردن اطلاعات ایده از متن پیام
+        const ideaInfo = parseIdeaFromMessage(message.content);
+        const messageId = `sent-message-${index}`;
+        
+        return `
+          <div class="message-item" onclick="toggleMessageDetails('${messageId}')">
+            <div class="message-header">
+              <div class="message-title">
+                <i class="fas fa-paper-plane"></i>
+                <span>${message.subject}</span>
+              </div>
+              <div class="message-meta">
+                <div class="partner-name">به: ${message.recipientBrandId.name}</div>
+                <div class="message-time">${formatDate(message.createdAt)}</div>
+              </div>
+            </div>
+            
+            <div class="message-details" id="${messageId}" style="display: none;">
+              <div class="message-content">
+                ${ideaInfo ? `
+                  <div class="idea-preview">
+                    <div class="idea-title-preview">
+                      <span class="label">عنوان ایده:</span>
+                      <span class="value">${ideaInfo.title}</span>
+                    </div>
+                    <div class="idea-description-preview">
+                      <span class="label">شرح ایده:</span>
+                      <span class="value">${ideaInfo.description}</span>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="message-text">${message.content}</div>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Parse idea information from message content
+    function parseIdeaFromMessage(content) {
+      try {
+        // جستجو برای الگوهای مختلف در متن پیام
+        const titleMatch = content.match(/\*\*عنوان ایده:\*\*\s*([^\n]+)/i) || 
+                          content.match(/عنوان ایده:\s*([^\n]+)/i) ||
+                          content.match(/درخواست همکاری:\s*([^\n]+)/i) ||
+                          content.match(/پذیرش درخواست همکاری:\s*([^\n]+)/i);
+        
+        const descriptionMatch = content.match(/\*\*توضیحات:\*\*\s*([\s\S]+?)(?=\n\n|\*\*|امیدوارم|من آماده)/i) ||
+                                content.match(/توضیحات:\s*([\s\S]+?)(?=\n\n|\*\*|امیدوارم|من آماده)/i);
+        
+        // بررسی اینکه آیا پیام پذیرفته شده است
+        const isAccepted = content.includes('پذیرش درخواست همکاری') || 
+                          content.includes('درخواست همکاری پذیرفته شد') ||
+                          content.includes('همکاری پذیرفته شده');
+        
+        if (titleMatch && descriptionMatch) {
+          return {
+            title: titleMatch[1].trim(),
+            description: descriptionMatch[1].trim(),
+            isAccepted: isAccepted
+          };
+        }
+        
+        return null;
+      } catch (error) {
+        console.error('خطا در پارس کردن اطلاعات ایده:', error);
+        return null;
+      }
+    }
+
+    // Toggle message details
+    function toggleMessageDetails(messageId) {
+      const detailsElement = document.getElementById(messageId);
+      if (detailsElement) {
+        if (detailsElement.style.display === 'none') {
+          detailsElement.style.display = 'block';
+          detailsElement.style.animation = 'slideDown 0.3s ease-out';
+        } else {
+          detailsElement.style.animation = 'slideUp 0.3s ease-out';
+          setTimeout(() => {
+            detailsElement.style.display = 'none';
+          }, 300);
+        }
+      }
+    }
+
+    // Navigate to idea analysis page
+    async function goToIdeaAnalysis(messageId, title, description, senderBrandId, senderName) {
+      try {
+        // دریافت اطلاعات برند من
+        const myBrandResponse = await fetch('/api/my-brand', { credentials: 'include' });
+        if (!myBrandResponse.ok) {
+          throw new Error('برند شما یافت نشد');
+        }
+        const myBrand = await myBrandResponse.json();
+        
+        // ذخیره اطلاعات ایده در sessionStorage
+        sessionStorage.setItem('ideaTitle', title);
+        sessionStorage.setItem('ideaDescription', description);
+        sessionStorage.setItem('targetBrandId', senderBrandId);
+        sessionStorage.setItem('partnerName', senderName);
+        sessionStorage.setItem('ideaPrompt', `ایده: ${title}\n\nتوضیحات: ${description}`);
+        sessionStorage.setItem('myBrandId', myBrand._id);
+        sessionStorage.setItem('ideaType', 'received_idea');
+        sessionStorage.setItem('messageId', messageId);
+        
+        // هدایت به صفحه جزئیات ایده
+        window.location.href = 'idea-details.html';
+      } catch (error) {
+        console.error('خطا در دریافت اطلاعات برند:', error);
+        alert('خطا در بارگذاری اطلاعات. لطفاً دوباره تلاش کنید.');
+      }
+    }
+
+    // Show message details
+    function showMessageDetails(messageId, type) {
+      // This would open a modal or navigate to a message detail page
+      alert(`نمایش جزئیات پیام ${messageId} از نوع ${type}`);
     }
 
     // Logout
