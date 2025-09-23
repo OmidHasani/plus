@@ -8,14 +8,155 @@
     @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
     body {
       font-family: 'Vazirmatn', sans-serif;
-      background: #f8faff;
+      background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 50%, #ffffff 100%);
       padding: 20px;
       max-width: 900px;
       margin: auto;
       direction: rtl;
       line-height: 1.8;
       color: #222;
+      min-height: 100vh;
     }
+    /* استایل هدر */
+    .header {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+      animation: headerSlideIn 0.8s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes headerSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-link:hover::before {
+      left: 100%;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .nav-link.active {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* استایل مخصوص دکمه داشبورد - بنفش */
+    .nav-dashboard {
+      background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important;
+      border: 1px solid rgba(155, 89, 182, 0.3) !important;
+    }
+
+    .nav-dashboard:hover {
+      background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%) !important;
+      box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4) !important;
+    }
+
+    /* استایل مخصوص دکمه لیست برندها - سفید با متن آبی */
+    .nav-brands {
+      background: white !important;
+      color: #3498db !important;
+      border: 1px solid rgba(52, 152, 219, 0.3) !important;
+    }
+
+    .nav-brands:hover {
+      background: #f8f9fa !important;
+      color: #2980b9 !important;
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2) !important;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .header-nav {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      .nav-link {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+    }
+
     h2, h3 {
       color: #1e3a8a;
       margin-bottom: 15px;
@@ -359,17 +500,31 @@ textarea {
     /* Questions */
     .section {
       border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 15px;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
       background: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .section:hover {
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
     }
     .section strong {
       display: block;
-      margin-bottom: 8px;
-      color: #1e293b;
-      font-weight: 500;
+      margin-bottom: 15px;
+      color: #1e3a8a;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 1.6;
+      border-right: 4px solid #3b82f6;
+      padding-right: 12px;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin: -20px -20px 15px -20px;
     }
     textarea {
       width: 100%;
@@ -428,6 +583,17 @@ textarea {
 </head>
 <body>
 
+<!-- هدر صفحه -->
+<header class="header">
+  <div class="header-content">
+    <h1 class="header-title">✏️ ویرایش برند</h1>
+    <nav class="header-nav">
+      <a href="dashboard.html" class="nav-link nav-dashboard">داشبورد</a>
+      <a href="brands.html" class="nav-link nav-brands">لیست برندها</a>
+    </nav>
+  </div>
+</header>
+
 <h2>ویرایش برند</h2>
 
 <div class="form-row">
@@ -454,61 +620,98 @@ textarea {
   </div>
 </div>
 
-<h3>سؤالات</h3>
-<div id="essentials-questions"></div>
-<div id="extra-questions"></div>
+<div class="form-row">
+  <label>آخرین ارزیابی سلامت روان:</label>
+  <div class="dropdown" id="mentalHealthAssessment-dropdown">
+    <div class="dropdown-toggle" onclick="toggleMenu('mentalHealthAssessment')">انتخاب کنید ▼</div>
+    <div class="dropdown-menu" id="mentalHealthAssessment-menu">
+      <div onclick="selectOption('mentalHealthAssessment', 'کمتر از ۶ ماه پیش')">کمتر از ۶ ماه پیش</div>
+      <div onclick="selectOption('mentalHealthAssessment', '۶–۱۲ ماه گذشته')">۶–۱۲ ماه گذشته</div>
+      <div onclick="selectOption('mentalHealthAssessment', '۱–۲ سال گذشته')">۱–۲ سال گذشته</div>
+      <div onclick="selectOption('mentalHealthAssessment', 'بیش از ۲ سال گذشته')">بیش از ۲ سال گذشته</div>
+      <div onclick="selectOption('mentalHealthAssessment', 'هرگز')">هرگز</div>
+    </div>
+  </div>
+</div>
 
-<h3>اولویت‌ها</h3>
-<div id="priority-list"></div>
+<div class="form-row">
+  <label>آخرین آموزش سازمانی:</label>
+  <div class="dropdown" id="organizationalTraining-dropdown">
+    <div class="dropdown-toggle" onclick="toggleMenu('organizationalTraining')">انتخاب کنید ▼</div>
+    <div class="dropdown-menu" id="organizationalTraining-menu">
+      <div onclick="selectOption('organizationalTraining', 'کمتر از ۳ ماه گذشته')">کمتر از ۳ ماه گذشته</div>
+      <div onclick="selectOption('organizationalTraining', '۳–۱۲ ماه گذشته')">۳–۱۲ ماه گذشته</div>
+      <div onclick="selectOption('organizationalTraining', 'بیش از ۱ سال گذشته')">بیش از ۱ سال گذشته</div>
+      <div onclick="selectOption('organizationalTraining', 'هرگز')">هرگز</div>
+    </div>
+  </div>
+</div>
+
+<div style="margin: 30px 0;">
+  <h2 style="color: #1e3a8a; border-bottom: 3px solid #3b82f6; padding-bottom: 10px; margin-bottom: 25px;">
+    📋 سؤالات اصلی
+  </h2>
+  <div id="essentials-questions"></div>
+</div>
+
+<div style="margin: 30px 0;">
+  <h2 style="color: #1e3a8a; border-bottom: 3px solid #10b981; padding-bottom: 10px; margin-bottom: 25px;">
+    🔍 سؤالات تکمیلی
+  </h2>
+  <div id="extra-questions"></div>
+</div>
+
+<div style="margin: 30px 0;">
+  <h2 style="color: #1e3a8a; border-bottom: 3px solid #f59e0b; padding-bottom: 10px; margin-bottom: 25px;">
+    🎯 اولویت‌های برند
+  </h2>
+  <div id="priority-list"></div>
+</div>
 
 <button class="save-button" onclick="saveChanges()">ذخیره تغییرات</button>
 
 <script>
-// ==== همه ۲۹ سؤال ====
+// ==== سوالات اصلی ====
 const essentialsQuestions = [
-  {id: 1,  q: "برند خود را در یک جمله معرفی کنید."},
-  {id: 2,  q: "چه جایگاهی در بازار دارید؟"},
-  {id: 3,  q: "در چه فازی از رشد هستید؟", type: "dropdown", options: ["شروع", "تثبیت", "رشد سریع", "بلوغ", "بازطراحی"]},
+  {id: 1,  q: "تعریف خدمات و برند شما در یک جمله"},
+  {id: 2,  q: "جایگاه کنونی سازمان/برند شما در بازار را چگونه تعریف می‌کنید؟"},
+  {id: 3,  q: "در حال حاضر کسب و کار شما در چه فازی است؟", type: "dropdown", options: ["شروع", "تثبیت", "رشد سریع", "بلوغ", "بازطراحی"]},
   {id: 4,  q: "۳ اولویت اصلی برندتان در ۱۲ ماه آینده چیست؟"},
-  {id: 5,  q: "در چه چیزهایی حاضرید سرمایه‌گذاری کنید؟"},
-  {id: 6,  q: "محصولات / خدمات اصلی شما چیست؟", type: "tag-input"},
-  {id: 7,  q: "چطور درآمدزایی می‌کنید؟"},
-  {id: 8,  q: "کدام‌یک از محصولاتتان قابلیت ترکیب با برندهای دیگر را دارد؟", type: "checkbox"},
-  {id: 9,  q: "کدام بخش‌های کسب‌وکارتان مقیاس‌پذیر است؟"},
-  {id: 10, q: "مشتری‌های شما بیشتر از کجا جذب می‌شوند و از چه کانال‌هایی فروش دارید؟"},
-  {id: 11, q: "محصولی دارید که بشه به‌عنوان هدیه یا پیشنهاد ترکیبی استفاده کرد؟"},
-  {id: 12, q: "چه ظرفیت‌هایی دارید که می‌توانند در همکاری مشترک استفاده شوند؟"},
-  {id: 13, q: "کدام منابع فعلاً کمتر از ظرفیت واقعی استفاده می‌شوند؟"},
-  {id: 14, q: "آیا مجاز به ارائه این منابع به بیرون هستید؟"},
-  {id: 15, q: "مشتری ایده‌آل شما کیست؟"},
-  {id: 16, q: "درصد مخاطبین فعال شما چقدر است؟"},
-  {id: 18, q: "سه ویژگی مهم که در رفتار و روحیه مشتریان شما وجود دارد چیست؟"},
-  {id: 19, q: "تجربه‌ای از همکاری با برندهای دیگر داشتید؟"},
-  {id: 21, q: "چه چیزی باعث می‌شود یک همکاری را متوقف کنید؟"},
-  // 🔻 سوالات جدید
-  {id: 22, q: "آیا در حال حاضر برند شما برنامه‌ای برای برونسپاری پروژه‌های کوچک دارد یا تمام کارها داخل مجموعه انجام می‌گردد؟"},
-  {id: 23, q: "هدف شما کدام صنعت است؟"},
-  {id: 24, q: "مهمترین مناسبت در صنعت و برای برند شما، چه روزهایی است؟"},
-  {id: 25, q: "آخرین بار چه زمانی پرسنل‌تان را از نظر سلامت روان ارزیابی کردید؟", type: "dropdown", options: ["کمتر از ۶ ماه پیش", "۶–۱۲ ماه گذشته", "۱–۲ سال گذشته", "بیش از ۲ سال گذشته", "هرگز"]},
-  {id: 26, q: "آخرین باری که برند شما برای توانمندسازی کارکنان، از مدرس یا یک مشاور دعوت و یک دوره یا کارگاه سازمانی برگزار کرد، چه زمانی بوده؟", type: "dropdown", options: ["کمتر از ۳ ماه گذشته", "۳–۱۲ ماه گذشته", "بیش از ۱ سال گذشته", "هرگز"]},
-  {id: 27, q: "در حال حاضر با احتمال وقوع یک شرایط ایده‌آل، کدامیک از شرایط اسپانسری را دارید؟", type: "checkbox", options: ["مالی", "رسانه‌ای", "مکان (سالن، گالری، سوله، فضای کار یا...)", "هدیه سازمانی", "ارتباطات خاص"]},
-  {id: 28, q: "بر اساس تجربه، برای شکل‌گیری یک همکاری پایدار با شما، بهتر است سه اولویت برتر برند مقابل چه باید باشد؟", type: "priority-select", options: ["فرصت‌های توسعه بازار", "جذب سرمایه", "بهبود خدمات مشتری", "توسعه محصول", "افزایش فروش", "توسعه تیم", "ورود به بازار جدید", "ورود به بازار بین‌الملل", "تبلیغات و بازاریابی", "ارتقاء فناوری"]}
+  {id: 5,  q: "محصولات و خدمات اصلی سازمان شما چی هستند؟", type: "tag-input"},
+  {id: 6,  q: "مدل درآمدی محصولات/خدمات شما چیست؟"},
+  {id: 7,  q: "بیشتر مشتریان شما از چه مسیرهایی جذب می‌شوند و از طریق کدام کانال‌ها فروش انجام می‌گیرد؟"},
+  {id: 8,  q: "به نظر شما کدام محصول/خدمتِ برندتان، ظرفیت هم‌افزایی و ترکیب با سایر برندها را دارد؟", type: "checkbox"},
+  {id: 9,  q: "کدام محصول یا خدمت شما قابلیت ارائه بعنوان هدیه را دارد؟", type: "checkbox"},
+  {id: 10, q: "سه ویژگی برجسته در رفتار و روحیه مشتریان شما کدام‌اند؟"},
+  {id: 11, q: "مشتری ایده‌آل شما کدام صنعت است؟"},
+  {id: 12, q: "کدام مناسبت‌ها در صنعت شما، برای مشتریان و همچنین برای برندتان از بیشترین اهمیت برخوردار است؟"},
+  {id: 13, q: "در شرایط کنونی (با فرض دستیابی به موقعیتی ایده‌آل و حضور کامل مخاطبان هدف) کدام گزینه‌های اسپانسری در دسترس شما قرار دارد؟", type: "checkbox", options: ["مالی", "رسانه‌ای", "مکان (سالن، گالری، سوله، فضای کار یا...)", "محصول به عنوان هدیه", "ارتباطات خاص"]},
+  {id: 14, q: "لطفاً اولویت‌های برندتان (بسته به شرایط فعلی) را منظم فرمایید", type: "priority-select", options: ["فرصت‌های توسعه بازار", "جذب سرمایه", "بهبود خدمات مشتری", "توسعه محصول", "افزایش فروش", "توسعه تیم", "ورود به بازار جدید", "ورود به بازار بین‌الملل", "تبلیغات و بازاریابی", "ارتقاء فناوری"]},
+  {id: 15, q: "آخرین بار چه زمانی پرسنل‌تان را از نظر سلامت روان ارزیابی کردید؟", type: "dropdown", options: ["کمتر از ۶ ماه پیش", "۶–۱۲ ماه گذشته", "۱–۲ سال گذشته", "بیش از ۲ سال گذشته", "هرگز"]},
+  {id: 16, q: "آخرین باری که برند شما برای توانمندسازی کارکنان، از مدرس یا یک مشاور دعوت و یک دوره یا کارگاه سازمانی برگزار کرد، چه زمانی بوده؟", type: "dropdown", options: ["کمتر از ۳ ماه گذشته", "۳–۱۲ ماه گذشته", "بیش از ۱ سال گذشته", "هرگز"]}
 ];
 const extraQuestions = [
-  {id: 29, q: "برای رشد کسب‌وکارتان در یک سال آینده، چه قابلیت‌ها یا منابعی نیاز دارید که الان ندارید؟"},
-  {id: 30, q: "در حال حاضر کدام بخش از فعالیت‌هایتان زمان یا انرژی بیشتری می‌گیرد و چرا؟"},
-  {id: 31, q: "اخیراً چه فرصت مهمی در بازار وجود داشته که حس می‌کنید به خاطر نداشتن آمادگی آن را از دست داده‌اید؟"},
-  {id: 32, q: "رقبای شما در چه زمینه‌ای عملکرد بهتری داشته‌اند یا چه کاری انجام داده‌اند که شما هنوز شروع نکرده‌اید؟"},
-  {id: 33, q: "فکر می‌کنید کدام معیار یا شاخص در کسب‌وکارتان نیازمند توجه بیشتر است؟"},
-  {id: 34, q: "در حال حاضر بزرگترین چالش‌هایی که برای توسعه کسب‌وکارتان دارید کدامند؟"},
-  {id: 35, q: "معمولاً مشتریان چه پیشنهاداتی برای بهبود محصولات یا خدمات شما دارند؟"}
+  {id: 17, q: "کدام بخش‌های کسب‌وکار شما قابلیت مقیاس‌پذیری و توسعه در ابعاد بزرگ‌تر را دارد؟"},
+  {id: 18, q: "چه ظرفیت‌هایی در سازمان شما وجود دارد که بتوان از آن‌ها در چارچوب همکاری‌های مشترک بهره‌برداری کرد؟", type: "tag-input"},
+  {id: 19, q: "در حال حاضر کدام یک از منابع شما کمتر از ظرفیت واقعی خود مورد استفاده قرار می‌گیرند؟", type: "checkbox"},
+  {id: 20, q: "با کدام برندها تاکنون تجربه همکاری داشته‌اید؟", type: "tag-input"},
+  {id: 21, q: "خط قرمزها و عواملی که می‌توانند موجب توقف یک همکاری از سوی شما شوند، چه مواردی هستند؟"},
+  {id: 22, q: "در حال حاضر کدام بخش از فعالیت‌هایتان زمان یا انرژی بیشتری می‌گیرد و چرا؟"},
+  {id: 23, q: "برای رشد کسب‌وکارتان در یک سال آینده، چه قابلیت‌ها یا منابعی نیاز دارید که الان ندارید؟"},
+  {id: 24, q: "اخیراً چه فرصت مهمی در بازار وجود داشته که حس می‌کنید به خاطر نداشتن آمادگی آن را از دست داده‌اید؟"},
+  {id: 25, q: "رقبای شما در چه زمینه‌ای عملکرد بهتری داشته‌اند یا چه کاری انجام داده‌اند که شما هنوز شروع نکرده‌اید؟"},
+  {id: 26, q: "معمولاً مشتریان چه پیشنهاداتی برای بهبود محصولات یا خدمات شما دارند؟"}
 ];
 const allQuestions = [...essentialsQuestions, ...extraQuestions];
 
 // ==== ساخت سوالات ====
 function buildQuestions(containerId, questionsArr) {
   const parent = document.getElementById(containerId);
-  questionsArr.forEach(({id, q, type, options}) => {
+  
+  // مرتب کردن سوالات بر اساس شماره
+  const sortedQuestions = questionsArr.sort((a, b) => a.id - b.id);
+  
+  sortedQuestions.forEach(({id, q, type, options, loadFromQuestion}) => {
     const wrap = document.createElement('div');
     wrap.className = 'section';
     wrap.innerHTML = `<strong>${id}. ${q}</strong>`;
@@ -525,15 +728,30 @@ function buildQuestions(containerId, questionsArr) {
       `;
       wrap.appendChild(dropdownDiv);
     } else if (type === 'tag-input') {
-      // ایجاد tag input برای سوالات 6 و 8
+      // ایجاد tag input
       const tagContainer = document.createElement('div');
       tagContainer.className = 'tag-input-container';
-      tagContainer.innerHTML = `
-        <div class="tag-input-wrapper">
-          <input type="text" id="tag-input-${id}" placeholder="متن را وارد کنید و Enter بزنید..." class="tag-input-field">
-          <div class="tags-display" id="tags-${id}"></div>
-        </div>
-      `;
+      
+      // اگر سوال باید از سوال دیگری لود شود
+      if (loadFromQuestion) {
+        tagContainer.innerHTML = `
+          <div class="tag-input-wrapper">
+            <input type="text" id="tag-input-${id}" placeholder="متن اضافی را وارد کنید و Enter بزنید..." class="tag-input-field">
+            <div class="tags-display" id="tags-${id}"></div>
+            <div class="load-from-question-info" style="margin-top: 10px; padding: 10px; background: #f0f8ff; border-radius: 8px; border: 1px solid #e0e7ff;">
+              <small style="color: #1e40af; font-weight: 600;">📋 گزینه‌های از سوال ${loadFromQuestion} به صورت خودکار اضافه می‌شوند</small>
+            </div>
+          </div>
+        `;
+      } else {
+        tagContainer.innerHTML = `
+          <div class="tag-input-wrapper">
+            <input type="text" id="tag-input-${id}" placeholder="متن را وارد کنید و Enter بزنید..." class="tag-input-field">
+            <div class="tags-display" id="tags-${id}"></div>
+          </div>
+        `;
+      }
+      
       wrap.appendChild(tagContainer);
       
       // اضافه کردن event listener برای Enter key
@@ -545,6 +763,26 @@ function buildQuestions(containerId, questionsArr) {
           this.value = '';
         }
       });
+      
+      // اگر سوال باید از سوال دیگری لود شود، تگ‌ها را کپی کن
+      if (loadFromQuestion) {
+        setTimeout(() => {
+          loadTagsFromQuestion(id, loadFromQuestion);
+        }, 100);
+        
+        // اضافه کردن event listener برای تغییرات سوال منبع
+        const sourceInput = document.getElementById(`tag-input-${loadFromQuestion}`);
+        if (sourceInput) {
+          sourceInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              // بعد از اضافه شدن تگ جدید، سوال هدف را به‌روزرسانی کن
+              setTimeout(() => {
+                loadTagsFromQuestion(id, loadFromQuestion);
+              }, 200);
+            }
+          });
+        }
+      }
     } else if (type === 'checkbox' && options) {
       // ایجاد checkbox برای سوال 27
       const checkboxContainer = document.createElement('div');
@@ -553,27 +791,39 @@ function buildQuestions(containerId, questionsArr) {
         <div class="checkbox-options" id="checkbox-options-${id}">
           ${options.map(option => `
             <label class="checkbox-item">
-              <input type="checkbox" name="question-${id}" value="${option}">
-              <span class="checkbox-text">${option}</span>
+              <input type="checkbox" name="question-${id}" value="${option.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
+              <span class="checkbox-text">${option.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
             </label>
           `).join('')}
         </div>
       `;
       wrap.appendChild(checkboxContainer);
-    } else if (type === 'checkbox' && id === 8) {
-      // ایجاد checkbox برای سوال 8 که گزینه‌هایش از سوال 6 می‌آید
+    } else if (type === 'checkbox' && (id === 8 || id === 9)) {
+      // ایجاد checkbox برای سوال 8 و 9 که گزینه‌هایش از سوال 5 می‌آید
       const checkboxContainer = document.createElement('div');
       checkboxContainer.className = 'checkbox-container';
       checkboxContainer.innerHTML = `
         <div class="checkbox-options" id="checkbox-options-${id}">
           <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
-            ابتدا محصولات خود را در سوال 6 وارد کنید
+            ابتدا محصولات خود را در سوال 5 وارد کنید
+          </div>
+        </div>
+      `;
+      wrap.appendChild(checkboxContainer);
+    } else if (type === 'checkbox' && id === 19) {
+      // ایجاد checkbox برای سوال 19 که گزینه‌هایش از سوال 18 می‌آید
+      const checkboxContainer = document.createElement('div');
+      checkboxContainer.className = 'checkbox-container';
+      checkboxContainer.innerHTML = `
+        <div class="checkbox-options" id="checkbox-options-${id}">
+          <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
+            ابتدا ظرفیت‌های خود را در سوال 18 وارد کنید
           </div>
         </div>
       `;
       wrap.appendChild(checkboxContainer);
     } else if (type === 'priority-select' && options) {
-      // ایجاد priority select برای سوال 28
+      // ایجاد priority select برای سوال 14
       const priorityContainer = document.createElement('div');
       priorityContainer.className = 'priority-select-container';
       priorityContainer.innerHTML = `
@@ -651,19 +901,16 @@ function addTag(questionId, tagText) {
     return;
   }
   
-  // ایجاد تگ جدید
-  const tagElement = document.createElement('div');
-  tagElement.className = 'tag-item';
-  tagElement.innerHTML = `
-    <span class="tag-text">${tagText}</span>
-    <button class="tag-remove" onclick="removeTag(${questionId}, \`${tagText.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">×</button>
-  `;
+  addTagToContainer(questionId, tagText, false);
   
-  tagsContainer.appendChild(tagElement);
-  
-  // به‌روزرسانی سوال 8 اگر سوال 6 است
-  if (questionId === 6) {
+  // به‌روزرسانی سوال 8 و 9 اگر سوال 5 است
+  if (questionId === 5) {
     updateQuestion8Options();
+  }
+  
+  // به‌روزرسانی سوال 19 اگر سوال 18 است
+  if (questionId === 18) {
+    updateQuestion19Options();
   }
 }
 
@@ -679,9 +926,14 @@ function removeTag(questionId, tagText) {
     }
   });
   
-  // به‌روزرسانی سوال 8 اگر سوال 6 است
-  if (questionId === 6) {
+  // به‌روزرسانی سوال 8 و 9 اگر سوال 5 است
+  if (questionId === 5) {
     updateQuestion8Options();
+  }
+  
+  // به‌روزرسانی سوال 19 اگر سوال 18 است
+  if (questionId === 18) {
+    updateQuestion19Options();
   }
 }
 
@@ -695,10 +947,68 @@ function getTagsForQuestion(questionId) {
   );
 }
 
+// بارگذاری تگ‌ها از سوال دیگری
+function loadTagsFromQuestion(targetQuestionId, sourceQuestionId) {
+  const sourceTags = getTagsForQuestion(sourceQuestionId);
+  const targetContainer = document.getElementById(`tags-${targetQuestionId}`);
+  
+  if (!targetContainer || sourceTags.length === 0) return;
+  
+  // پاک کردن تگ‌های موجود در سوال هدف
+  targetContainer.innerHTML = '';
+  
+  // اضافه کردن تگ‌های سوال منبع
+  sourceTags.forEach(tagText => {
+    addTagToContainer(targetQuestionId, tagText, true); // true = از سوال دیگر لود شده
+  });
+}
+
+// اضافه کردن تگ به container بدون بررسی تکراری (برای لود از سوال دیگر)
+function addTagToContainer(questionId, tagText, isFromOtherQuestion = false) {
+  const tagsContainer = document.getElementById(`tags-${questionId}`);
+  if (!tagsContainer) return;
+  
+  const tagItem = document.createElement('div');
+  tagItem.className = 'tag-item';
+  tagItem.style.cssText = `
+    background: ${isFromOtherQuestion ? '#e0f2fe' : '#3b82f6'};
+    color: ${isFromOtherQuestion ? '#0369a1' : 'white'};
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 2px;
+    border: 1px solid ${isFromOtherQuestion ? '#bae6fd' : '#3b82f6'};
+  `;
+  
+  tagItem.innerHTML = `
+    <span class="tag-text">${tagText}</span>
+    ${!isFromOtherQuestion ? `<span class="tag-remove" onclick="removeTag(${questionId}, this)" style="cursor: pointer; font-weight: bold; margin-right: 4px;">×</span>` : ''}
+  `;
+  
+  tagsContainer.appendChild(tagItem);
+}
+
 // انتخاب اولویت برای سوال 28
 function selectPriority(questionId, priority) {
   const selectedContainer = document.getElementById(`selected-priorities-${questionId}`);
-  const option = document.querySelector(`[onclick="selectPriority('${questionId}', \`${priority.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)"]`);
+  
+  // پیدا کردن گزینه با مقایسه دستی
+  const allOptions = document.querySelectorAll(`.priority-options .priority-option`);
+  let option = null;
+  allOptions.forEach(opt => {
+    const onclickAttr = opt.getAttribute('onclick');
+    if (onclickAttr && onclickAttr.includes(`selectPriority('${questionId}'`)) {
+      // استخراج متن priority از onclick attribute
+      const match = onclickAttr.match(/selectPriority\('[^']+',\s*`([^`]+)`\)/);
+      if (match && match[1] === priority) {
+        option = opt;
+      }
+    }
+  });
   
   if (!selectedContainer || !option) return;
   
@@ -734,7 +1044,20 @@ function selectPriority(questionId, priority) {
 // حذف اولویت انتخاب شده
 function removePriority(questionId, priority) {
   const selectedContainer = document.getElementById(`selected-priorities-${questionId}`);
-  const option = document.querySelector(`[onclick="selectPriority('${questionId}', \`${priority.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)"]`);
+  
+  // پیدا کردن گزینه با مقایسه دستی
+  const allOptions = document.querySelectorAll(`.priority-options .priority-option`);
+  let option = null;
+  allOptions.forEach(opt => {
+    const onclickAttr = opt.getAttribute('onclick');
+    if (onclickAttr && onclickAttr.includes(`selectPriority('${questionId}'`)) {
+      // استخراج متن priority از onclick attribute
+      const match = onclickAttr.match(/selectPriority\('[^']+',\s*`([^`]+)`\)/);
+      if (match && match[1] === priority) {
+        option = opt;
+      }
+    }
+  });
   
   if (selectedContainer && option) {
     option.classList.remove('selected');
@@ -759,28 +1082,71 @@ function getSelectedCheckboxes(questionId) {
   return Array.from(checkboxes).map(cb => cb.value);
 }
 
-// به‌روزرسانی گزینه‌های سوال 8 بر اساس تگ‌های سوال 6
+// به‌روزرسانی گزینه‌های سوال 8 و 9 بر اساس تگ‌های سوال 5
 function updateQuestion8Options() {
-  const tagsFromQ6 = getTagsForQuestion(6);
+  const tagsFromQ5 = getTagsForQuestion(5);
+  
+  // به‌روزرسانی سوال 8
   const q8Container = document.getElementById('checkbox-options-8');
-  
-  if (!q8Container) return;
-  
-  if (tagsFromQ6.length === 0) {
-    q8Container.innerHTML = `
-      <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
-        ابتدا محصولات خود را در سوال 6 وارد کنید
-      </div>
-    `;
-    return;
+  if (q8Container) {
+    if (tagsFromQ5.length === 0) {
+      q8Container.innerHTML = `
+        <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
+          ابتدا محصولات خود را در سوال 5 وارد کنید
+        </div>
+      `;
+    } else {
+      q8Container.innerHTML = tagsFromQ5.map(tag => `
+        <label class="checkbox-item">
+          <input type="checkbox" name="question-8" value="${tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
+          <span class="checkbox-text">${tag.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
+        </label>
+      `).join('');
+    }
   }
   
-  q8Container.innerHTML = tagsFromQ6.map(tag => `
-    <label class="checkbox-item">
-      <input type="checkbox" name="question-8" value="${tag}">
-      <span class="checkbox-text">${tag}</span>
-    </label>
-  `).join('');
+  // به‌روزرسانی سوال 9
+  const q9Container = document.getElementById('checkbox-options-9');
+  if (q9Container) {
+    if (tagsFromQ5.length === 0) {
+      q9Container.innerHTML = `
+        <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
+          ابتدا محصولات خود را در سوال 5 وارد کنید
+        </div>
+      `;
+    } else {
+      q9Container.innerHTML = tagsFromQ5.map(tag => `
+        <label class="checkbox-item">
+          <input type="checkbox" name="question-9" value="${tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
+          <span class="checkbox-text">${tag.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
+        </label>
+      `).join('');
+    }
+  }
+}
+
+// به‌روزرسانی گزینه‌های سوال 19 بر اساس تگ‌های سوال 18
+function updateQuestion19Options() {
+  const tagsFromQ18 = getTagsForQuestion(18);
+  
+  // به‌روزرسانی سوال 19
+  const q19Container = document.getElementById('checkbox-options-19');
+  if (q19Container) {
+    if (tagsFromQ18.length === 0) {
+      q19Container.innerHTML = `
+        <div class="no-options-message" style="color: #666; font-style: italic; padding: 10px;">
+          ابتدا ظرفیت‌های خود را در سوال 18 وارد کنید
+        </div>
+      `;
+    } else {
+      q19Container.innerHTML = tagsFromQ18.map(tag => `
+        <label class="checkbox-item">
+          <input type="checkbox" name="question-19" value="${tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
+          <span class="checkbox-text">${tag.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
+        </label>
+      `).join('');
+    }
+  }
 }
 
 
@@ -794,11 +1160,19 @@ async function loadBrand() {
 
   document.querySelector('#industry-dropdown .dropdown-toggle').innerText = brand.field;
   document.querySelector('#employeeCount-dropdown .dropdown-toggle').innerText = brand.employeeCount || 'انتخاب کنید';
+  
+  // لود فیلدهای جدید
+  if (brand.mentalHealthAssessment) {
+    document.querySelector('#mentalHealthAssessment-dropdown .dropdown-toggle').innerText = brand.mentalHealthAssessment;
+  }
+  if (brand.organizationalTraining) {
+    document.querySelector('#organizationalTraining-dropdown .dropdown-toggle').innerText = brand.organizationalTraining;
+  }
 
-  // ابتدا سوال 6 را لود می‌کنیم
+  // ابتدا سوال 5، 18 و 20 را لود می‌کنیم
   brand.questions.forEach(({id, answer})=>{
-    if (id === 6) {
-      // برای سوال 6 که tag-input است
+    if (id === 5 || id === 18 || id === 20) {
+      // برای سوال 5، 18 و 20 که tag-input هستند
       if (answer) {
         const tags = answer.split('، ').filter(tag => tag.trim());
         tags.forEach(tag => addTag(id, tag.trim()));
@@ -808,40 +1182,66 @@ async function loadBrand() {
   
   // سپس بقیه سوالات را لود می‌کنیم
   brand.questions.forEach(({id, answer})=>{
-    if (id === 3 || id === 25 || id === 26) {
-      // برای سوالات dropdown (سوالات 3، 25، 26)
+    if (id === 3 || id === 15 || id === 16) {
+      // برای سوالات dropdown (سوالات 3، 15، 16)
       const toggle = document.getElementById(`question-${id}-toggle`);
       if (toggle) toggle.innerText = answer || 'انتخاب کنید';
-    } else if (id === 8) {
-      // برای سوال 8 که checkbox است - ابتدا گزینه‌ها را به‌روزرسانی می‌کنیم
+    } else if (id === 8 || id === 9) {
+      // برای سوال 8 و 9 که checkbox هستند - ابتدا گزینه‌ها را به‌روزرسانی می‌کنیم
       updateQuestion8Options();
       // سپس checkbox های انتخاب شده را تیک می‌زنیم
       if (answer) {
         const selectedTags = answer.split('، ').filter(tag => tag.trim());
         selectedTags.forEach(tag => {
-          const checkbox = document.querySelector(`input[name="question-8"][value="${tag.trim()}"]`);
-          if (checkbox) checkbox.checked = true;
+          // استفاده از querySelectorAll و مقایسه دستی
+          const checkboxes = document.querySelectorAll(`input[name="question-${id}"]`);
+          checkboxes.forEach(checkbox => {
+            if (checkbox.value === tag.trim()) {
+              checkbox.checked = true;
+            }
+          });
         });
       }
-    } else if (id === 27) {
-      // برای سوال 27 که checkbox است
+    } else if (id === 19) {
+      // برای سوال 19 که checkbox است - ابتدا گزینه‌ها را به‌روزرسانی می‌کنیم
+      updateQuestion19Options();
+      // سپس checkbox های انتخاب شده را تیک می‌زنیم
+      if (answer) {
+        const selectedTags = answer.split('، ').filter(tag => tag.trim());
+        selectedTags.forEach(tag => {
+          // استفاده از querySelectorAll و مقایسه دستی
+          const checkboxes = document.querySelectorAll(`input[name="question-${id}"]`);
+          checkboxes.forEach(checkbox => {
+            if (checkbox.value === tag.trim()) {
+              checkbox.checked = true;
+            }
+          });
+        });
+      }
+    } else if (id === 13) {
+      // برای سوال 13 که checkbox است
       if (answer) {
         const selectedOptions = answer.split('، ').filter(option => option.trim());
         selectedOptions.forEach(option => {
-          const checkbox = document.querySelector(`input[name="question-27"][value="${option.trim()}"]`);
-          if (checkbox) checkbox.checked = true;
+          // استفاده از querySelectorAll و مقایسه دستی
+          const checkboxes = document.querySelectorAll('input[name="question-13"]');
+          checkboxes.forEach(checkbox => {
+            if (checkbox.value === option.trim()) {
+              checkbox.checked = true;
+            }
+          });
         });
       }
-    } else if (id === 28) {
-      // برای سوال 28 که priority-select است
+    } else if (id === 14) {
+      // برای سوال 14 که priority-select است
       if (answer) {
         const selectedPriorities = answer.split('، ').filter(priority => priority.trim());
         selectedPriorities.forEach(priority => {
-          selectPriority(28, priority.trim());
+          selectPriority(14, priority.trim());
         });
       }
-    } else if (id !== 6) {
-      // برای سوالات textarea (به جز سوال 6 که قبلاً لود شده)
+    } else if (id !== 5 && id !== 18 && id !== 20) {
+      // برای سوالات textarea (به جز سوالات tag-input که قبلاً لود شده)
       const el = document.getElementById(`answer-${id}`);
       if (el) el.value = answer;
     }
@@ -905,6 +1305,8 @@ function updatePriorityNumbers(){
 async function saveChanges() {
   const industry = document.querySelector('#industry-dropdown .dropdown-toggle').innerText;
   const employeeCount = document.querySelector('#employeeCount-dropdown .dropdown-toggle').innerText;
+  const mentalHealthAssessment = document.querySelector('#mentalHealthAssessment-dropdown .dropdown-toggle').innerText;
+  const organizationalTraining = document.querySelector('#organizationalTraining-dropdown .dropdown-toggle').innerText;
   
   // Validation
   if (employeeCount === 'انتخاب کنید') {
@@ -918,11 +1320,11 @@ async function saveChanges() {
       const toggle = document.getElementById(`question-${id}-toggle`);
       answer = toggle ? toggle.innerText.replace(' ▼', '') : '';
     } else if (type === 'tag-input') {
-      // برای سوال tag-input (سوال 6)
+      // برای سوالات tag-input (سوال 6، 12 و 19)
       const tags = getTagsForQuestion(id);
       answer = tags.join('، ');
     } else if (type === 'checkbox') {
-      // برای سوالات checkbox (سوالات 8 و 27)
+      // برای سوالات checkbox (سوالات 8، 11، 13 و 27)
       const selected = getSelectedCheckboxes(id);
       answer = selected.join('، ');
     } else if (type === 'priority-select') {
@@ -938,7 +1340,14 @@ async function saveChanges() {
   });
   const priorities = Array.from(document.querySelectorAll('#priority-list .priority-item .priority-text')).map(el=>el.innerText);
 
-  const brandData = {field:industry, employeeCount, questions, priorities};
+  const brandData = {
+    field: industry, 
+    employeeCount, 
+    mentalHealthAssessment: mentalHealthAssessment !== 'انتخاب کنید' ? mentalHealthAssessment : undefined,
+    organizationalTraining: organizationalTraining !== 'انتخاب کنید' ? organizationalTraining : undefined,
+    questions, 
+    priorities
+  };
 
   const res = await fetch(`/api/brand/${brandId}`, {
     method:'PUT',
@@ -990,9 +1399,10 @@ window.addEventListener('DOMContentLoaded',()=>{
   loadCategories();
   loadBrand();
   
-  // اطمینان از به‌روزرسانی سوال 8 بعد از لود کامل
+  // اطمینان از به‌روزرسانی سوال 8 و 19 بعد از لود کامل
   setTimeout(() => {
     updateQuestion8Options();
+    updateQuestion19Options();
   }, 100);
 });
 </script>
