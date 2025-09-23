@@ -56,6 +56,14 @@ const brandSchema = new mongoose.Schema({
     enum: ['1-9', '10-49', '50-99', '100-499', '500+'],
     required: true
   },
+  mentalHealthAssessment: {
+    type: String,
+    enum: ['کمتر از ۶ ماه پیش', '۶–۱۲ ماه گذشته', '۱–۲ سال گذشته', 'بیش از ۲ سال گذشته', 'هرگز']
+  },
+  organizationalTraining: {
+    type: String,
+    enum: ['کمتر از ۳ ماه گذشته', '۳–۱۲ ماه گذشته', 'بیش از ۱ سال گذشته', 'هرگز']
+  },
   // اضافه کردن فیلد questions به شکل آرایه‌ای از آبجکت‌ها
   questions: [
     {
@@ -480,6 +488,114 @@ app.post("/api/generate-ideas", async (req, res) => {
   }
 });
 
+// -- تولید مدل‌های درآمدی --
+app.post("/api/generate-revenue-models", async (req, res) => {
+  try {
+    const { ideaDescription, myBrandId, targetBrandId } = req.body;
+    if (!ideaDescription) {
+      return res.status(400).json({ error: "شرح ایده الزامی است" });
+    }
+
+    // دریافت اطلاعات برندها برای بهبود پرامپت
+    let enhancedPrompt = ideaDescription;
+    let myBrand = null;
+    let targetBrand = null;
+    
+    if (myBrandId && targetBrandId) {
+      try {
+        myBrand = await Brand.findById(myBrandId);
+        targetBrand = await Brand.findById(targetBrandId);
+        
+        if (myBrand && targetBrand) {
+          enhancedPrompt += `\n\n**اطلاعات برند من:** ${myBrand.name} - ${myBrand.field}\n`;
+          enhancedPrompt += `**اطلاعات برند همکار:** ${targetBrand.name} - ${targetBrand.field}`;
+        }
+      } catch (err) {
+        console.log("خطا در دریافت اطلاعات برندها:", err.message);
+      }
+    }
+    const revenuePrompt = `
+    تو یک نابغه کسب‌وکار و مشاور استراتژیک برند در سطح جهانی هستی، کسی که تجربه خلق مدل‌های درآمدی میلیارد دلاری و فوق‌العاده خلاقانه برای برندهای مختلف را دارد.  
+    هدف تو این است که از ایده همکاری زیر، **5 مدل درآمدی حرفه‌ای و کاملاً عملی برای برند اول و 5 مدل برای برند دوم** بسازی.  
+    
+    ایده همکاری: ${enhancedPrompt}
+    
+    **نکات مهم برای تولید مدل‌ها:**  
+    - مدل‌ها باید کاملاً خلاقانه، نوآورانه و منحصر به فرد باشند.  
+    - مدل‌ها باید عملی و قابل اجرا باشند، بدون ارائه فیلدهای خشک یا جدول‌بندی رسمی.  
+    - توضیحات هر مدل باید **جزئیات دقیق، مثال‌های کاربردی و نحوه درآمدزایی** را نشان دهد.  
+    - می‌توانی از انواع مدل‌ها استفاده کنی: فروش مستقیم، اشتراک، اسپانسرشیپ، خدمات ویژه، آپ‌سل، تبلیغات، لید جن، بسته‌های B2B و هر روش دیگری که خلاقانه و سودآور باشد.  
+    - سبک نوشتار باید **مثل مشاور میلیارد دلاری** باشد، طبیعی، روان و با تمام جزئیات لازم برای درک ارزش مدل.  
+    
+    **برای ${myBrand ? myBrand.name : 'برند اول'}:**  
+    1. [مدل درآمدی اول و توضیحات کاملش با جزئیات عملی، مثال‌ها، نحوه درآمدزایی و ایده‌های ترکیبی]  
+    2. [مدل درآمدی دوم...]  
+    3. [مدل درآمدی سوم...]  
+    4. [مدل درآمدی چهارم...]  
+    5. [مدل درآمدی پنجم...]  
+    
+    **برای ${targetBrand ? targetBrand.name : 'برند دوم'}:**  
+    1. [مدل درآمدی اول و توضیحات کاملش با جزئیات عملی، مثال‌ها، نحوه درآمدزایی و ایده‌های ترکیبی]  
+    2. [مدل درآمدی دوم...]  
+    3. [مدل درآمدی سوم...]  
+    4. [مدل درآمدی چهارم...]  
+    5. [مدل درآمدی پنجم...]  
+    
+    **تذکر:**  
+    - هیچ مدل نباید شبیه دیگری باشد، تمام مدل‌ها باید خلاقانه، متمایز و جذاب باشند.  
+    - توضیحات باید واقعی و قابل تصور برای اجرای عملی باشند، نه کلی و سطحی.  
+    -مدل های درامدی ارائه شده کاملا باید برای ایده ای باشند که روی آن تمرکز میشود یعنی : ${enhancedPrompt}
+    - تمرکز روی سودآوری، نوآوری و عملی بودن مدل‌ها باشد.  
+    - سبک نوشتار باید **جذاب، حرفه‌ای و به گونه‌ای باشد که خواننده احساس کند یک مشاور برند حرفه‌ای و با تجربه آن را نوشته است.**
+    `;
+    
+    
+    
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4.1",
+      messages: [
+        { 
+          role: "system", 
+          content: "تو یک نابغه کسب‌وکار هستی که می‌تونی از هر ایده همکاری، مدل‌های درآمدی فوق‌العاده خلق کنی. تو همیشه بر اساس ایده همکاری خاص ارائه شده مدل‌های درآمدی طراحی می‌کنی و هرگز از مدل‌های کلی کسب‌وکار استفاده نمی‌کنی. تو قادرید نقاط قوت هر ایده همکاری را شناسایی کرده و آن‌ها را به مدل‌های درآمدی خلاقانه و قابل اجرا تبدیل کنی." 
+        },
+        { role: "user", content: revenuePrompt }
+      ],
+      
+      max_tokens: 2000
+    });
+
+    // چاپ خروجی خام در کنسول
+    console.log("🔍 خروجی خام API مدل‌های درآمدی:");
+    console.log("==================================================");
+    console.log(completion.choices[0].message.content);
+    console.log("==================================================");
+
+    res.json({ 
+      choices: completion.choices,
+      usage: completion.usage 
+    });
+  } catch (error) {
+    console.error("خطا در تولید مدل‌های درآمدی:", error);
+    
+    if (error.code === 'ECONNRESET' || error.type === 'APIConnectionError' || error.constructor.name === 'APIConnectionError' || error.message.includes('Connection error')) {
+      res.status(503).json({ 
+        error: "سرویس تولید مدل‌های درآمدی موقتاً در دسترس نیست. لطفاً بعداً تلاش کنید.",
+        choices: [{
+          message: {
+            content: "متأسفانه در حال حاضر امکان تولید مدل‌های درآمدی وجود ندارد. لطفاً بعداً دوباره تلاش کنید."
+          }
+        }]
+      });
+    } else {
+      res.status(500).json({ 
+        error: "خطا در تولید مدل‌های درآمدی", 
+        details: error.message 
+      });
+    }
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 سرور در حال اجرا روی http://localhost:${PORT}`);
 });
@@ -503,6 +619,118 @@ app.put("/api/brand/:id", authMiddleware, async (req, res) => {
   }
 });
 
+// --- پذیرفتن همکاری ---
+app.post("/api/accept-cooperation", authMiddleware, async (req, res) => {
+  try {
+    const { messageId, ideaTitle, ideaDescription } = req.body;
+    
+    if (!messageId) {
+      return res.status(400).json({ error: "شناسه پیام الزامی است" });
+    }
+
+    // پیدا کردن پیام اصلی
+    const originalMessage = await Message.findById(messageId);
+    if (!originalMessage) {
+      return res.status(404).json({ error: "پیام پیدا نشد" });
+    }
+
+    // بررسی اینکه پیام برای کاربر فعلی است
+    const currentBrand = await Brand.findOne({ userId: req.user.userId });
+    if (!currentBrand) {
+      return res.status(404).json({ error: "برند پیدا نشد" });
+    }
+
+    if (originalMessage.recipientBrandId.toString() !== currentBrand._id.toString()) {
+      return res.status(403).json({ error: "دسترسی ندارید" });
+    }
+
+    // بروزرسانی وضعیت پیام اصلی
+    originalMessage.status = 'accepted';
+    await originalMessage.save();
+
+    // بروزرسانی درخواست همکاری
+    const cooperationRequest = await CooperationRequest.findOne({ messageId: messageId });
+    if (cooperationRequest) {
+      cooperationRequest.status = 'accepted';
+      cooperationRequest.updatedAt = new Date();
+      await cooperationRequest.save();
+    }
+
+    // ایجاد پیام تایید
+    const acceptanceMessage = new Message({
+      senderBrandId: currentBrand._id,
+      recipientBrandId: originalMessage.senderBrandId,
+      subject: `پذیرش همکاری: ${ideaTitle}`,
+      content: `برند ${currentBrand.name} درخواست همکاری شما را پذیرفت.`,
+      messageType: 'cooperation_acceptance',
+      ideaTitle: ideaTitle,
+      ideaDescription: ideaDescription,
+      status: 'sent'
+    });
+
+    await acceptanceMessage.save();
+
+    // بروزرسانی درخواست همکاری با پیام تایید
+    if (cooperationRequest) {
+      cooperationRequest.acceptanceMessageId = acceptanceMessage._id;
+      await cooperationRequest.save();
+    }
+
+    res.json({ 
+      message: "همکاری با موفقیت پذیرفته شد",
+      acceptanceMessageId: acceptanceMessage._id
+    });
+
+  } catch (error) {
+    console.error("خطا در پذیرش همکاری:", error);
+    res.status(500).json({ error: "خطا در پذیرش همکاری" });
+  }
+});
+
+// --- دریافت وضعیت درخواست همکاری ---
+app.get("/api/cooperation-status/:ideaTitle", authMiddleware, async (req, res) => {
+  try {
+    const { ideaTitle } = req.params;
+    
+    const currentBrand = await Brand.findOne({ userId: req.user.userId });
+    if (!currentBrand) {
+      return res.status(404).json({ error: "برند پیدا نشد" });
+    }
+
+    // بررسی درخواست‌های ارسالی
+    const sentRequests = await CooperationRequest.find({
+      requesterBrandId: currentBrand._id,
+      ideaTitle: ideaTitle
+    }).populate('targetBrandId', 'name');
+
+    // بررسی درخواست‌های دریافتی
+    const receivedRequests = await CooperationRequest.find({
+      targetBrandId: currentBrand._id,
+      ideaTitle: ideaTitle
+    }).populate('requesterBrandId', 'name');
+
+    res.json({
+      sentRequests: sentRequests.map(req => ({
+        id: req._id,
+        targetBrand: req.targetBrandId.name,
+        status: req.status,
+        createdAt: req.createdAt
+      })),
+      receivedRequests: receivedRequests.map(req => ({
+        id: req._id,
+        requesterBrand: req.requesterBrandId.name,
+        status: req.status,
+        messageId: req.messageId,
+        createdAt: req.createdAt
+      }))
+    });
+
+  } catch (error) {
+    console.error("خطا در دریافت وضعیت همکاری:", error);
+    res.status(500).json({ error: "خطا در دریافت وضعیت همکاری" });
+  }
+});
+
 // --- Schema برای ایده‌ها ---
 const ideaSchema = new mongoose.Schema({
   title: String,
@@ -510,6 +738,10 @@ const ideaSchema = new mongoose.Schema({
   myBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
   partnerBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
   status: { type: String, enum: ['draft', 'active', 'completed', 'cancelled'], default: 'draft' },
+  // اضافه کردن فیلدهای مربوط به درخواست همکاری
+  collaborationRequestSent: { type: Boolean, default: false },
+  collaborationRequestAccepted: { type: Boolean, default: false },
+  collaborationRequestId: { type: mongoose.Schema.Types.ObjectId, ref: "CooperationRequest" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
@@ -523,13 +755,71 @@ const messageSchema = new mongoose.Schema({
   subject: String,
   content: String,
   isRead: { type: Boolean, default: false },
+  messageType: { type: String, enum: ['cooperation_request', 'cooperation_acceptance'], required: true },
+  ideaTitle: String,
+  ideaDescription: String,
+  status: { type: String, enum: ['sent', 'accepted', 'rejected'], default: 'sent' },
   createdAt: { type: Date, default: Date.now }
 });
 
 const Message = mongoose.model("Message", messageSchema);
 
+// --- Schema برای درخواست‌های همکاری ---
+const cooperationRequestSchema = new mongoose.Schema({
+  requesterBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
+  targetBrandId: { type: mongoose.Schema.Types.ObjectId, ref: "Brand", required: true },
+  ideaTitle: { type: String, required: true },
+  ideaDescription: { type: String, required: true },
+  status: { 
+    type: String, 
+    enum: ['pending', 'accepted', 'rejected'], 
+    default: 'pending' 
+  },
+  messageId: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
+  acceptanceMessageId: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const CooperationRequest = mongoose.model("CooperationRequest", cooperationRequestSchema);
+
+// --- دریافت جزئیات ایده بر اساس ID ---
+app.get("/api/ideas/:ideaId", authMiddleware, async (req, res) => {
+  try {
+    const { ideaId } = req.params;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const idea = await Idea.findById(ideaId)
+      .populate('myBrandId partnerBrandId', 'name field');
+
+    if (!idea) return res.status(404).json({ error: "ایده یافت نشد" });
+
+    // بررسی دسترسی
+    const isOwner = idea.myBrandId._id.toString() === myBrand._id.toString();
+    const isPartner = idea.partnerBrandId._id.toString() === myBrand._id.toString();
+    
+    console.log("🔍 Debug - ideaId:", ideaId);
+    console.log("🔍 Debug - myBrand._id:", myBrand._id);
+    console.log("🔍 Debug - idea.myBrandId._id:", idea.myBrandId._id);
+    console.log("🔍 Debug - idea.partnerBrandId._id:", idea.partnerBrandId._id);
+    console.log("🔍 Debug - isOwner:", isOwner);
+    console.log("🔍 Debug - isPartner:", isPartner);
+
+    if (!isOwner && !isPartner) {
+      return res.status(403).json({ error: "دسترسی ندارید" });
+    }
+
+    res.json(idea);
+  } catch (err) {
+    console.error("خطا در دریافت جزئیات ایده:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
 // --- دریافت ایده‌های همکاری ---
-app.get("/api/ideas/:partnerId", authMiddleware, async (req, res) => {
+app.get("/api/ideas/partner/:partnerId", authMiddleware, async (req, res) => {
   try {
     const { partnerId } = req.params;
     const myBrand = await Brand.findOne({ userId: req.user.userId });
@@ -590,10 +880,287 @@ app.get("/api/messages/received", authMiddleware, async (req, res) => {
   }
 });
 
+// --- دریافت پیام‌های ارسالی ---
+app.get("/api/messages/sent", authMiddleware, async (req, res) => {
+  try {
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const messages = await Message.find({ senderBrandId: myBrand._id })
+      .populate('recipientBrandId', 'name field')
+      .sort({ createdAt: -1 });
+
+    res.json(messages);
+  } catch (err) {
+    console.error("خطا در دریافت پیام‌های ارسالی:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- ارسال درخواست همکاری ---
+app.post("/api/cooperation-requests", authMiddleware, async (req, res) => {
+  try {
+    const { targetBrandId, ideaTitle, ideaDescription } = req.body;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    // بررسی اینکه آیا قبلاً درخواست ارسال شده یا نه
+    const existingRequest = await CooperationRequest.findOne({
+      requesterBrandId: myBrand._id,
+      targetBrandId: targetBrandId,
+      ideaTitle: ideaTitle
+    });
+
+    if (existingRequest) {
+      return res.status(400).json({ 
+        error: "درخواست همکاری قبلاً برای این ایده ارسال شده است",
+        status: existingRequest.status 
+      });
+    }
+
+    // ایجاد پیام
+    const subject = `درخواست همکاری: ${ideaTitle}`;
+    const content = `
+سلام،
+
+من از برند ${myBrand.name} هستم و علاقه‌مند به همکاری در زمینه زیر هستم:
+
+**عنوان ایده:** ${ideaTitle}
+**توضیحات:** ${ideaDescription}
+
+امیدوارم بتوانیم در این زمینه همکاری کنیم.
+
+با تشکر
+${myBrand.name}
+    `.trim();
+
+    const message = new Message({
+      senderBrandId: myBrand._id,
+      recipientBrandId: targetBrandId,
+      subject,
+      content,
+      messageType: 'cooperation_request',
+      ideaTitle,
+      ideaDescription,
+      status: 'sent'
+    });
+
+    await message.save();
+
+    // ایجاد درخواست همکاری
+    const cooperationRequest = new CooperationRequest({
+      requesterBrandId: myBrand._id,
+      targetBrandId: targetBrandId,
+      ideaTitle,
+      ideaDescription,
+      messageId: message._id,
+      status: 'pending'
+    });
+
+    await cooperationRequest.save();
+
+    // بروزرسانی وضعیت ایده
+    const idea = await Idea.findOne({
+      title: ideaTitle,
+      myBrandId: myBrand._id,
+      partnerBrandId: targetBrandId
+    });
+
+    if (idea) {
+      idea.collaborationRequestSent = true;
+      idea.collaborationRequestId = cooperationRequest._id;
+      await idea.save();
+    }
+
+    res.status(201).json({ 
+      message: "درخواست همکاری با موفقیت ارسال شد", 
+      requestId: cooperationRequest._id,
+      messageId: message._id 
+    });
+  } catch (err) {
+    console.error("خطا در ارسال درخواست همکاری:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- پذیرش درخواست همکاری ---
+app.post("/api/cooperation-requests/:requestId/accept", authMiddleware, async (req, res) => {
+  try {
+    const { requestId } = req.params;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const cooperationRequest = await CooperationRequest.findById(requestId)
+      .populate('requesterBrandId', 'name')
+      .populate('targetBrandId', 'name');
+
+    if (!cooperationRequest) {
+      return res.status(404).json({ error: "درخواست همکاری یافت نشد" });
+    }
+
+    if (cooperationRequest.targetBrandId._id.toString() !== myBrand._id.toString()) {
+      return res.status(403).json({ error: "شما مجاز به پذیرش این درخواست نیستید" });
+    }
+
+    if (cooperationRequest.status !== 'pending') {
+      return res.status(400).json({ 
+        error: "این درخواست قبلاً پردازش شده است",
+        status: cooperationRequest.status 
+      });
+    }
+
+    // ایجاد پیام پذیرش
+    const subject = `پذیرش درخواست همکاری: ${cooperationRequest.ideaTitle}`;
+    const content = `
+سلام،
+
+من از برند ${myBrand.name} هستم و درخواست همکاری شما را در زمینه زیر می‌پذیرم:
+
+**عنوان ایده:** ${cooperationRequest.ideaTitle}
+**توضیحات:** ${cooperationRequest.ideaDescription}
+
+من آماده همکاری در این زمینه هستم و منتظر تماس شما برای شروع همکاری هستم.
+
+با تشکر
+${myBrand.name}
+    `.trim();
+
+    const acceptanceMessage = new Message({
+      senderBrandId: myBrand._id,
+      recipientBrandId: cooperationRequest.requesterBrandId._id,
+      subject,
+      content,
+      messageType: 'cooperation_acceptance',
+      ideaTitle: cooperationRequest.ideaTitle,
+      ideaDescription: cooperationRequest.ideaDescription,
+      status: 'sent'
+    });
+
+    await acceptanceMessage.save();
+
+    // به‌روزرسانی وضعیت درخواست
+    cooperationRequest.status = 'accepted';
+    cooperationRequest.acceptanceMessageId = acceptanceMessage._id;
+    cooperationRequest.updatedAt = new Date();
+    await cooperationRequest.save();
+
+    // بروزرسانی وضعیت ایده
+    const idea = await Idea.findOne({
+      title: cooperationRequest.ideaTitle,
+      myBrandId: cooperationRequest.requesterBrandId._id,
+      partnerBrandId: myBrand._id
+    });
+
+    if (idea) {
+      idea.collaborationRequestAccepted = true;
+      idea.status = 'active';
+      await idea.save();
+    }
+
+    res.json({ 
+      message: "درخواست همکاری با موفقیت پذیرفته شد",
+      acceptanceMessageId: acceptanceMessage._id 
+    });
+  } catch (err) {
+    console.error("خطا در پذیرش درخواست همکاری:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- بررسی وضعیت درخواست همکاری ---
+app.get("/api/cooperation-requests/check/:ideaTitle/:targetBrandId", authMiddleware, async (req, res) => {
+  try {
+    const { ideaTitle, targetBrandId } = req.params;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    // بررسی درخواست ارسالی
+    const sentRequest = await CooperationRequest.findOne({
+      requesterBrandId: myBrand._id,
+      targetBrandId: targetBrandId,
+      ideaTitle: ideaTitle
+    });
+
+    // بررسی درخواست دریافتی
+    const receivedRequest = await CooperationRequest.findOne({
+      requesterBrandId: targetBrandId,
+      targetBrandId: myBrand._id,
+      ideaTitle: ideaTitle
+    });
+
+    res.json({
+      hasSentRequest: !!sentRequest,
+      hasReceivedRequest: !!receivedRequest,
+      sentRequestStatus: sentRequest?.status || null,
+      receivedRequestStatus: receivedRequest?.status || null,
+      sentRequestId: sentRequest?._id || null,
+      receivedRequestId: receivedRequest?._id || null
+    });
+  } catch (err) {
+    console.error("خطا در بررسی وضعیت درخواست همکاری:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- بررسی وضعیت درخواست همکاری برای ایده خاص ---
+app.get("/api/ideas/:ideaId/collaboration-status", authMiddleware, async (req, res) => {
+  try {
+    const { ideaId } = req.params;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    const idea = await Idea.findById(ideaId);
+    if (!idea) return res.status(404).json({ error: "ایده یافت نشد" });
+
+    // بررسی اینکه آیا کاربر صاحب ایده است یا نه
+    const isOwner = idea.myBrandId.toString() === myBrand._id.toString();
+    const isPartner = idea.partnerBrandId.toString() === myBrand._id.toString();
+
+    if (!isOwner && !isPartner) {
+      return res.status(403).json({ error: "دسترسی ندارید" });
+    }
+
+    // بررسی درخواست‌های همکاری
+    const sentRequest = await CooperationRequest.findOne({
+      requesterBrandId: myBrand._id,
+      targetBrandId: isOwner ? idea.partnerBrandId : idea.myBrandId,
+      ideaTitle: idea.title
+    });
+
+    const receivedRequest = await CooperationRequest.findOne({
+      requesterBrandId: isOwner ? idea.partnerBrandId : idea.myBrandId,
+      targetBrandId: myBrand._id,
+      ideaTitle: idea.title
+    });
+
+    res.json({
+      isOwner,
+      isPartner,
+      ideaTitle: idea.title,
+      ideaDescription: idea.description,
+      hasSentRequest: !!sentRequest,
+      hasReceivedRequest: !!receivedRequest,
+      sentRequestStatus: sentRequest?.status || null,
+      receivedRequestStatus: receivedRequest?.status || null,
+      sentRequestId: sentRequest?._id || null,
+      receivedRequestId: receivedRequest?._id || null,
+      canSendRequest: isOwner && !sentRequest,
+      canAcceptRequest: isPartner && receivedRequest && receivedRequest.status === 'pending'
+    });
+  } catch (err) {
+    console.error("خطا در بررسی وضعیت همکاری ایده:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
 // --- ارسال پیام ---
 app.post("/api/messages", authMiddleware, async (req, res) => {
   try {
-    const { recipientBrandId, subject, content } = req.body;
+    const { recipientBrandId, subject, content, messageType, ideaTitle, ideaDescription } = req.body;
     const myBrand = await Brand.findOne({ userId: req.user.userId });
     
     if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
@@ -602,13 +1169,72 @@ app.post("/api/messages", authMiddleware, async (req, res) => {
       senderBrandId: myBrand._id,
       recipientBrandId,
       subject,
-      content
+      content,
+      messageType: messageType || 'cooperation_request',
+      ideaTitle,
+      ideaDescription,
+      status: 'sent'
     });
 
     await message.save();
-    res.status(201).json({ message: "پیام با موفقیت ارسال شد" });
+    res.status(201).json({ message: "پیام با موفقیت ارسال شد", messageId: message._id });
   } catch (err) {
     console.error("خطا در ارسال پیام:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- به‌روزرسانی وضعیت پیام ---
+app.put("/api/messages/:messageId/status", authMiddleware, async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { status } = req.body;
+    
+    const message = await Message.findById(messageId);
+    if (!message) return res.status(404).json({ error: "پیام یافت نشد" });
+    
+    message.status = status;
+    await message.save();
+    
+    res.json({ message: "وضعیت پیام به‌روزرسانی شد" });
+  } catch (err) {
+    console.error("خطا در به‌روزرسانی وضعیت پیام:", err);
+    res.status(500).json({ error: "خطا در سرور" });
+  }
+});
+
+// --- بررسی وضعیت پیام برای ایده ---
+app.get("/api/messages/check-status/:ideaTitle/:targetBrandId", authMiddleware, async (req, res) => {
+  try {
+    const { ideaTitle, targetBrandId } = req.params;
+    const myBrand = await Brand.findOne({ userId: req.user.userId });
+    
+    if (!myBrand) return res.status(404).json({ error: "برند شما یافت نشد" });
+
+    // بررسی پیام‌های ارسالی
+    const sentMessage = await Message.findOne({
+      senderBrandId: myBrand._id,
+      recipientBrandId: targetBrandId,
+      ideaTitle: ideaTitle,
+      messageType: 'cooperation_request'
+    });
+
+    // بررسی پیام‌های دریافتی (پذیرش)
+    const receivedMessage = await Message.findOne({
+      senderBrandId: targetBrandId,
+      recipientBrandId: myBrand._id,
+      ideaTitle: ideaTitle,
+      messageType: 'cooperation_acceptance'
+    });
+
+    res.json({
+      hasSentRequest: !!sentMessage,
+      hasReceivedAcceptance: !!receivedMessage,
+      sentMessageStatus: sentMessage?.status || null,
+      receivedMessageStatus: receivedMessage?.status || null
+    });
+  } catch (err) {
+    console.error("خطا در بررسی وضعیت پیام:", err);
     res.status(500).json({ error: "خطا در سرور" });
   }
 });
