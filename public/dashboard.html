@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>داشبورد برند - پنل مدیریت همکاری‌ها</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      direction: rtl;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .brand-info h1 {
+      color: #2d3748;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .brand-info p {
+      color: #718096;
+      font-size: 1.1rem;
+    }
+    
+    .user-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Vazirmatn', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .card-footer {
+      padding: 20px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 0 0 16px 16px;
+    }
+    
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .btn-danger {
+      background: #e53e3e;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #c53030;
+      transform: translateY(-2px);
+    }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+      align-items: start;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      height: fit-content;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .partners-list {
+      max-height: 400px;
+      overflow-y: auto;
+      min-height: 200px;
+      height: 400px;
+    }
+    
+    .partners-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .partners-list::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 3px;
+    }
+    
+    .partners-list::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    
+    .partners-list::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    
+    .partner-item {
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .partner-item:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+    }
+    
+    .partner-item.active {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .partner-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .partner-field {
+      color: #718096;
+      font-size: 0.95rem;
+    }
+    
+    .partner-item.active .partner-field {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .ideas-section {
+      display: none;
+      max-height: 500px;
+      min-height: 200px;
+      height: 500px;
+      overflow-y: auto;
+      padding: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+    
+    .ideas-section::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .ideas-section::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    
+    .ideas-section::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    
+    .ideas-section::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    
+    .ideas-header {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      color: white;
+    }
+    
+    .ideas-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .ideas-section.active {
+      display: block;
+    }
+    
+    .idea-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .idea-item:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    .idea-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+    
+    .idea-description {
+      color: #718096;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    .idea-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+    }
+    
+    .btn-success {
+      background: #48bb78;
+      color: white;
+    }
+    
+    .btn-info {
+      background: #4299e1;
+      color: white;
+    }
+
+    .message-preview {
+      color: #718096;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    .message-time {
+      color: #a0aec0;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+
+    .partner-item.unread {
+      border-left: 4px solid #667eea;
+      background: #f7fafc;
+    }
+
+    .partner-item.unread .partner-name {
+      font-weight: 700;
+    }
+
+    .message-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .message-item:hover {
+      border-color: #667eea;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    .message-item.unread {
+      border-left: 4px solid #667eea;
+      background: #f8fafc;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0;
+    }
+
+    .message-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 1.1rem;
+      flex: 1;
+    }
+
+    .message-title i {
+      color: #667eea;
+      font-size: 1.1rem;
+    }
+
+    .message-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .partner-name {
+      color: #718096;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .message-time {
+      color: #a0aec0;
+      font-size: 0.8rem;
+    }
+
+    .message-details {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+
+    .message-content {
+      margin-bottom: 0;
+    }
+
+    .idea-preview {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 0;
+    }
+
+    .idea-title-preview {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .idea-description-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .label {
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 0.9rem;
+    }
+
+    .value {
+      color: #2d3748;
+      line-height: 1.6;
+      white-space: pre-line;
+      font-size: 0.95rem;
+    }
+
+    .message-text {
+      color: #4a5568;
+      line-height: 1.6;
+      white-space: pre-line;
+      font-size: 0.95rem;
+    }
+
+    .message-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .message-actions .btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+      }
+    }
+    
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 8px;
+    }
+    
+    .stat-label {
+      color: #718096;
+      font-size: 0.95rem;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #718096;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #718096;
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #cbd5e0;
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+      
+      .user-actions {
+        justify-content: center;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+      
+      .partners-list {
+        max-height: 300px;
+        min-height: 150px;
+      }
+      
+      .partner-item {
+        padding: 15px;
+        margin-bottom: 10px;
+      }
+      
+      .partner-name {
+        font-size: 1.1rem;
+      }
+      
+      .partner-field {
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .header {
+        padding: 20px;
+      }
+      
+      .brand-info h1 {
+        font-size: 1.8rem;
+      }
+      
+      .partners-list {
+        max-height: 250px;
+        min-height: 120px;
+      }
+      
+      .partner-item {
+        padding: 12px;
+      }
+      
+      .idea-item {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="brand-info">
+        <h1 id="brandName">داشبورد برند</h1>
+        <p id="brandField">در حال بارگذاری...</p>
+      </div>
+      <div class="user-actions">
+        <button onclick="logout()" class="btn btn-danger">
+          <i class="fas fa-sign-out-alt"></i>
+          خروج
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="totalBrands">0</div>
+        <div class="stat-label">کل برندها</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="unreadMessages">0</div>
+        <div class="stat-label">پیام‌های خوانده نشده</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pendingSuggestions">0</div>
+        <div class="stat-label">پیشنهاد بی‌پاسخ</div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Partners Section -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-handshake"></i>
+            همکاران شما
+          </h2>
+        </div>
+        <div class="partners-list" id="partnersList">
+          <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            در حال بارگذاری...
+          </div>
+        </div>
+        <div class="card-footer">
+        <a href="brands.html" class="btn btn-primary btn-full" style="margin-bottom: 10px;">
+          <i class="fas fa-list"></i>
+          لیست برندها
+        </a>
+        <a href="questions-management.html" class="btn btn-secondary btn-full">
+          <i class="fas fa-question-circle"></i>
+          مدیریت سوالات
+        </a>
+        </div>
+      </div>
+
+      <!-- Ideas Section -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-lightbulb"></i>
+            ایده‌های همکاری
+          </h2>
+        </div>
+        <div class="ideas-section" id="ideasSection">
+          <div class="empty-state" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <i class="fas fa-hand-pointer"></i>
+            <p>برای مشاهده ایده‌ها، ابتدا یک همکار انتخاب کنید</p>
+          </div>
+        </div>
+        <div id="ideasHeader" class="ideas-header" style="display: none;">
+          <h3 id="selectedPartnerName">ایده‌های همکاری با: </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages Section -->
+    <div class="dashboard-grid" style="margin-top: 30px;">
+      <!-- Received Messages -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-inbox"></i>
+            پیام‌های دریافتی
+          </h2>
+        </div>
+        <div class="partners-list" id="receivedMessages">
+          <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            در حال بارگذاری...
+          </div>
+        </div>
+      </div>
+
+      <!-- Sent Messages -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-paper-plane"></i>
+            پیام‌های ارسالی
+          </h2>
+        </div>
+        <div class="partners-list" id="sentMessages">
+          <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            در حال بارگذاری...
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentUser = null;
+    let myBrand = null;
+    let allBrands = [];
+    let selectedPartner = null;
+    let ideas = [];
+
+    // Initialize dashboard
+    window.addEventListener('DOMContentLoaded', async () => {
+      await checkAuth();
+      await loadDashboardData();
+    });
+
+    // Check authentication
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/check-auth', { credentials: 'include' });
+        const data = await response.json();
+        
+        if (!data.authenticated) {
+          alert('ابتدا وارد شوید.');
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        currentUser = data.userId;
+      } catch (error) {
+        console.error('خطا در بررسی احراز هویت:', error);
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Load dashboard data
+    async function loadDashboardData() {
+      try {
+        // Load my brand
+        const brandResponse = await fetch('/api/my-brand', { credentials: 'include' });
+        if (brandResponse.ok) {
+          myBrand = await brandResponse.json();
+          document.getElementById('brandName').textContent = 'داشبورد ' + myBrand.name;
+          document.getElementById('brandField').textContent = myBrand.field || 'بدون دسته‌بندی';
+        }
+
+        // Load all brands (partners)
+        const brandsResponse = await fetch('/api/brands', { credentials: 'include' });
+        if (brandsResponse.ok) {
+          allBrands = await brandsResponse.json();
+          // Filter out my own brand
+          allBrands = allBrands.filter(brand => brand._id !== myBrand._id);
+          await displayPartners();
+        }
+
+        // Load ideas (mock data for now)
+        loadIdeas();
+        updateStats();
+
+        // Load messages
+        await loadMessages();
+
+        // Hide ideas header initially
+        document.getElementById('ideasHeader').style.display = 'none';
+
+      } catch (error) {
+        console.error('خطا در بارگذاری داده‌ها:', error);
+      }
+    }
+
+    // Display partners (only brands with ideas)
+    async function displayPartners() {
+      const partnersList = document.getElementById('partnersList');
+      
+      console.log('🔍 نمایش همکاران - تعداد برندها:', allBrands.length);
+      
+      if (allBrands.length === 0) {
+        partnersList.innerHTML = `
+          <div class="empty-state" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <i class="fas fa-users"></i>
+            <p>هنوز هیچ برندی برای همکاری وجود ندارد</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Filter brands that have ideas
+      const brandsWithIdeas = [];
+      for (const brand of allBrands) {
+        try {
+          console.log(`🔍 بررسی ایده‌های ${brand.name}...`);
+          // استفاده از endpoint صحیح برای دریافت ایده‌های برند
+          const ideasResponse = await fetch('/api/ideas/partner/' + brand._id, { credentials: 'include' });
+          if (ideasResponse.ok) {
+            const ideas = await ideasResponse.json();
+            console.log(`🔍 ایده‌های ${brand.name}:`, ideas.length);
+            if (ideas.length > 0) {
+              brandsWithIdeas.push(brand);
+            }
+          }
+        } catch (error) {
+          console.error(`خطا در بررسی ایده‌های ${brand.name}:`, error);
+        }
+      }
+      
+      console.log('🔍 برندهای با ایده:', brandsWithIdeas.length);
+
+      if (brandsWithIdeas.length === 0) {
+        partnersList.innerHTML = `
+          <div class="empty-state" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <i class="fas fa-lightbulb"></i>
+            <p>هنوز با هیچ برندی ایده‌ای تولید نکرده‌اید</p>
+          </div>
+        `;
+        return;
+      }
+
+      partnersList.innerHTML = brandsWithIdeas.map(brand => `
+        <div class="partner-item" onclick="selectPartner('${brand._id}')" data-brand-id="${brand._id}">
+          <div class="partner-name">${brand.name}</div>
+          <div class="partner-field">${brand.field || 'بدون دسته‌بندی'}</div>
+        </div>
+      `).join('');
+    }
+
+    // Select partner
+    function selectPartner(brandId) {
+      // Remove active class from all partners
+      document.querySelectorAll('.partner-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // Add active class to selected partner
+      const selectedItem = document.querySelector(`[data-brand-id="${brandId}"]`);
+      selectedItem.classList.add('active');
+      
+      selectedPartner = allBrands.find(brand => brand._id === brandId);
+      
+      // Show ideas header with partner name
+      const ideasHeader = document.getElementById('ideasHeader');
+      const selectedPartnerName = document.getElementById('selectedPartnerName');
+      selectedPartnerName.textContent = 'ایده‌های همکاری با: ' + selectedPartner.name;
+      ideasHeader.style.display = 'block';
+      
+      // Clear any previous loading states
+      const ideasSection = document.getElementById('ideasSection');
+      ideasSection.innerHTML = '';
+      
+      loadIdeasForPartner(brandId);
+    }
+
+    // Load ideas for selected partner
+    async function loadIdeasForPartner(partnerId) {
+      const ideasSection = document.getElementById('ideasSection');
+      ideasSection.classList.add('active');
+      
+      // Clear previous ideas first
+      ideasSection.innerHTML = `
+        <div class="loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          در حال بارگذاری ایده‌ها...
+        </div>
+      `;
+      
+      try {
+        // First, try to load existing ideas
+        console.log('🔍 بارگذاری ایده‌های موجود برای برند:', partnerId);
+        const ideasResponse = await fetch('/api/ideas/partner/' + partnerId, { credentials: 'include' });
+        
+        if (ideasResponse.ok) {
+          const existingIdeas = await ideasResponse.json();
+          console.log('🔍 ایده‌های موجود:', existingIdeas);
+          if (existingIdeas.length > 0) {
+            displayExistingIdeas(existingIdeas);
+            return;
+          } else {
+            // No existing ideas, show empty state
+            console.log('🔍 هیچ ایده‌ای یافت نشد');
+            ideasSection.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-lightbulb"></i>
+                <p>هنوز ایده‌ای با این برند تولید نکرده‌اید</p>
+              </div>
+            `;
+            return;
+          }
+        } else {
+          console.error('🔍 خطا در بارگذاری ایده‌ها:', ideasResponse.status, ideasResponse.statusText);
+        }
+
+        // If no existing ideas, generate new ones using OpenAI API
+        const response = await fetch('/api/generate-ideas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            prompt: `ایده‌های خلاقانه همکاری بین برند ${myBrand.name} (${myBrand.field}) و برند ${selectedPartner.name} (${selectedPartner.field}) را ارائه دهید.`,
+            myBrandId: myBrand._id,
+            targetBrandId: partnerId
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const ideasText = data.choices[0].message.content;
+          displayIdeas(ideasText);
+        } else {
+          throw new Error('خطا در تولید ایده‌ها');
+        }
+      } catch (error) {
+        console.error('خطا در بارگذاری ایده‌ها:', error);
+        ideasSection.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>خطا در بارگذاری ایده‌ها</p>
+          </div>
+        `;
+      }
+    }
+
+    // Display existing ideas from database
+    function displayExistingIdeas(ideas) {
+      const ideasSection = document.getElementById('ideasSection');
+      
+      console.log('🔍 نمایش ایده‌های موجود:', ideas);
+      
+      if (ideas.length === 0) {
+        ideasSection.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-lightbulb"></i>
+            <p>هیچ ایده‌ای یافت نشد</p>
+          </div>
+        `;
+        return;
+      }
+
+      ideasSection.innerHTML = ideas.map((idea, index) => {
+        const ideaTitle = idea.title || 'ایده ' + (index + 1);
+        const ideaDescription = idea.description || 'توضیحی موجود نیست';
+        const safeDescription = ideaDescription.replace(/'/g, "\\'");
+        const safeTitle = ideaTitle.replace(/'/g, "\\'");
+        
+        return '<div class="idea-item">' +
+          '<div class="idea-title">' + ideaTitle + '</div>' +
+          '<div class="idea-description">' + ideaDescription + '</div>' +
+          '<div class="idea-actions">' +
+            '<button class="btn btn-sm btn-primary" onclick="showIdeaDetails(\'' + idea._id + '\', \'' + safeTitle + '\', \'' + safeDescription + '\')">' +
+              '<i class="fas fa-info-circle"></i>' +
+              'جزئیات بیشتر' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('') + 
+        '<div style="margin-top: 20px; text-align: center;">' +
+          '<button class="btn btn-primary" onclick="goToCooperationPage(\'' + selectedPartner._id + '\')">' +
+            '<i class="fas fa-lightbulb"></i>' +
+            'فرصت‌های همکاری پیشنهادی' +
+          '</button>' +
+        '</div>';
+    }
+
+    // Display ideas
+    function displayIdeas(ideasText) {
+      const ideasSection = document.getElementById('ideasSection');
+      
+      // Parse ideas from text (simple parsing)
+      const ideaLines = ideasText.split('\n').filter(line => 
+        line.trim() && 
+        (line.includes('ایده') || line.includes('همکاری') || line.includes('برنامه') || line.includes('کمپین'))
+      );
+
+      if (ideaLines.length === 0) {
+        ideasSection.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-lightbulb"></i>
+            <p>هیچ ایده‌ای یافت نشد</p>
+          </div>
+        `;
+        return;
+      }
+
+      ideasSection.innerHTML = ideaLines.map((idea, index) => {
+        const ideaTitle = 'ایده ' + (index + 1);
+        const ideaText = idea.trim();
+        const safeIdeaText = ideaText.replace(/'/g, "\\'");
+        const safeTitle = ideaTitle.replace(/'/g, "\\'");
+        
+        return '<div class="idea-item">' +
+          '<div class="idea-title">' + ideaTitle + '</div>' +
+          '<div class="idea-description">' + ideaText + '</div>' +
+          '<div class="idea-actions">' +
+            '<button class="btn btn-sm btn-primary" onclick="showIdeaDetails(null, \'' + safeTitle + '\', \'' + safeIdeaText + '\')">' +
+              '<i class="fas fa-info-circle"></i>' +
+              'جزئیات بیشتر' +
+            '</button>' +
+            '<button class="btn btn-sm btn-success" onclick="saveIdea(\'' + safeIdeaText + '\', ' + index + ')">' +
+              '<i class="fas fa-save"></i>' +
+              'ذخیره' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('') + 
+        '<div style="margin-top: 20px; text-align: center;">' +
+          '<button class="btn btn-primary" onclick="goToCooperationPage(\'' + selectedPartner._id + '\')">' +
+            '<i class="fas fa-lightbulb"></i>' +
+            'فرصت‌های همکاری پیشنهادی' +
+          '</button>' +
+        '</div>';
+    }
+
+    // Load ideas (mock data)
+    function loadIdeas() {
+      // This would be replaced with actual API call
+      ideas = [];
+    }
+
+
+    // Update statistics
+    async function updateStats() {
+      try {
+        // Count total brands (excluding my own brand)
+        const totalBrandsCount = allBrands.length;
+
+        // Count pending suggestions (ideas without response)
+        const pendingSuggestionsCount = ideas.filter(idea => !idea.responded).length;
+
+        // Count unread messages
+        let unreadMessagesCount = 0;
+        try {
+          const response = await fetch('/api/messages/received', { credentials: 'include' });
+          if (response.ok) {
+            const messages = await response.json();
+            unreadMessagesCount = messages.filter(message => !message.isRead).length;
+          }
+        } catch (error) {
+          console.error('خطا در دریافت پیام‌ها:', error);
+        }
+
+        // Update stats
+        document.getElementById('totalBrands').textContent = totalBrandsCount;
+        document.getElementById('unreadMessages').textContent = unreadMessagesCount;
+        document.getElementById('pendingSuggestions').textContent = pendingSuggestionsCount;
+      } catch (error) {
+        console.error('خطا در محاسبه آمار:', error);
+        // Fallback to basic counts
+        document.getElementById('totalBrands').textContent = 0;
+        document.getElementById('unreadMessages').textContent = 0;
+        document.getElementById('pendingSuggestions').textContent = 0;
+      }
+    }
+
+    // Save idea to database
+    async function saveIdea(ideaText, index) {
+      if (!selectedPartner) {
+        alert('ابتدا یک همکار انتخاب کنید');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/ideas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            title: 'ایده ' + (index + 1),
+            description: ideaText,
+            partnerBrandId: selectedPartner._id
+          })
+        });
+
+        if (response.ok) {
+          alert('ایده با موفقیت ذخیره شد!');
+          // Reload ideas for current partner
+          loadIdeasForPartner(selectedPartner._id);
+        } else {
+          const error = await response.json();
+          alert(error.error || 'خطا در ذخیره ایده');
+        }
+      } catch (error) {
+        console.error('خطا در ذخیره ایده:', error);
+        alert('خطا در ذخیره ایده');
+      }
+    }
+
+    // Show idea details
+    function showIdeaDetails(ideaId, title, description) {
+      console.log('🔍 showIdeaDetails فراخوانی شد:');
+      console.log('ایده ID:', ideaId);
+      console.log('عنوان:', title);
+      console.log('توضیحات:', description);
+      console.log('برند من:', myBrand._id);
+      console.log('برند انتخاب شده:', selectedPartner);
+      
+      // Store idea data in sessionStorage for the analysis page
+      sessionStorage.setItem('ideaPrompt', title + '\n\n' + description);
+      sessionStorage.setItem('ideaTitle', title);
+      sessionStorage.setItem('ideaDescription', description);
+      sessionStorage.setItem('myBrandId', myBrand._id);
+      sessionStorage.setItem('ideaType', 'my_idea'); // مشخص کردن نوع ایده
+      
+      // Also store partner information if available
+      if (selectedPartner) {
+        sessionStorage.setItem('targetBrandId', selectedPartner._id);
+        sessionStorage.setItem('partnerName', selectedPartner.name);
+        console.log('✅ اطلاعات برند همکار ذخیره شد:', selectedPartner.name);
+      } else {
+        console.log('⚠️ برند همکار انتخاب نشده است');
+        // اگر برند همکار انتخاب نشده، از لیست برندها یکی را انتخاب کن
+        if (allBrands && allBrands.length > 0) {
+          const randomPartner = allBrands[0];
+          sessionStorage.setItem('targetBrandId', randomPartner._id);
+          sessionStorage.setItem('partnerName', randomPartner.name);
+          console.log('✅ برند همکار تصادفی انتخاب شد:', randomPartner.name);
+        }
+      }
+      
+      // Store idea ID if available
+      if (ideaId) {
+        sessionStorage.setItem('ideaId', ideaId);
+      }
+      
+      // Navigate to idea details page
+      window.location.href = 'idea-details.html';
+    }
+
+    // Go to cooperation page
+    function goToCooperationPage(partnerId) {
+      // Store the selected partner ID in sessionStorage
+      sessionStorage.setItem('targetBrandId', partnerId);
+      // Navigate to cooperation page
+      window.location.href = 'coop1.html?target=' + partnerId;
+    }
+
+
+    // Format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+      
+      if (diffInHours < 1) {
+        return 'همین الان';
+      } else if (diffInHours < 24) {
+        return `${diffInHours} ساعت پیش`;
+      } else {
+        const diffInDays = Math.floor(diffInHours / 24);
+        return `${diffInDays} روز پیش`;
+      }
+    }
+
+    // Load messages
+    async function loadMessages() {
+      try {
+        await loadReceivedMessages();
+        await loadSentMessages();
+      } catch (error) {
+        console.error('خطا در بارگذاری پیام‌ها:', error);
+      }
+    }
+
+    // Load received messages
+    async function loadReceivedMessages() {
+      try {
+        console.log('🔍 در حال بارگذاری پیام‌های دریافتی...');
+        const response = await fetch('/api/messages/received', { credentials: 'include' });
+        if (response.ok) {
+          const messages = await response.json();
+          console.log('🔍 پیام‌های دریافتی:', messages);
+          displayReceivedMessages(messages);
+        } else if (response.status === 401) {
+          // کاربر وارد نشده است
+          document.getElementById('receivedMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-sign-in-alt"></i>
+              <p>ابتدا وارد شوید</p>
+            </div>
+          `;
+        } else if (response.status === 404) {
+          // API endpoint یافت نشد
+          document.getElementById('receivedMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>سرویس پیام‌رسانی در دسترس نیست</p>
+            </div>
+          `;
+        } else {
+          document.getElementById('receivedMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>خطا در بارگذاری پیام‌های دریافتی</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('خطا در بارگذاری پیام‌های دریافتی:', error);
+        document.getElementById('receivedMessages').innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>خطا در بارگذاری پیام‌های دریافتی</p>
+          </div>
+        `;
+      }
+    }
+
+    // Load sent messages
+    async function loadSentMessages() {
+      try {
+        const response = await fetch('/api/messages/sent', { credentials: 'include' });
+        if (response.ok) {
+          const messages = await response.json();
+          displaySentMessages(messages);
+        } else if (response.status === 401) {
+          // کاربر وارد نشده است
+          document.getElementById('sentMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-sign-in-alt"></i>
+              <p>ابتدا وارد شوید</p>
+            </div>
+          `;
+        } else if (response.status === 404) {
+          // API endpoint یافت نشد
+          document.getElementById('sentMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>سرویس پیام‌رسانی در دسترس نیست</p>
+            </div>
+          `;
+        } else {
+          document.getElementById('sentMessages').innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>خطا در بارگذاری پیام‌های ارسالی</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('خطا در بارگذاری پیام‌های ارسالی:', error);
+        document.getElementById('sentMessages').innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>خطا در بارگذاری پیام‌های ارسالی</p>
+          </div>
+        `;
+      }
+    }
+
+    // Display received messages
+    function displayReceivedMessages(messages) {
+      const container = document.getElementById('receivedMessages');
+      
+      console.log('🔍 نمایش پیام‌های دریافتی:', messages);
+      
+      if (messages.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>هیچ پیام دریافتی ندارید</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map((message, index) => {
+        // پارس کردن اطلاعات ایده از متن پیام
+        const ideaInfo = parseIdeaFromMessage(message.content);
+        const messageId = `message-${index}`;
+        
+        return `
+          <div class="message-item ${!message.isRead ? 'unread' : ''}" onclick="toggleMessageDetails('${messageId}')">
+            <div class="message-header">
+              <div class="message-title">
+                <i class="fas fa-envelope"></i>
+                <span>${message.subject}</span>
+              </div>
+              <div class="message-meta">
+                <div class="partner-name">از: ${message.senderBrandId.name}</div>
+                <div class="message-time">${formatDate(message.createdAt)}</div>
+              </div>
+            </div>
+            
+            <div class="message-details" id="${messageId}" style="display: none;">
+              <div class="message-content">
+                ${ideaInfo ? `
+                  <div class="idea-preview">
+                    <div class="idea-title-preview">
+                      <span class="label">عنوان ایده:</span>
+                      <span class="value">${ideaInfo.title}</span>
+                    </div>
+                    <div class="idea-description-preview">
+                      <span class="label">شرح ایده:</span>
+                      <span class="value">${ideaInfo.description}</span>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="message-text">${message.content}</div>
+                `}
+              </div>
+              ${ideaInfo && !ideaInfo.isAccepted ? `
+                <div class="message-actions">
+                  <button class="btn btn-sm btn-primary idea-details-btn" 
+                          data-message-id="${message._id}" 
+                          data-title="${ideaInfo.title.replace(/"/g, '&quot;')}" 
+                          data-description="${ideaInfo.description.replace(/"/g, '&quot;')}" 
+                          data-sender-id="${message.senderBrandId._id}" 
+                          data-sender-name="${message.senderBrandId.name.replace(/"/g, '&quot;')}">
+                    <i class="fas fa-info-circle"></i>
+                    جزئیات بیشتر
+                  </button>
+                </div>
+              ` : ideaInfo && ideaInfo.isAccepted ? `
+                <div class="message-actions">
+                  <div class="btn btn-sm btn-success" style="cursor: default;">
+                    <i class="fas fa-check-circle"></i>
+                    همکاری پذیرفته شده
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // اضافه کردن event listener برای دکمه‌های جزئیات بیشتر
+      container.querySelectorAll('.idea-details-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const messageId = btn.getAttribute('data-message-id');
+          const title = btn.getAttribute('data-title');
+          const description = btn.getAttribute('data-description');
+          const senderId = btn.getAttribute('data-sender-id');
+          const senderName = btn.getAttribute('data-sender-name');
+          goToIdeaAnalysis(messageId, title, description, senderId, senderName);
+        });
+      });
+    }
+
+    // Display sent messages
+    function displaySentMessages(messages) {
+      const container = document.getElementById('sentMessages');
+      
+      if (messages.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-paper-plane"></i>
+            <p>هیچ پیام ارسالی ندارید</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map((message, index) => {
+        // پارس کردن اطلاعات ایده از متن پیام
+        const ideaInfo = parseIdeaFromMessage(message.content);
+        const messageId = `sent-message-${index}`;
+        
+        return `
+          <div class="message-item" onclick="toggleMessageDetails('${messageId}')">
+            <div class="message-header">
+              <div class="message-title">
+                <i class="fas fa-paper-plane"></i>
+                <span>${message.subject}</span>
+              </div>
+              <div class="message-meta">
+                <div class="partner-name">به: ${message.recipientBrandId.name}</div>
+                <div class="message-time">${formatDate(message.createdAt)}</div>
+              </div>
+            </div>
+            
+            <div class="message-details" id="${messageId}" style="display: none;">
+              <div class="message-content">
+                ${ideaInfo ? `
+                  <div class="idea-preview">
+                    <div class="idea-title-preview">
+                      <span class="label">عنوان ایده:</span>
+                      <span class="value">${ideaInfo.title}</span>
+                    </div>
+                    <div class="idea-description-preview">
+                      <span class="label">شرح ایده:</span>
+                      <span class="value">${ideaInfo.description}</span>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="message-text">${message.content}</div>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Parse idea information from message content
+    function parseIdeaFromMessage(content) {
+      try {
+        // جستجو برای الگوهای مختلف در متن پیام
+        const titleMatch = content.match(/\*\*عنوان ایده:\*\*\s*([^\n]+)/i) || 
+                          content.match(/عنوان ایده:\s*([^\n]+)/i) ||
+                          content.match(/درخواست همکاری:\s*([^\n]+)/i) ||
+                          content.match(/پذیرش درخواست همکاری:\s*([^\n]+)/i);
+        
+        const descriptionMatch = content.match(/\*\*توضیحات:\*\*\s*([\s\S]+?)(?=\n\n|\*\*|امیدوارم|من آماده)/i) ||
+                                content.match(/توضیحات:\s*([\s\S]+?)(?=\n\n|\*\*|امیدوارم|من آماده)/i);
+        
+        // بررسی اینکه آیا پیام پذیرفته شده است
+        const isAccepted = content.includes('پذیرش درخواست همکاری') || 
+                          content.includes('درخواست همکاری پذیرفته شد') ||
+                          content.includes('همکاری پذیرفته شده');
+        
+        if (titleMatch && descriptionMatch) {
+          return {
+            title: titleMatch[1].trim(),
+            description: descriptionMatch[1].trim(),
+            isAccepted: isAccepted
+          };
+        }
+        
+        return null;
+      } catch (error) {
+        console.error('خطا در پارس کردن اطلاعات ایده:', error);
+        return null;
+      }
+    }
+
+    // Toggle message details
+    function toggleMessageDetails(messageId) {
+      const detailsElement = document.getElementById(messageId);
+      if (detailsElement) {
+        if (detailsElement.style.display === 'none') {
+          detailsElement.style.display = 'block';
+          detailsElement.style.animation = 'slideDown 0.3s ease-out';
+        } else {
+          detailsElement.style.animation = 'slideUp 0.3s ease-out';
+          setTimeout(() => {
+            detailsElement.style.display = 'none';
+          }, 300);
+        }
+      }
+    }
+
+    // Navigate to idea analysis page
+    async function goToIdeaAnalysis(messageId, title, description, senderBrandId, senderName) {
+      try {
+        // دریافت اطلاعات برند من
+        const myBrandResponse = await fetch('/api/my-brand', { credentials: 'include' });
+        if (!myBrandResponse.ok) {
+          throw new Error('برند شما یافت نشد');
+        }
+        const myBrand = await myBrandResponse.json();
+        
+        // ذخیره اطلاعات ایده در sessionStorage
+        sessionStorage.setItem('ideaTitle', title);
+        sessionStorage.setItem('ideaDescription', description);
+        sessionStorage.setItem('targetBrandId', senderBrandId);
+        sessionStorage.setItem('partnerName', senderName);
+        sessionStorage.setItem('ideaPrompt', `ایده: ${title}\n\nتوضیحات: ${description}`);
+        sessionStorage.setItem('myBrandId', myBrand._id);
+        sessionStorage.setItem('ideaType', 'received_idea');
+        sessionStorage.setItem('messageId', messageId);
+        
+        // هدایت به صفحه جزئیات ایده
+        window.location.href = 'idea-details.html';
+      } catch (error) {
+        console.error('خطا در دریافت اطلاعات برند:', error);
+        alert('خطا در بارگذاری اطلاعات. لطفاً دوباره تلاش کنید.');
+      }
+    }
+
+    // Show message details
+    function showMessageDetails(messageId, type) {
+      // This would open a modal or navigate to a message detail page
+      alert(`نمایش جزئیات پیام ${messageId} از نوع ${type}`);
+    }
+
+    // Logout
+    async function logout() {
+      if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+        try {
+          await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+          window.location.href = 'login.html';
+        } catch (error) {
+          console.error('خطا در خروج:', error);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

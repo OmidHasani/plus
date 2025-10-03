@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>بررسی فرصت‌های همکاری</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  line-height: 1.8;
+  direction: rtl;
+}
+
+/* App Modal (shared) */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.45); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+.modal-box { width: 100%; max-width: 920px; background: #fff; border-radius: 14px; box-shadow: 0 20px 50px rgba(2,6,23,0.35); border: 1px solid #e2e8f0; overflow: hidden; animation: modalIn .18s ease-out; }
+@keyframes modalIn { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+.modal-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 14px 16px; background: linear-gradient(135deg,#eff6ff 0%,#ffffff 100%); border-bottom:1px solid #e2e8f0; }
+.modal-title { margin:0; font-size:16px; font-weight:800; color:#1e3a8a; }
+.modal-close { background:#eff6ff; border:1px solid #dbeafe; width:32px; height:32px; border-radius:8px; cursor:pointer; color:#1e40af; font-weight:800; }
+.modal-body { padding:16px; color:#334155; line-height:1.9; max-height: 70vh; overflow:auto; }
+.modal-actions { display:flex; justify-content:flex-end; gap:10px; padding:12px 16px 16px 16px; }
+.modal-button { background:#2563eb; color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:700; cursor:pointer; }
+
+/* Revenue modal inner layout (two columns) */
+.revenue-container { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+@media (max-width: 768px) { .revenue-container { grid-template-columns: 1fr; } }
+.revenue-brand-box { background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border:2px solid #e2e8f0; border-radius:12px; padding:16px; }
+.revenue-brand-title { font-size:18px; font-weight:800; color:#1e3a8a; border-bottom:3px solid #3b82f6; padding-bottom:8px; margin-bottom:12px; }
+.revenue-model-item { background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:12px; margin-bottom:10px; box-shadow: 0 2px 4px rgba(0,0,0,.05); }
+.model-title-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; margin:6px 0 10px 0; font-weight:700; color:#0f172a; }
+.model-section-title { font-weight:700; color:#1e3a8a; margin:6px 0 4px 0; font-size: 13px; }
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  font-weight: 700;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 10px;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#ideasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.idea-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 25px 30px;
+  position: relative;
+}
+
+.idea-number {
+  position: absolute;
+  top: 25px;
+  right: 30px; /* تغییر از left به right */
+  background: #3498db;
+  color: white;
+  font-weight: 700;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  user-select: none;
+}
+
+.idea-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #2c3e50;
+  /* حذف خط عمودی */
+  /* border-right: 5px solid #3498db; */
+  padding-right: 50px;
+  display: inline-block;
+}
+
+
+.section-label {
+  font-weight: 700;
+  color: #2980b9;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.section-content {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+#generateBtn {
+  display: block;
+  margin: 40px auto 0;
+  background-color: #0057a3;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: 'Vazirmatn', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 87, 163, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#generateBtn:hover {
+  background-color: #003e7e;
+  transform: translateY(-2px);
+}
+
+#generateBtn:active {
+  transform: translateY(0);
+}
+
+#loadingText {
+  text-align: center;
+  color: #888;
+  margin-top: 25px;
+  font-style: italic;
+  font-size: 15px;
+}
+
+#errorText {
+  text-align: center;
+  color: #e74c3c;
+  margin-top: 25px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.btn-detail {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 10px;
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.4);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.btn-detail:hover {
+  background-color: #217dbb;
+  transform: translateY(-2px);
+}
+
+.btn-detail:active {
+  transform: translateY(0);
+}
+
+
+  </style>
+</head>
+<body>
+
+<h1>💡 فرصت‌های همکاری پیشنهادی</h1>
+
+<div id="ideasContainer"></div>
+<div id="loadingText" style="display:none;">⏳ در حال دریافت ایده‌ها...</div>
+<div id="errorText" style="display:none;"></div>
+<button id="generateBtn">🔄 دریافت ایده‌های جدید</button>
+
+<!-- Revenue Modal -->
+<div id="revenueModal" class="modal-backdrop" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="revenueModalTitle">
+    <div class="modal-header">
+      <h4 class="modal-title" id="revenueModalTitle">💰 مدل‌های درآمدی پیشنهادی</h4>
+      <button class="modal-close" id="revenueModalClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="revenueModalContent">⏳ در حال آماده‌سازی...</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-button" id="revenueModalOk">باشه</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function getTargetBrandId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("target");
+}
+
+async function fetchTargetBrand(id) {
+  const res = await fetch(`/api/brand/${id}`, { credentials: "include" });
+  if (!res.ok) throw new Error("برند هدف یافت نشد.");
+  return await res.json();
+}
+
+function parseIdeas(text) {
+  console.log("متن ورودی برای پارس:", text);
+  
+  const ideas = [];
+  
+  // روش 1: تقسیم بر اساس شماره ایده
+  let ideaSections = text.split(/(?:^|\n)(?:\d+\.|🎯|ایده\s*\d+)/).filter(section => section.trim());
+  
+  // اگر روش 1 کار نکرد، روش 2: تقسیم بر اساس 🎯
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/🎯/).filter(section => section.trim());
+  }
+  
+  // اگر هنوز کار نکرد، روش 3: تقسیم بر اساس خطوط خالی
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/\n\s*\n/).filter(section => section.trim());
+  }
+  
+  console.log("بخش‌های پیدا شده:", ideaSections.length);
+  
+  for (let i = 0; i < ideaSections.length; i++) {
+    const section = ideaSections[i].trim();
+    if (!section) continue;
+    
+    console.log(`پردازش بخش ${i + 1}:`, section.substring(0, 100) + "...");
+    
+    let title = '';
+    let description = '';
+    let whyEffective = '';
+    
+    // پیدا کردن عنوان (قبل از 🧠)
+    const titleMatch = section.match(/^([^🧠]*?)(?=🧠|$)/s);
+    if (titleMatch) {
+      title = titleMatch[1].trim().replace(/^[🎯\s]*/, '');
+    }
+    
+    // پیدا کردن شرح (بین 🧠 و 💎 یا 📈)
+    const descriptionMatch = section.match(/🧠\s*([^💎📈]*?)(?=💎|📈|$)/s);
+    if (descriptionMatch) {
+      description = descriptionMatch[1].trim();
+    }
+    
+    // پیدا کردن مزایا (بعد از 💎 یا 📈)
+    const whyMatch = section.match(/(?:💎|📈)\s*([^]*?)$/s);
+    if (whyMatch) {
+      whyEffective = whyMatch[1].trim();
+    }
+    
+    // اگر عنوان و شرح داشته باشد اضافه کن
+    if (title && description) {
+      console.log(`ایده ${i + 1} اضافه شد:`, { title: title.substring(0, 50), description: description.substring(0, 50) });
+      ideas.push({
+        title: title,
+        description: description,
+        whyEffective: whyEffective
+      });
+    } else {
+      console.log(`ایده ${i + 1} ناقص بود:`, { title: !!title, description: !!description });
+    }
+  }
+  
+  // اگر هیچ ایده‌ای پیدا نشد، سعی کن کل متن را به عنوان یک ایده در نظر بگیر
+  if (ideas.length === 0 && text.trim()) {
+    console.log("هیچ ایده‌ای پیدا نشد، سعی در پارس کل متن...");
+    ideas.push({
+      title: "ایده همکاری",
+      description: text.trim(),
+      whyEffective: ""
+    });
+  }
+  
+  console.log(`تعداد ایده‌های پارس شده: ${ideas.length}`);
+  return ideas;
+}
+
+let currentIdeas = [];
+
+function addSectionTitle(title) {
+  const h2 = document.createElement("h2");
+  h2.textContent = title;
+  return h2;
+}
+
+function createIdeaCard(idea, index) {
+  const card = document.createElement("div");
+  card.className = "idea-card";
+  card.innerHTML = `
+    <div class="idea-number">${index + 1}</div>
+    <div class="idea-title">${idea.title}</div>
+    <div class="section-label">📝 شرح ایده:</div>
+    <div class="section-content">${idea.description}</div>
+    
+    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn-detail" data-idea-index="${index}" data-type="detail">🔍 بررسی بیشتر</button>
+      <button class="btn-detail" data-idea-index="${index}" data-type="economy">💰 مدل‌های درآمدی</button>
+    </div>
+  `;
+  return card;
+}
+
+function setupIdeaButtons() {
+  document.querySelectorAll(".btn-detail").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const type = btn.getAttribute("data-type");
+      const ideaIndex = parseInt(btn.getAttribute("data-idea-index"), 10);
+
+      if (type === "detail") {
+        // می‌تونه به صفحه جزئیات هدایت بشه؛ فعلاً مودال ساده
+        openRevenueModal('<p>🔍 بررسی بیشتر به زودی فعال می‌شود.</p>');
+      } else if (type === "economy") {
+        showRevenueForIdeaNew(ideaIndex);
+      }
+    });
+  });
+}
+
+// === ذخیره و دریافت عناوین قبلی ایده‌ها در localStorage بر اساس برند ===
+function getStoredIdeaTitles(brandId) {
+  const key = `storedIdeaTitles_${brandId}`;
+  const stored = localStorage.getItem(key);
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+}
+
+function storeIdeaTitles(titles, brandId) {
+  const uniqueTitles = Array.from(new Set(titles)); // حذف تکراری در ذخیره
+  const key = `storedIdeaTitles_${brandId}`;
+  localStorage.setItem(key, JSON.stringify(uniqueTitles));
+}
+
+// === ذخیره ایده‌ها در دیتابیس ===
+async function saveIdeasToDatabase(ideas, myBrandId, targetBrandId) {
+  try {
+    for (const idea of ideas) {
+      const response = await fetch('/api/ideas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          title: idea.title,
+          description: idea.description,
+          partnerBrandId: targetBrandId
+        })
+      });
+
+      if (!response.ok) {
+        console.error('خطا در ذخیره ایده:', idea.title);
+      }
+    }
+    console.log('✅ تمام ایده‌ها در دیتابیس ذخیره شدند');
+  } catch (error) {
+    console.error('خطا در ذخیره ایده‌ها در دیتابیس:', error);
+  }
+}
+
+// === تغییر توابع buildPrompt برای ارسال عناوین قبلی به GPT ===
+
+function buildPrompt(myBrand, similarBrands, brandId) {
+  const priority = myBrand.priorities?.[0] || "رضایت مشتری";
+  const questions = myBrand.questions || [];
+
+  let questionsText = questions.map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+  // دریافت عناوین قبلی از localStorage
+  const storedTitles = getStoredIdeaTitles(brandId);
+
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و ایده‌پرداز خلاق هستید.  
+برند من با نام «${myBrand.name}» در حوزه «${myBrand.field}» فعالیت می‌کند.  
+اولویت اصلی برند من این است: «${priority}».  
+
+سوالات و پاسخ‌های برند من به شرح زیر است:  
+${questionsText}  
+
+برندهای مشابه زیر را نیز در نظر بگیر:  
+`;
+
+  similarBrands.forEach((b, i) => {
+    const priority = b.priorities?.[0] || "اولویت مشخص نشده";
+    const questionsText = (b.questions || [])
+      .map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`)
+      .join("\n\n");
+
+    prompt += `
+${i + 1}. نام: ${b.name}
+حوزه فعالیت: ${b.field}
+اولویت اصلی: ${priority}
+سوالات و پاسخ‌ها:
+${questionsText}
+`;
+  });
+
+  prompt += `
+
+لطفاً ایده‌هایی تولید کن که عنوان آن‌ها در لیست زیر وجود ندارد و تکراری نباشند:
+${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+
+با توجه به اطلاعات زیر درباره دو برند [ایران‌خودرو] و [اسنپ]، که شامل پاسخ‌های تحلیلی، اهداف، نقاط قوت، مزیت رقابتی، مشکلات و فرصت‌ها هستند، از تو می‌خواهم **دقیقاً و حتماً 5 ایده‌ی همکاری** بسیار خلاقانه، متمایز، پخته و قابل اجرا بین این دو برند ارائه بدهی.
+
+⚠️ **تأکید مهم**: باید دقیقاً 5 ایده ارائه بدهی. نه کمتر، نه بیشتر. هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5).
+
+❗ نکات مهم:
+- این ایده‌ها باید حاصل **همکاری و هم‌افزایی بین دو برند** باشند.
+- یعنی ایده‌هایی که **ترکیب ظرفیت‌ها، منابع یا خدمات** دو برند را هدف می‌گیرند و به نتیجه‌ای تازه و نوآورانه منجر می‌شوند.
+- این ایده‌ها نباید تکراری، عمومی یا صرفاً تبلیغاتی باشند. باید:
+  - نوآورانه و کاربردی باشند
+  - قابلیت اجرای عملی داشته باشند
+  - بر اساس داده‌های دقیق موجود طراحی شوند، نه فرضیات کلی
+
+📌 ساختار خروجی برای هر ایده باید دقیقاً به شکل زیر باشد:
+
+🎯 عنوان ایده:  
+[یک عنوان جذاب، خلاقانه و منحصر‌به‌فرد که به همکاری دو برند اشاره دارد]
+
+🧠 شرح ایده:  
+[توضیح کامل درباره نحوه عملکرد ایده. حداقل ۵ خط. توضیح بده که:
+- ایده دقیقاً چیست و چگونه پیاده‌سازی می‌شود  
+- چه بخشی از آن توسط اسنپ اجرا می‌شود و چه بخشی توسط ایران‌خودرو  
+- چه مشکلی را حل می‌کند یا چه مزیتی ایجاد می‌کند  
+- از چه فناوری یا ساختاری استفاده می‌کند  
+- تجربه کاربر یا مشتری در این ایده چگونه خواهد بود  
+]
+
+📈 مزایای استراتژیک:  
+[تحلیل دقیق از مزایای استراتژیک این همکاری. اشاره به تفاوت با رقبا، ظرفیت‌های موجود دو برند، و اینکه چرا این ایده خاص از دل اطلاعات بالا استخراج شده.]
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 5 ایده ارائه بدهی
+- هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5)
+- تمام ایده‌ها باید بر اساس اولویت اول برند یعنی افزایش فروش باشند
+- اگر کمتر از 5 ایده ارائه بدهی، پاسخ ناقص محسوب می‌شود
+
+اکنون تحلیل را شروع کن و دقیقاً 5 ایده همکاری را بنویس.
+`;
+
+  console.log("PROMPT اولویت اول:");
+  console.log(prompt);
+  return prompt;
+}
+
+function buildPromptForPriority2and3(p2, p3, similarBrands, usedTitles = [], brandId) {
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و خلاق هستید.  
+می‌خواهیم ۶ ایده همکاری (۳ ایده برای هر اولویت) تولید کنیم.  
+برند ما اولویت‌های زیر را دارد:
+1. ${p2}
+2. ${p3}
+
+برندهای مشابه ما:
+`;
+
+  similarBrands.forEach((b, i) => {
+    prompt += `${i + 1}. نام: ${b.name}، حوزه فعالیت: ${b.field}\n`;
+  });
+
+  prompt += `
+
+⚠️ **تأکید مهم**: باید دقیقاً 6 ایده همکاری تولید کنی (3 ایده برای هر اولویت). نه کمتر، نه بیشتر.
+
+**ساختار خروجی اجباری:**
+
+**اولویت دوم (${p2}):**
+**ایده 1:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 2:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 3:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**اولویت سوم (${p3}):**
+**ایده 4:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 5:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 6:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 6 ایده ارائه بدهی (3+3)
+- هر ایده باید شماره‌گذاری شده باشد
+- عناوین زیر تکراری نباشد:
+${usedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}`;
+
+  return prompt;
+}
+
+async function fetchMyBrand() {
+  const res = await fetch("/api/my-brand", { credentials: "include" });
+  if (!res.ok) throw new Error("برند شما یافت نشد.");
+  return await res.json();
+}
+
+async function fetchRecommendations() {
+  const res = await fetch("/api/recommendations", { credentials: "include" });
+  if (!res.ok) throw new Error("خطا در دریافت برندهای مشابه.");
+  return await res.json();
+}
+
+async function callOpenAI(prompt) {
+  const res = await fetch("/api/generate-ideas", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ prompt })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || "خطا در پاسخ OpenAI");
+  }
+
+  const data = await res.json();
+  console.log("خام API OpenAI:", JSON.stringify(data, null, 2));
+  return data.choices[0].message.content;
+}
+
+async function generateIdeas() {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+
+  container.innerHTML = "";
+  errorText.style.display = "none";
+  loadingText.style.display = "block";
+  generateBtn.disabled = true;
+
+  try {
+    const myBrand = await fetchMyBrand();
+
+    const targetBrandId = getTargetBrandId();
+    if (!targetBrandId) throw new Error("شناسه برند هدف در URL یافت نشد.");
+
+    const targetBrand = await fetchTargetBrand(targetBrandId);
+    const similarBrands = [targetBrand];  // فقط برند هدف برای پرامپت
+
+    const allIdeas = [];
+
+    // دریافت عناوین قبلی از localStorage بر اساس برند هدف
+    let storedTitles = getStoredIdeaTitles(targetBrandId);
+
+    // ۱. ایده‌های اولویت اول (۵ تا)
+    const prompt1 = buildPrompt(myBrand, similarBrands, targetBrandId);
+    const text1 = await callOpenAI(prompt1);
+    const ideas1 = parseIdeas(text1);
+    
+    // فیلتر ایده‌های تکراری نسبت به storedTitles
+    const uniqueIdeas1 = ideas1.filter(idea => !storedTitles.includes(idea.title));
+    
+    allIdeas.push(...uniqueIdeas1);
+
+    // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
+    storedTitles = storedTitles.concat(uniqueIdeas1.map(i => i.title));
+    storeIdeaTitles(storedTitles, targetBrandId);
+
+    container.appendChild(addSectionTitle(`🟢 ایده‌ها بر اساس اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
+    uniqueIdeas1.forEach((idea, i) => container.appendChild(createIdeaCard(idea, i)));
+
+    // ۲. ایده‌های اولویت دوم و سوم (۳+۳)
+    const p2 = myBrand.priorities?.[1];
+    const p3 = myBrand.priorities?.[2];
+
+    if (p2 && p3) {
+      // ارسال عناوین قبلی (storedTitles) به prompt برای جلوگیری از تکرار
+      const prompt23 = buildPromptForPriority2and3(p2, p3, similarBrands, storedTitles, targetBrandId);
+      const text23 = await callOpenAI(prompt23);
+      const ideas23 = parseIdeas(text23);
+      const ideas2 = ideas23.slice(0, 3);
+      const ideas3 = ideas23.slice(3, 6);
+      allIdeas.push(...ideas2, ...ideas3);
+
+      // ذخیره عناوین جدید
+      storedTitles = storedTitles.concat(ideas2.map(i => i.title), ideas3.map(i => i.title));
+      storeIdeaTitles(storedTitles, targetBrandId);
+
+      container.appendChild(addSectionTitle(`🔵 ایده‌ها بر اساس اولویت دوم: «${p2}»`));
+      ideas2.forEach((idea, i) => container.appendChild(createIdeaCard(idea, allIdeas.indexOf(idea))));
+
+      container.appendChild(addSectionTitle(`🟣 ایده‌ها بر اساس اولویت سوم: «${p3}»`));
+      ideas3.forEach((idea, i) => container.appendChild(createIdeaCard(idea, allIdeas.indexOf(idea))));
+    }
+
+    setupIdeaButtons();
+
+    currentIdeas = allIdeas;
+
+    // ذخیره ایده‌ها در دیتابیس
+    await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
+
+  } catch (err) {
+    errorText.textContent = "❌ خطا: " + err.message;
+    errorText.style.display = "block";
+  } finally {
+    loadingText.style.display = "none";
+    generateBtn.disabled = false;
+  }
+}
+
+document.getElementById("generateBtn").addEventListener("click", generateIdeas);
+window.onload = generateIdeas;
+
+// ===== Revenue Modal controls =====
+function openRevenueModal(html) {
+  const modal = document.getElementById('revenueModal');
+  const content = document.getElementById('revenueModalContent');
+  content.innerHTML = html || '—';
+  modal.style.display = 'flex';
+  modal.removeAttribute('aria-hidden');
+  modal.removeAttribute('inert');
+  document.body.style.overflow = 'hidden';
+  // مدیریت فوکوس
+  window.__lastActiveElement = document.activeElement;
+  const closeBtn = document.getElementById('revenueModalClose');
+  if (closeBtn) closeBtn.focus();
+}
+function closeRevenueModal() {
+  const modal = document.getElementById('revenueModal');
+  modal.style.display = 'none';
+  modal.setAttribute('inert', '');
+  document.body.style.overflow = '';
+  // بازگرداندن فوکوس
+  if (window.__lastActiveElement && typeof window.__lastActiveElement.focus === 'function') {
+    window.__lastActiveElement.focus();
+  }
+}
+document.getElementById('revenueModalClose').addEventListener('click', closeRevenueModal);
+document.getElementById('revenueModalOk').addEventListener('click', closeRevenueModal);
+document.getElementById('revenueModal').addEventListener('click', (e) => { if (e.target.id === 'revenueModal') closeRevenueModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeRevenueModal(); });
+
+// ===== Generate revenue models (reusing logic from idea-details) =====
+async function showRevenueForIdea(index) {
+  try {
+    const idea = currentIdeas[index];
+    if (!idea) return openRevenueModal('<p>ایده یافت نشد</p>');
+
+    openRevenueModal('<p>⏳ در حال تولید مدل‌های درآمدی...</p>');
+
+    // دریافت برند خود و برند هدف از URL
+    const myBrandRes = await fetch('/api/my-brand', { credentials:'include' });
+    const myBrand = myBrandRes.ok ? await myBrandRes.json() : null;
+
+    const targetId = getTargetBrandId();
+    const partnerRes = targetId ? await fetch(`/api/brand/${targetId}`, { credentials:'include' }) : null;
+    const targetBrand = partnerRes && partnerRes.ok ? await partnerRes.json() : null;
+
+    const promptBrand1Name = myBrand ? myBrand.name : 'برند اول';
+    const promptBrand2Name = targetBrand ? targetBrand.name : 'برند دوم';
+    const enhancedPrompt = `${idea.title}\n\n${idea.description}`;
+
+    const revenuePrompt = `
+تو یک نابغه کسب‌وکار و مشاور استراتژیک برند در سطح جهانی هستی، کسی که تجربه خلق مدل‌های درآمدی میلیارد دلاری و فوق‌العاده خلاقانه برای برندهای مختلف را دارد.
+هدف تو این است که از ایده همکاری زیر، **۵ مدل درآمدی حرفه‌ای و کاملاً عملی برای ${promptBrand1Name} و ۵ مدل برای ${promptBrand2Name}** بسازی.
+
+ایده همکاری: ${enhancedPrompt}
+
+⚠️ خروجی را دقیقاً با دو سرفصل مجزا بنویس:
+«برای ${promptBrand1Name}»
+«برای ${promptBrand2Name}»
+و زیر هر سرفصل دقیقاً ۵ مدل شماره‌دار (۱ تا ۵) بنویس.
+
+نکات مهم:
+- مدل‌ها باید خلاقانه و عملی باشند.
+- هر مدل شامل: عنوان، شرح کوتاه، «جزئیات عملی: ...»، «نحوه درآمدزایی: ...»، «مثال: ...» باشد.
+
+برای ${promptBrand1Name}:
+1. [عنوان مدل] — شرح کوتاه. جزئیات عملی: ... | نحوه درآمدزایی: ... | مثال: ...
+2. [...]
+3. [...]
+4. [...]
+5. [...]
+
+برای ${promptBrand2Name}:
+1. [عنوان مدل] — شرح کوتاه. جزئیات عملی: ... | نحوه درآمدزایی: ... | مثال: ...
+2. [...]
+3. [...]
+4. [...]
+5. [...]
+`;
+
+    const resp = await fetch('/api/generate-ideas', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt: revenuePrompt, myBrandId: myBrand?._id, targetBrandId: targetBrand?._id }) });
+    if (!resp.ok) {
+      const e = await resp.json().catch(()=>({}));
+      return openRevenueModal(`<p>❌ خطا: ${e.error || 'خطا در تولید مدل‌ها'}</p>`);
+    }
+    const data = await resp.json();
+    const content = (data.choices?.[0]?.message?.content || '').trim();
+
+    // پارس پیشرفته با پشتیبانی از سرفصل برندها و اعداد فارسی/انگلیسی
+    const lines = content.split('\n').map(l=>l.trim()).filter(Boolean);
+    const numberRegex = /^(?:\d+|[۰-۹]+)[\.:\)\-\s]+/;
+    const isNumbered = (l)=>numberRegex.test(l);
+    const isHeader = (l)=> /^\s*(برای|مدل(?:‌| )های درآمدی برای)\s+/i.test(l) || l.includes(promptBrand1Name) || l.includes(promptBrand2Name) || /برند\s*(اول|دوم)/.test(l);
+
+    let currentBrand = 0; // 0: نامشخص، 1: برند اول، 2: برند دوم
+    let allNumbered = [];
+    let brand1 = []; let brand2 = [];
+    for (let i=0;i<lines.length;i++){
+      const line = lines[i];
+      if (isHeader(line)) {
+        if (line.includes(promptBrand2Name) || /برند\s*دوم/.test(line)) currentBrand = 2;
+        else if (line.includes(promptBrand1Name) || /برند\s*اول/.test(line)) currentBrand = 1;
+        continue;
+      }
+      if (isNumbered(line)){
+        let text = line.replace(numberRegex,'');
+        let j=i+1;
+        while (j<lines.length && !isNumbered(lines[j]) && !isHeader(lines[j])){ text += '\n'+lines[j]; j++; }
+        allNumbered.push(text);
+        if (currentBrand===1) brand1.push(text); else if (currentBrand===2) brand2.push(text);
+        i=j-1;
+      }
+    }
+
+    // فallbackها: در صورت نبود سرفصل‌ها یا توزیع نامتوازن
+    if (brand1.length===0 && brand2.length===0 && allNumbered.length>0) {
+      if (allNumbered.length>=10) {
+        brand1 = allNumbered.slice(0,5);
+        brand2 = allNumbered.slice(5,10);
+      } else if (allNumbered.length>=6) {
+        const mid = Math.ceil(allNumbered.length/2);
+        brand1 = allNumbered.slice(0, mid);
+        brand2 = allNumbered.slice(mid);
+      } else {
+        brand1 = allNumbered.slice();
+      }
+    }
+    if (brand1.length===10 && brand2.length===0) {
+      brand2 = brand1.slice(5,10);
+      brand1 = brand1.slice(0,5);
+    }
+
+    const parseModelText = (text) => {
+      const parts = { title:'', desc:'', ops:'', revenue:'', example:'' };
+      const ls = text.split('\n').map(x=>x.trim()).filter(Boolean);
+      if (ls.length>0){ parts.title = ls[0]; parts.desc = ls.slice(1).join(' ');} 
+      const pick=(label,key)=>{ const re=new RegExp(`${label}\\s*[:：-]\\s*([^|]+)`,'i'); const m=parts.desc.match(re); if(m){ parts[key]=m[1].trim(); parts.desc=parts.desc.replace(m[0],'').trim(); } };
+      pick('جزئیات عملی','ops'); pick('نحوه درآمدزایی','revenue'); pick('مثال','example');
+      return parts;
+    };
+    const renderModel = (m)=>{ const p=parseModelText(m); return `<div class=\"revenue-model-item\"><div class=\"model-title-box\">${p.title||'مدل درآمدی'}</div>${p.desc?`<div class=\"model-section-title\">شرح</div><div>${p.desc}</div>`:''}${p.ops?`<div class=\"model-section-title\">جزئیات عملی</div><div>${p.ops}</div>`:''}${p.revenue?`<div class=\"model-section-title\">نحوه درآمدزایی</div><div>${p.revenue}</div>`:''}${p.example?`<div class=\"model-section-title\">مثال</div><div>${p.example}</div>`:''}</div>`};
+    const brand1HTML = brand1.map(renderModel).join('');
+    const brand2HTML = brand2.map(renderModel).join('');
+
+    const html = `
+      <div class=\"revenue-container\">
+        <div class=\"revenue-brand-box\">
+          <div class=\"revenue-brand-title\">💼 ${promptBrand1Name}</div>
+          ${brand1HTML || '<p style=\"color:#999;\">مدلی یافت نشد</p>'}
+        </div>
+        <div class=\"revenue-brand-box\">
+          <div class=\"revenue-brand-title\">💼 ${promptBrand2Name}</div>
+          ${brand2HTML || '<p style=\"color:#999;\">مدلی یافت نشد</p>'}
+        </div>
+      </div>`;
+
+    openRevenueModal(html);
+  } catch (e) {
+    openRevenueModal(`<p>❌ خطا: ${e.message}</p>`);
+  }
+}
+
+// پاک کردن و بازنویسی کامل تابع نمایش مدل‌های درآمدی
+async function showRevenueForIdeaNew(index) {
+  try {
+    const idea = currentIdeas[index];
+    if (!idea) return openRevenueModal('<p>ایده یافت نشد</p>');
+
+    openRevenueModal('<p>⏳ در حال تولید مدل‌های درآمدی...</p>');
+
+    const myBrandRes = await fetch('/api/my-brand', { credentials:'include' });
+    const myBrand = myBrandRes.ok ? await myBrandRes.json() : null;
+
+    const targetId = getTargetBrandId();
+    const partnerRes = targetId ? await fetch(`/api/brand/${targetId}`, { credentials:'include' }) : null;
+    const targetBrand = partnerRes && partnerRes.ok ? await partnerRes.json() : null;
+
+    const promptBrand1Name = myBrand ? myBrand.name : 'برند اول';
+    const promptBrand2Name = targetBrand ? targetBrand.name : 'برند دوم';
+    
+    const revenuePrompt = `
+تو یک نابغه کسب‌وکار و مشاور استراتژیک برند در سطح جهانی هستی.
+هدف تو این است که از ایده همکاری زیر، **۵ مدل درآمدی حرفه‌ای برای ${promptBrand1Name} و ۵ مدل برای ${promptBrand2Name}** بسازی.
+
+ایده همکاری: ${idea.title}
+
+${idea.description}
+
+**خروجی دقیق و ساختاریافته:**
+برای ${promptBrand1Name}:
+1. [عنوان مدل] — [شرح کامل مدل]
+2. [عنوان مدل] — [شرح کامل مدل]
+3. [عنوان مدل] — [شرح کامل مدل]
+4. [عنوان مدل] — [شرح کامل مدل]
+5. [عنوان مدل] — [شرح کامل مدل]
+
+для ${promptBrand2Name}:
+1. [عنوان مدل] — [شرح کامل مدل]
+2. [عنوان مدل] — [شرح کامل مدل]
+3. [عنوان مدل] — [شرح کامل مدل]
+4. [عنوان مدل] — [شرح کامل مدل]
+5. [عنوان مدل] — [شرح کامل مدل]
+`;
+
+    const resp = await fetch('/api/generate-ideas', { 
+      method:'POST', 
+      headers:{'Content-Type':'application/json'}, 
+      body: JSON.stringify({ prompt: revenuePrompt, myBrandId: myBrand?._id, targetBrandId: targetBrand?._id }) 
+    });
+    
+    if (!resp.ok) {
+      const e = await resp.json().catch(()=>({}));
+      return openRevenueModal(`<p>❌ خطا: ${e.error || 'خطا در تولید مدل‌ها'}</p>`);
+    }
+    
+    const data = await resp.json();
+    const content = (data.choices?.[0]?.message?.content || '').trim();
+    
+    // پارس دقیق متن
+    const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+    const brand1Models = [];
+    const brand2Models = [];
+    let currentBrand = 0;
+    
+    const extractModels = (brandName) => {
+      const models = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].toLowerCase().includes('برای') && lines[i].toLowerCase().includes(brandName.toLowerCase())) {
+          i++; // رفتن به مدل‌ها
+          while (i < lines.length && /^\d+\./.test(lines[i])) {
+            models.push(lines[i].replace(/^\d+\.\s*/, ''));
+            i++;
+          }
+          break;
+        }
+      }
+      return models;
+    };
+    
+    brand1Models.push(...extractModels(promptBrand1Name));
+    brand2Models.push(...extractModels(promptBrand2Name));
+    
+    // اگر هیچ مدلی یافت نشد، کل متن را پارس کن
+    if (brand1Models.length === 0 && brand2Models.length === 0) {
+      const numberedLines = lines.filter(l => /^\d+\./.test(l));
+      brand1Models.push(...numberedLines.slice(0, 5).map(l => l.replace(/^\d+\.\s*/, '')));
+      brand2Models.push(...numberedLines.slice(5, 10).map(l => l.replace(/^\d+\.\s*/, '')));
+    }
+    
+    const renderModel = (model, index) => `
+      <div class="revenue-model-item">
+        <div class="model-title-box">${model}</div>
+      </div>
+    `;
+    
+    const brand1HTML = brand1Models.map(renderModel).join('');
+    const brand2HTML = brand2Models.map(renderModel).join('');
+    
+    if (brand1Models.length === 0 && brand2Models.length === 0) {
+      return openRevenueModal('<p>مدلی یافت نشد. لطفاً دوباره تلاش کنید.</p>');
+    }
+    
+    const html = `
+      <div class="revenue-container">
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${promptBrand1Name}</div>
+          ${brand1HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${promptBrand2Name}</div>
+          ${brand2HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+      </div>`;
+
+    openRevenueModal(html);
+  } catch (e) {
+    openRevenueModal(`<p>❌ خطا: ${e.message}</p>`);
+  }
+}
+</script>
+
+
+</body>
+</html>
+

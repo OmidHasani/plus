@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>بررسی فرصت‌های همکاری</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 50%, #ffffff 100%);
+  color: #2c3e50;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.8;
+  direction: rtl;
+  min-height: 100vh;
+}
+
+/* استایل هدر */
+.header {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: headerSlideIn 0.8s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes headerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.header-nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-link:hover::before {
+  left: 100%;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* استایل مخصوص دکمه داشبورد - بنفش */
+.nav-dashboard {
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important;
+  border: 1px solid rgba(155, 89, 182, 0.3) !important;
+}
+
+.nav-dashboard:hover {
+  background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%) !important;
+  box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4) !important;
+}
+
+/* استایل مخصوص دکمه لیست برندها - سفید با متن آبی */
+.nav-brands {
+  background: white !important;
+  color: #3498db !important;
+  border: 1px solid rgba(52, 152, 219, 0.3) !important;
+}
+
+.nav-brands:hover {
+  background: #f8f9fa !important;
+  color: #2980b9 !important;
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2) !important;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .header-nav {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .nav-link {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .buttons-container {
+    position: sticky;
+    top: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .btn-modern {
+    min-width: 180px;
+    padding: 15px 25px;
+    font-size: 15px;
+  }
+}
+
+
+/* استایل h1 حذف شد چون حالا در هدر قرار دارد */
+
+#ideasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.idea-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.1);
+  padding: 25px 30px;
+  position: relative;
+}
+
+.idea-number {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  font-weight: 700;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.idea-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #2c3e50;
+  /* حذف خط عمودی */
+  /* border-right: 5px solid #3498db; */
+  padding-right: 50px;
+  display: inline-block;
+}
+
+
+.section-label {
+  font-weight: 700;
+  color: #2980b9;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.section-content {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+  text-align: justify;
+}
+
+/* استایل‌های مدرن برای دکمه‌ها */
+.btn-modern {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  padding: 18px 36px;
+  border-radius: 20px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Vazirmatn', sans-serif;
+  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+  min-width: 220px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+.btn-modern:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(52, 152, 219, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-modern:active {
+  transform: translateY(-1px);
+}
+
+.btn-modern:disabled {
+  background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 15px rgba(189, 195, 199, 0.3);
+}
+
+.btn-occasion {
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+  box-shadow: 0 8px 25px rgba(26, 188, 156, 0.3);
+}
+
+.btn-occasion:hover {
+  box-shadow: 0 15px 40px rgba(26, 188, 156, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-occasion:disabled {
+  background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+  box-shadow: 0 4px 15px rgba(189, 195, 199, 0.3);
+}
+
+#loadingText {
+  text-align: center;
+  color: #888;
+  margin-top: 25px;
+  font-style: italic;
+  font-size: 15px;
+}
+
+#errorText {
+  text-align: center;
+  color: #e74c3c;
+  margin-top: 25px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.btn-detail {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 10px;
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.4);
+  transition: all 0.3s ease;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.btn-detail:hover {
+  background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.5);
+}
+
+.btn-detail:active {
+  transform: translateY(0);
+}
+
+/* استایل‌های پاپ‌آپ */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+
+.popup-header {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.popup-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.popup-body {
+  padding: 25px;
+  text-align: center;
+}
+
+.popup-body p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.popup-footer {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #eee;
+}
+
+.popup-btn {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.popup-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* استایل کنتینر دکمه‌ها */
+.buttons-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  padding: 25px;
+  background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  position: sticky;
+  top: 20px;
+  z-index: 100;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+/* سایه بیشتر وقتی دکمه‌ها در حالت sticky هستند */
+.buttons-container.sticky {
+  box-shadow: 0 8px 30px rgba(52, 152, 219, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.buttons-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3498db, #1abc9c, #3498db);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* App Modal (shared) */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.45); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+.modal-box { width: 100%; max-width: 920px; background: #fff; border-radius: 14px; box-shadow: 0 20px 50px rgba(2,6,23,0.35); border: 1px solid #e2e8f0; overflow: hidden; animation: modalIn .18s ease-out; }
+@keyframes modalIn { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+.modal-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 14px 16px; background: linear-gradient(135deg,#eff6ff 0%,#ffffff 100%); border-bottom:1px solid #e2e8f0; }
+.modal-title { margin:0; font-size:16px; font-weight:800; color:#1e3a8a; }
+.modal-close { background:#eff6ff; border:1px solid #dbeafe; width:32px; height:32px; border-radius:8px; cursor:pointer; color:#1e40af; font-weight:800; }
+.modal-body { padding:16px; color:#334155; line-height:1.9; max-height: 70vh; overflow:auto; }
+.modal-actions { display:flex; justify-content:flex-end; gap:10px; padding:12px 16px 16px 16px; }
+.modal-button { background:#2563eb; color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:700; cursor:pointer; }
+
+/* Revenue modal inner layout (two columns) */
+.revenue-container { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+@media (max-width: 768px) { .revenue-container { grid-template-columns: 1fr; } }
+.revenue-brand-box { background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border:2px solid #e2e8f0; border-radius:12px; padding:16px; }
+.revenue-brand-title { font-size:18px; font-weight:800; color:#1e3a8a; border-bottom:3px solid #3b82f6; padding-bottom:8px; margin-bottom:12px; }
+.revenue-model-item { background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:12px; margin-bottom:10px; box-shadow: 0 2px 4px rgba(0,0,0,.05); }
+.model-title-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; margin:6px 0 10px 0; font-weight:700; color:#0f172a; }
+.model-section-title { font-weight:700; color:#1e3a8a; margin:6px 0 4px 0; font-size: 13px; }
+
+  </style>
+  
+  <!-- پاپ‌آپ زیبا -->
+  <div id="popup-overlay" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3 id="popup-title">اطلاعیه</h3>
+        <button class="popup-close" onclick="closePopup()">&times;</button>
+      </div>
+      <div class="popup-body">
+        <p id="popup-message">پیام در اینجا نمایش داده می‌شود</p>
+      </div>
+      <div class="popup-footer">
+        <button class="popup-btn" onclick="closePopup()">متوجه شدم</button>
+      </div>
+    </div>
+  </div>
+</head>
+<body>
+
+<!-- هدر صفحه -->
+<header class="header">
+  <div class="header-content">
+    <h1 class="header-title">💡 فرصت‌های همکاری پیشنهادی</h1>
+    <nav class="header-nav">
+      <a href="dashboard.html" class="nav-link nav-dashboard">داشبورد</a>
+      <a href="brands.html" class="nav-link nav-brands">لیست برندها</a>
+    </nav>
+  </div>
+</header>
+
+<!-- دکمه‌های تولید ایده در بالای صفحه -->
+<div class="buttons-container">
+  <button id="generateBtn" class="btn-modern">🔄 دریافت ایده‌های جدید</button>
+  <button id="generateOccasionBtn" class="btn-modern btn-occasion">🎉 ایده‌های مناسبتی</button>
+</div>
+
+<div id="industryInfo" style="display:none; background:#f8f9fa; padding:15px; border-radius:10px; margin-bottom:20px; border-right:4px solid #3498db;">
+  <h3 style="color:#2c3e50; margin-bottom:10px;">🏭 جزئیات بیشتر صنایع </h3>
+  <div id="industryDetails"></div>
+</div>
+
+<div id="ideasContainer"></div>
+<div id="loadingText" style="display:none;">⏳ در حال دریافت ایده‌ها...</div>
+<div id="errorText" style="display:none;"></div>
+
+<!-- Revenue Modal -->
+<div id="revenueModal" class="modal-backdrop" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="revenueModalTitle">
+    <div class="modal-header">
+      <h4 class="modal-title" id="revenueModalTitle">💰 مدل‌های درآمدی پیشنهادی</h4>
+      <button class="modal-close" id="revenueModalClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="revenueModalContent">⏳ در حال آماده‌سازی...</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-button" id="revenueModalOk">باشه</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// متغیر global برای ذخیره ایده‌ها
+let ideas = [];
+
+function getTargetBrandId() {
+  const params = new URLSearchParams(window.location.search);
+  const targetId = params.get("target");
+  console.log("🔍 دریافت targetBrandId از URL:", targetId);
+  console.log("🔍 URL کامل:", window.location.href);
+  return targetId;
+}
+
+async function fetchTargetBrand(id) {
+  const res = await fetch(`/api/brand/${id}`, { credentials: "include" });
+  if (!res.ok) throw new Error("برند هدف یافت نشد.");
+  return await res.json();
+}
+
+function parseIdeas(text) {
+  console.log("متن ورودی برای پارس:", text);
+  
+  ideas = [];
+  
+  // روش 1: تقسیم بر اساس **ایده X:**
+  let ideaSections = text.split(/\*\*ایده\s*\d+:\*\*/).filter(section => section.trim());
+  
+  // اگر روش 1 کار نکرد، روش 2: تقسیم بر اساس شماره ایده
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/(?:^|\n)(?:\d+\.|🎯|ایده\s*\d+)/).filter(section => section.trim());
+  }
+  
+  // اگر روش 2 کار نکرد، روش 3: تقسیم بر اساس 🎯
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/🎯/).filter(section => section.trim());
+  }
+  
+  // اگر هنوز کار نکرد، روش 4: تقسیم بر اساس خطوط خالی
+  if (ideaSections.length <= 1) {
+    ideaSections = text.split(/\n\s*\n/).filter(section => section.trim());
+  }
+  
+  console.log("بخش‌های پیدا شده:", ideaSections.length);
+  
+  for (let i = 0; i < ideaSections.length; i++) {
+    const section = ideaSections[i].trim();
+    if (!section) continue;
+    
+    console.log(`پردازش بخش ${i + 1}:`, section.substring(0, 100) + "...");
+    
+    let title = '';
+    let description = '';
+    let whyEffective = '';
+    
+    // پیدا کردن عنوان (قبل از 🧠)
+    const titleMatch = section.match(/^([^🧠]*?)(?=🧠|$)/s);
+    if (titleMatch) {
+      title = titleMatch[1].trim()
+        .replace(/^[🎯\s]*/, '')
+        .replace(/^\*\*ایده\s*\d+:\*\*\s*/, '')
+        .replace(/^\*\*عنوان\s*ایده:\*\*\s*/, '')
+        .replace(/^عنوان\s*ایده:\s*/, '');
+    }
+    
+    // پیدا کردن شرح (بین 🧠 و 💎 یا 📈)
+    const descriptionMatch = section.match(/🧠\s*([^💎📈]*?)(?=💎|📈|$)/s);
+    if (descriptionMatch) {
+      description = descriptionMatch[1].trim()
+        .replace(/^\*\*شرح\s*ایده:\*\*\s*/, '')
+        .replace(/^شرح\s*ایده:\s*/, '');
+    }
+    
+    // پیدا کردن مزایا (بعد از 💎 یا 📈)
+    const whyMatch = section.match(/(?:💎|📈)\s*([^]*?)$/s);
+    if (whyMatch) {
+      whyEffective = whyMatch[1].trim();
+    }
+    
+    // اگر عنوان و شرح داشته باشد اضافه کن
+    if (title && description) {
+      console.log(`ایده ${i + 1} اضافه شد:`, { title: title.substring(0, 50), description: description.substring(0, 50) });
+      ideas.push({
+        title: title,
+        description: description,
+        whyEffective: whyEffective
+      });
+    } else {
+      console.log(`ایده ${i + 1} ناقص بود:`, { title: !!title, description: !!description });
+    }
+  }
+  
+  // اگر هیچ ایده‌ای پیدا نشد، سعی کن کل متن را به عنوان یک ایده در نظر بگیر
+  if (ideas.length === 0 && text.trim()) {
+    console.log("هیچ ایده‌ای پیدا نشد، سعی در پارس کل متن...");
+    ideas.push({
+      title: "ایده همکاری",
+      description: text.trim(),
+      whyEffective: ""
+    });
+  }
+  
+  console.log(`تعداد ایده‌های پارس شده: ${ideas.length}`);
+  return ideas;
+}
+
+let currentIdeas = [];
+
+function addSectionTitle(title) {
+  const h2 = document.createElement("h2");
+  h2.textContent = title;
+  return h2;
+}
+
+function createIdeaCard(idea, index) {
+  const card = document.createElement("div");
+  card.className = "idea-card";
+  // حذف خطوط --- از متن شرح ایده
+  const cleanDescription = idea.description ? idea.description.replace(/^---+$/gm, '').replace(/\n\s*\n\s*\n/g, '\n\n').trim() : '';
+  
+  // بررسی صحت ایندکس
+  if (index < 0 || index >= ideas.length) {
+    console.warn(`ایده در ایندکس ${index} یافت نشد. تعداد ایده‌ها: ${ideas.length}`);
+    return null;
+  }
+  
+  card.innerHTML = `
+    <div class="idea-number">${index + 1}</div>
+    <div class="idea-title">${idea.title}</div>
+    <div class="section-content">${cleanDescription}</div>
+    
+    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn-detail" data-idea-index="${index}" data-type="detail">🔍 جزئیات بیشتر</button>
+      <button class="btn-detail" data-idea-index="${index}" data-type="economy">💰 مدل‌های درآمدی</button>
+    </div>
+  `;
+  return card;
+}
+
+// توابع پاپ‌آپ
+function showPopup(title, message) {
+  document.getElementById('popup-title').textContent = title;
+  document.getElementById('popup-message').textContent = message;
+  document.getElementById('popup-overlay').style.display = 'flex';
+}
+
+function closePopup() {
+  document.getElementById('popup-overlay').style.display = 'none';
+}
+
+// توابع ذخیره و بارگذاری ایده‌ها
+function saveIdeasToStorage(ideas, myBrandId, targetBrandId) {
+  const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
+  const existingIdeas = getSavedIdeas(myBrandId, targetBrandId);
+  const allIdeas = [...existingIdeas, ...ideas];
+  console.log('🔍 ذخیره ایده‌ها در localStorage:');
+  console.log('🔍 کلید:', key);
+  console.log('🔍 ایده‌های موجود:', existingIdeas.length);
+  console.log('🔍 ایده‌های جدید:', ideas.length);
+  console.log('🔍 کل ایده‌ها:', allIdeas.length);
+  localStorage.setItem(key, JSON.stringify(allIdeas));
+}
+
+function getSavedIdeas(myBrandId, targetBrandId) {
+  const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
+  const saved = localStorage.getItem(key);
+  console.log('🔍 جستجو برای ایده‌های ذخیره شده:');
+  console.log('🔍 کلید:', key);
+  console.log('🔍 داده‌های ذخیره شده:', saved);
+  return saved ? JSON.parse(saved) : [];
+}
+
+function clearSavedIdeas(myBrandId, targetBrandId) {
+  const key = `saved_ideas_${myBrandId}_${targetBrandId}`;
+  localStorage.removeItem(key);
+}
+
+// === ذخیره ایده‌ها در دیتابیس ===
+async function saveIdeasToDatabase(ideas, myBrandId, targetBrandId) {
+  try {
+    for (const idea of ideas) {
+      const response = await fetch('/api/ideas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          title: idea.title,
+          description: idea.description,
+          partnerBrandId: targetBrandId
+        })
+      });
+
+      if (!response.ok) {
+        console.error('خطا در ذخیره ایده:', idea.title);
+      }
+    }
+    console.log('✅ تمام ایده‌ها در دیتابیس ذخیره شدند');
+  } catch (error) {
+    console.error('خطا در ذخیره ایده‌ها در دیتابیس:', error);
+  }
+}
+
+
+function setupIdeaButtons() {
+  // اطمینان از اینکه آرایه ideas مقداردهی شده است
+  if (!ideas || ideas.length === 0) {
+    console.warn("آرایه ideas خالی است یا مقداردهی نشده است");
+    return;
+  }
+  
+  document.querySelectorAll(".btn-detail").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const type = btn.getAttribute("data-type");
+      let title = "";
+      let message = "";
+      
+      if (type === "detail") {
+        // هدایت به صفحه تحلیل ایده
+        const ideaIndex = parseInt(btn.getAttribute("data-idea-index"));
+        
+        console.log('🔍 بررسی ایده:');
+        console.log('ایده ایندکس:', ideaIndex);
+        console.log('تعداد ایده‌ها:', ideas.length);
+        console.log('ایده‌های موجود:', ideas);
+        
+        // بررسی صحت ایندکس
+        if (ideaIndex < 0 || ideaIndex >= ideas.length) {
+          console.error("Idea not found at index:", ideaIndex);
+          alert("خطا: ایده یافت نشد. لطفاً صفحه را رفرش کنید.");
+          return;
+        }
+        
+        const idea = ideas[ideaIndex];
+        console.log('ایده پیدا شده:', idea);
+        
+        if (idea) {
+          // دریافت اطلاعات برند من
+          const myBrand = await fetchMyBrand();
+          
+          // دریافت targetBrandId و ذخیره آن
+          const targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
+          if (targetBrandId) {
+            sessionStorage.setItem("targetBrandId", targetBrandId);
+            
+            // دریافت و ذخیره نام برند همکار
+            try {
+              const response = await fetch(`/api/brand/${targetBrandId}`, { credentials: 'include' });
+              if (response.ok) {
+                const targetBrand = await response.json();
+                sessionStorage.setItem("partnerName", targetBrand.name);
+              }
+            } catch (error) {
+              console.error("خطا در دریافت اطلاعات برند همکار:", error);
+            }
+          }
+          
+          // جستجو برای یافتن ایده در دیتابیس
+          let ideaId = null;
+          try {
+            console.log('🔍 جستجو برای ایده در دیتابیس با عنوان:', idea.title);
+            const response = await fetch(`/api/ideas/partner/${targetBrandId}`, { credentials: 'include' });
+            if (response.ok) {
+              const ideasFromDB = await response.json();
+              console.log('🔍 ایده‌های موجود در دیتابیس:', ideasFromDB);
+              const foundIdea = ideasFromDB.find(dbIdea => dbIdea.title === idea.title);
+              if (foundIdea) {
+                ideaId = foundIdea._id;
+                sessionStorage.setItem("ideaId", ideaId);
+                console.log('🔍 ایده پیدا شد با ID:', ideaId);
+              } else {
+                console.log('🔍 ایده در دیتابیس یافت نشد');
+              }
+            }
+          } catch (error) {
+            console.error("خطا در جستجوی ایده در دیتابیس:", error);
+          }
+          
+          // اگر ایده در دیتابیس یافت نشد، آن را ایجاد کن
+          if (!ideaId) {
+            try {
+              console.log('🔍 ایجاد ایده جدید در دیتابیس...');
+              const response = await fetch('/api/ideas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                  title: idea.title,
+                  description: idea.description,
+                  partnerBrandId: targetBrandId
+                })
+              });
+              
+              if (response.ok) {
+                const newIdea = await response.json();
+                ideaId = newIdea.idea._id;
+                sessionStorage.setItem("ideaId", ideaId);
+                console.log('🔍 ایده جدید ایجاد شد با ID:', ideaId);
+              } else {
+                const errorData = await response.json();
+                console.error('🔍 خطا در ایجاد ایده:', errorData);
+              }
+            } catch (error) {
+              console.error("خطا در ایجاد ایده در دیتابیس:", error);
+            }
+          }
+          
+          // ذخیره اطلاعات ایده در sessionStorage
+          const ideaData = `ایده: ${idea.title}\n\nتوضیحات: ${idea.description}`;
+          sessionStorage.setItem("ideaPrompt", ideaData);
+          sessionStorage.setItem("ideaTitle", idea.title);
+          sessionStorage.setItem("ideaDescription", idea.description);
+          sessionStorage.setItem("myBrandId", myBrand._id);
+          sessionStorage.setItem("ideaType", "my_idea"); // مشخص کردن نوع ایده
+          
+          console.log('🔍 اطلاعات ذخیره شده در sessionStorage:');
+          console.log('🔍 ideaId:', sessionStorage.getItem("ideaId"));
+          console.log('🔍 ideaTitle:', sessionStorage.getItem("ideaTitle"));
+          console.log('🔍 targetBrandId:', sessionStorage.getItem("targetBrandId"));
+          
+          // بررسی وضعیت دکمه قبل از هدایت
+          await checkIdeaStatus(idea.title, targetBrandId);
+          
+          // هدایت به صفحه جزئیات ایده
+          console.log('🔍 هدایت به صفحه idea-details.html');
+          window.location.href = "idea-details.html";
+        } else {
+          console.error("Idea not found at index:", ideaIndex);
+          alert("خطا: ایده یافت نشد");
+        }
+        return;
+      } else if (type === "economy") {
+        const ideaIndex = parseInt(btn.getAttribute("data-idea-index"));
+        if (ideaIndex >= 0 && ideaIndex < ideas.length) {
+          await showRevenueForIdeaNew(ideaIndex);
+        } else {
+          openRevenueModal('<p>❌ ایده یافت نشد</p>');
+        }
+        return; // جلوگیری از نمایش پاپ‌آپ قدیمی
+      }
+      
+      if (title) showPopup(title, message);
+    });
+  });
+}
+
+// === ذخیره و دریافت عناوین قبلی ایده‌ها در localStorage بر اساس برند ===
+function getStoredIdeaTitles(brandId) {
+  const key = `storedIdeaTitles_${brandId}`;
+  const stored = localStorage.getItem(key);
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+}
+
+function storeIdeaTitles(titles, brandId) {
+  const uniqueTitles = Array.from(new Set(titles)); // حذف تکراری در ذخیره
+  const key = `storedIdeaTitles_${brandId}`;
+  localStorage.setItem(key, JSON.stringify(uniqueTitles));
+}
+
+// === تغییر توابع buildPrompt برای ارسال عناوین قبلی به GPT ===
+
+function buildPrompt(myBrand, similarBrands, brandId) {
+  const priority = myBrand.priorities?.[0] || "رضایت مشتری";
+
+  const questions = myBrand.questions || [];
+  let questionsText = questions.map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+  // 🔹 همیشه قبل از ساخت پرامپت لیست به‌روز بگیر
+  const storedTitles = getStoredIdeaTitles(brandId);
+  const titlesText = storedTitles.length > 0 
+    ? storedTitles.join("، ") 
+    : "هیچ ایده‌ای تاکنون ارائه نشده است";
+
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و ایده‌پرداز خلاق هستید.  
+برند من با نام «${myBrand.name}» در حوزه «${myBrand.field}» فعالیت می‌کند.  
+اولویت اصلی برند من این است: «${priority}».  
+
+سوالات و پاسخ‌های برند من به شرح زیر است:  
+${questionsText}  
+
+برندهای مشابه زیر را نیز در نظر بگیر:  
+`;
+
+  similarBrands.forEach((b, i) => {
+    const priority = b.priorities?.[0] || "اولویت مشخص نشده";
+    const questionsText = (b.questions || []).map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+    prompt += `
+${i + 1}. نام: ${b.name}
+حوزه فعالیت: ${b.field}
+اولویت اصلی: ${priority}
+سوالات و پاسخ‌ها:
+${questionsText}
+`;
+  });
+
+  prompt += `
+
+لطفاً ایده‌هایی تولید کن که عنوان آن‌ها در لیست زیر وجود ندارد و تکراری نباشند:
+${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+
+با توجه به اطلاعات زیر درباره دو برند ، که شامل پاسخ‌های تحلیلی، اهداف، نقاط قوت، مزیت رقابتی، مشکلات و فرصت‌ها هستند، از تو می‌خواهم **دقیقاً و حتماً 5 ایده‌ی همکاری** بسیار خلاقانه، متمایز، پخته و قابل اجرا بین این دو برند ارائه بدهی.
+
+⚠️ **تأکید مهم**: این ایده‌ها باید **بدون در نظر گیری مناسبت‌های خاص** و بر اساس **نیازهای واقعی و فرصت‌های همکاری** طراحی شوند.
+
+⚠️ **تأکید مهم**: باید دقیقاً 5 ایده ارائه بدهی. نه کمتر، نه بیشتر. هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5).
+
+❗ نکات مهم:
+- این ایده‌ها باید حاصل **همکاری و هم‌افزایی بین دو برند** باشند.
+- یعنی ایده‌هایی که **ترکیب ظرفیت‌ها، منابع یا خدمات** دو برند را هدف می‌گیرند و به نتیجه‌ای تازه و نوآورانه منجر می‌شوند.
+- **این ایده‌ها باید بر اساس نیازهای واقعی و فرصت‌های همکاری** طراحی شوند، نه مناسبت‌های خاص
+- این ایده‌ها نباید تکراری، عمومی یا صرفاً تبلیغاتی باشند. باید:
+  - نوآورانه و کاربردی باشند
+  - قابلیت اجرای عملی داشته باشند
+  - بر اساس داده‌های دقیق موجود طراحی شوند، نه فرضیات کلی
+  - **بدون وابستگی به مناسبت‌های خاص** طراحی شوند
+
+📌 **ساختار خروجی اجباری**: باید دقیقاً 5 ایده ارائه بدهی، هر کدام با این فرمت:
+
+**ایده 1:**
+🎯 عنوان ایده:  
+[یک عنوان جذاب، خلاقانه و منحصر‌به‌فرد که به همکاری دو برند اشاره دارد]
+
+🧠 شرح ایده:  
+[توضیح کامل درباره نحوه عملکرد ایده. حداقل 5 خط. توضیح بده که:
+- ایده دقیقاً چیست و چگونه پیاده‌سازی می‌شود  
+- چه بخشی از آن توسط برند اول اجرا می‌شود و چه بخشی توسط برند دوم  
+- چه مشکلی را حل می‌کند یا چه مزیتی ایجاد می‌کند  
+- از چه فناوری یا ساختاری استفاده می‌کند  
+- تجربه کاربر یا مشتری در این ایده چگونه خواهد بود  
+- **این ایده بر اساس نیازهای واقعی و فرصت‌های همکاری** طراحی شده است
+]
+
+**ایده 2:**
+🎯 عنوان ایده:  
+[عنوان دوم]
+
+🧠 شرح ایده:  
+[شرح دوم]
+
+**ایده 3:**
+🎯 عنوان ایده:  
+[عنوان سوم]
+
+🧠 شرح ایده:  
+[شرح سوم]
+
+**ایده 4:**
+🎯 عنوان ایده:  
+[عنوان چهارم]
+
+🧠 شرح ایده:  
+[شرح چهارم]
+
+**ایده 5:**
+🎯 عنوان ایده:  
+[عنوان پنجم]
+
+🧠 شرح ایده:  
+[شرح پنجم]
+
+💎 چرا مؤثر است:  
+[تحلیل دقیق از اینکه چرا این همکاری می‌تواند موفق باشد. اشاره به مزایای استراتژیک، تفاوت با رقبا، ظرفیت‌های موجود دو برند، و اینکه چرا این ایده خاص از دل اطلاعات بالا استخراج شده.]
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 5 ایده ارائه بدهی
+- هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5)
+- تمام ایده‌ها باید بر اساس اولویت اول برند یعنی «${priority}» باشند
+- اگر کمتر از 5 ایده ارائه بدهی، پاسخ ناقص محسوب می‌شود
+
+اکنون تحلیل را شروع کن و دقیقاً 5 ایده همکاری را بنویس.
+`;
+
+  console.log("PROMPT اولویت اول:");
+  console.log(prompt);
+  return prompt;
+}
+
+// تابع برای ساخت پرامپت مناسبتی
+function buildOccasionPrompt(myBrand, similarBrands, brandId) {
+  const priority = myBrand.priorities?.[0] || "رضایت مشتری";
+
+  const questions = myBrand.questions || [];
+  let questionsText = questions.map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+  // 🔹 همیشه قبل از ساخت پرامپت لیست به‌روز بگیر
+  const storedTitles = getStoredIdeaTitles(brandId);
+  const titlesText = storedTitles.length > 0 
+    ? storedTitles.join("، ") 
+    : "هیچ ایده‌ای تاکنون ارائه نشده است";
+
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و ایده‌پرداز خلاق هستید که در تولید ایده‌های مناسبتی تخصص دارید.  
+برند من با نام «${myBrand.name}» در حوزه «${myBrand.field}» فعالیت می‌کند.  
+اولویت اصلی برند من این است: «${priority}».  
+
+سوالات و پاسخ‌های برند من به شرح زیر است:  
+${questionsText}  
+
+برندهای مشابه زیر را نیز در نظر بگیر:  
+`;
+
+  similarBrands.forEach((b, i) => {
+    const priority = b.priorities?.[0] || "اولویت مشخص نشده";
+    const questionsText = (b.questions || []).map(q => `سوال: ${q.question}\nپاسخ: ${q.answer}`).join("\n\n");
+
+    prompt += `
+${i + 1}. نام: ${b.name}
+حوزه فعالیت: ${b.field}
+اولویت اصلی: ${priority}
+سوالات و پاسخ‌ها:
+${questionsText}
+`;
+  });
+
+  prompt += `
+
+لطفاً ایده‌هایی تولید کن که عنوان آن‌ها در لیست زیر وجود ندارد و تکراری نباشند:
+${storedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+
+با توجه به اطلاعات زیر درباره دو برند ، که شامل پاسخ‌های تحلیلی، اهداف، نقاط قوت، مزیت رقابتی، مشکلات و فرصت‌ها هستند، از تو می‌خواهم **دقیقاً و حتماً 5 ایده‌ی همکاری** بسیار خلاقانه، متمایز، پخته و قابل اجرا بین این دو برند ارائه بدهی که **بر اساس مناسبت‌های صنعتی** طراحی شده باشند.
+
+⚠️ **تأکید مهم**: این ایده‌ها باید **حتماً بر اساس مناسبت‌های صنعتی** طراحی شوند و مناسبت‌ها در مرکز توجه قرار گیرند.
+
+⚠️ **تأکید مهم**: باید دقیقاً 5 ایده ارائه بدهی. نه کمتر، نه بیشتر. هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5).
+
+❗ نکات مهم:
+- این ایده‌ها باید حاصل **همکاری و هم‌افزایی بین دو برند** باشند.
+- **هر ایده باید بر اساس یک یا چند مناسبت صنعتی** طراحی شود (مثل روز ملی فناوری اطلاعات، روز جهانی بازاریابی، هفته پژوهش، روز معلم، روز پزشک، روز محیط زیست، و غیره)
+- ایده‌ها باید شامل **هدایای مناسبتی، برنامه‌های ویژه، کمپین‌های مشترک، رویدادهای تخصصی** مرتبط با مناسبت‌ها باشند
+- **مناسبت‌های صنعتی باید در مرکز توجه قرار گیرند** و ایده‌ها حول آن‌ها طراحی شوند
+- این ایده‌ها نباید تکراری، عمومی یا صرفاً تبلیغاتی باشند. باید:
+  - نوآورانه و کاربردی باشند
+  - قابلیت اجرای عملی داشته باشند
+  - بر اساس داده‌های دقیق موجود طراحی شوند، نه فرضیات کلی
+  - **مناسبت‌های صنعتی را در مرکز توجه قرار دهند**
+
+📌 **ساختار خروجی اجباری**: باید دقیقاً 5 ایده ارائه بدهی، هر کدام با این فرمت:
+
+**ایده 1:**
+🎯 عنوان ایده:  
+[یک عنوان جذاب، خلاقانه و منحصر‌به‌فرد که به همکاری دو برند و مناسبت صنعتی اشاره دارد]
+
+🧠 شرح ایده:  
+[توضیح کامل درباره نحوه عملکرد ایده. حداقل 5 خط. توضیح بده که:
+- ایده دقیقاً چیست و چگونه پیاده‌سازی می‌شود  
+- چه بخشی از آن توسط برند اول اجرا می‌شود و چه بخشی توسط برند دوم  
+- چه مشکلی را حل می‌کند یا چه مزیتی ایجاد می‌کند  
+- از چه فناوری یا ساختاری استفاده می‌کند  
+- تجربه کاربر یا مشتری در این ایده چگونه خواهد بود  
+- **چگونه مناسبت صنعتی در این ایده دخیل است و چه تأثیری دارد**
+- **چه نوع هدایا، برنامه‌ها یا رویدادهای مناسبتی** در این ایده گنجانده شده است
+]
+
+**ایده 2:**
+🎯 عنوان ایده:  
+[عنوان دوم]
+
+🧠 شرح ایده:  
+[شرح دوم]
+
+**ایده 3:**
+🎯 عنوان ایده:  
+[عنوان سوم]
+
+🧠 شرح ایده:  
+[شرح سوم]
+
+**ایده 4:**
+🎯 عنوان ایده:  
+[عنوان چهارم]
+
+🧠 شرح ایده:  
+[شرح چهارم]
+
+**ایده 5:**
+🎯 عنوان ایده:  
+[عنوان پنجم]
+
+🧠 شرح ایده:  
+[شرح پنجم]
+
+💎 چرا مؤثر است:  
+[تحلیل دقیق از اینکه چرا این همکاری می‌تواند موفق باشد. اشاره به مزایای استراتژیک، تفاوت با رقبا، ظرفیت‌های موجود دو برند، و اینکه چرا این ایده خاص از دل اطلاعات بالا استخراج شده و چگونه مناسبت صنعتی آن را تقویت می‌کند.]
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 5 ایده ارائه بدهی
+- هر ایده باید شماره‌گذاری شده باشد (1، 2، 3، 4، 5)
+- تمام ایده‌ها باید بر اساس اولویت اول برند یعنی «${priority}» باشند
+- **هر ایده باید بر اساس مناسبت‌های صنعتی طراحی شود**
+- اگر کمتر از 5 ایده ارائه بدهی، پاسخ ناقص محسوب می‌شود
+
+اکنون تحلیل را شروع کن و دقیقاً 5 ایده همکاری مناسبتی را بنویس.
+`;
+
+  console.log("PROMPT مناسبتی:");
+  console.log(prompt);
+  return prompt;
+}
+
+function buildPromptForPriority2and3(p2, p3, similarBrands, usedTitles = [], brandId) {
+  let prompt = `شما یک تحلیل‌گر حرفه‌ای و خلاق هستید.  
+می‌خواهیم ۶ ایده همکاری (۳ ایده برای هر اولویت) تولید کنیم.  
+برند ما اولویت‌های زیر را دارد:
+1. ${p2}
+2. ${p3}
+
+برندهای مشابه ما:
+`;
+
+  similarBrands.forEach((b, i) => {
+    prompt += `${i + 1}. نام: ${b.name}، حوزه فعالیت: ${b.field}\n`;
+  });
+
+  prompt += `
+
+⚠️ **تأکید مهم**: باید دقیقاً 6 ایده همکاری تولید کنی (3 ایده برای هر اولویت). نه کمتر، نه بیشتر.
+
+**ساختار خروجی اجباری:**
+
+**اولویت دوم (${p2}):**
+**ایده 1:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 2:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 3:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**اولویت سوم (${p3}):**
+**ایده 4:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 5:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+**ایده 6:**
+🎯 عنوان ایده:  
+🧠 شرح ایده:  
+📈 مزایای استراتژیک:  
+
+🚨 **تأکید نهایی**: 
+- باید دقیقاً 6 ایده ارائه بدهی (3+3)
+- هر ایده باید شماره‌گذاری شده باشد
+- عناوین زیر تکراری نباشد:
+${usedTitles.map((t, i) => `${i + 1}. ${t}`).join("\n")}`;
+
+  return prompt;
+}
+
+async function fetchMyBrand() {
+  const res = await fetch("/api/my-brand", { credentials: "include" });
+  if (!res.ok) throw new Error("برند شما یافت نشد.");
+  return await res.json();
+}
+
+async function fetchRecommendations() {
+  const res = await fetch("/api/recommendations", { credentials: "include" });
+  if (!res.ok) throw new Error("خطا در دریافت برندهای مشابه.");
+  return await res.json();
+}
+
+async function callOpenAI(prompt, myBrandId, targetBrandId) {
+  const res = await fetch("/api/generate-ideas", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ 
+      prompt, 
+      myBrandId, 
+      targetBrandId 
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || "خطا در پاسخ OpenAI");
+  }
+
+  const data = await res.json();
+  console.log("خام API OpenAI:", JSON.stringify(data, null, 2));
+  return data.choices[0].message.content;
+}
+
+// تابع برای نمایش اطلاعات صنعتی
+async function displayIndustryInfo(myBrand, targetBrand) {
+  const industryInfo = document.getElementById("industryInfo");
+  const industryDetails = document.getElementById("industryDetails");
+  
+  try {
+    console.log("🔍 Debug - myBrand.field:", myBrand.field);
+    console.log("🔍 Debug - targetBrand.field:", targetBrand.field);
+    
+    // دریافت اطلاعات صنعت برند من
+    const myField = myBrand.field || myBrand.industry || "عمومی";
+    const myIndustryRes = await fetch("/api/detect-industry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ field: myField })
+    });
+    const myIndustryData = await myIndustryRes.json();
+    console.log("🔍 Debug - myIndustryData:", myIndustryData);
+    
+    // دریافت اطلاعات صنعت برند هدف
+    const targetField = targetBrand.field || targetBrand.industry || "عمومی";
+    const targetIndustryRes = await fetch("/api/detect-industry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ field: targetField })
+    });
+    const targetIndustryData = await targetIndustryRes.json();
+    console.log("🔍 Debug - targetIndustryData:", targetIndustryData);
+    
+    industryDetails.innerHTML = `
+      <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:200px; background:white; padding:15px; border-radius:8px; border:1px solid #e0e0e0;">
+          <h4 style="color:#2980b9; margin-bottom:12px; font-size:16px;">🏢 ${myBrand.name || 'برند شما'}</h4>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${myField}</p>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>مناسبت‌های مرتبط:</strong></p>
+          <ul style="margin:8px 0; padding-right:15px; max-height:120px; overflow-y:auto;">
+            ${myIndustryData.occasions && myIndustryData.occasions.length > 0 
+              ? myIndustryData.occasions.map(occ => `<li style="margin:4px 0; color:#555; font-size:14px;">${occ.name}</li>`).join("")
+              : `<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد (${myIndustryData.occasions ? 'لیست خالی' : 'داده‌ای دریافت نشد'})</li>`
+            }
+          </ul>
+        </div>
+        <div style="flex:1; min-width:200px; background:white; padding:15px; border-radius:8px; border:1px solid #e0e0e0;">
+          <h4 style="color:#e74c3c; margin-bottom:12px; font-size:16px;">🎯 ${targetBrand.name || 'برند هدف'}</h4>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>حوزه کاری:</strong> ${targetField}</p>
+          <p style="margin:8px 0; font-weight:600; color:#2c3e50;"><strong>مناسبت‌های مرتبط:</strong></p>
+          <ul style="margin:8px 0; padding-right:15px; max-height:120px; overflow-y:auto;">
+            ${targetIndustryData.occasions && targetIndustryData.occasions.length > 0 
+              ? targetIndustryData.occasions.map(occ => `<li style="margin:4px 0; color:#555; font-size:14px;">${occ.name}</li>`).join("")
+              : `<li style="color:#999; font-style:italic;">مناسبت خاصی یافت نشد (${targetIndustryData.occasions ? 'لیست خالی' : 'داده‌ای دریافت نشد'})</li>`
+            }
+          </ul>
+        </div>
+      </div>
+    `;
+    
+    industryInfo.style.display = "block";
+  } catch (err) {
+    console.error("❌ خطا در دریافت اطلاعات صنعتی:", err);
+    console.error("❌ myBrand:", myBrand);
+    console.error("❌ targetBrand:", targetBrand);
+    industryDetails.innerHTML = `
+      <div style="text-align:center; color:#e74c3c; padding:20px;">
+        <p>⚠️ خطا در دریافت اطلاعات صنعتی</p>
+        <p style="font-size:14px; color:#999;">لطفاً صفحه را رفرش کنید</p>
+        <p style="font-size:12px; color:#666;">خطا: ${err.message}</p>
+      </div>
+    `;
+    industryInfo.style.display = "block";
+  }
+}
+
+async function generateIdeas() {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+
+  // بارگذاری ایده‌های قبلی
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    
+    console.log('🔍 بارگذاری ایده‌های قبلی:');
+    console.log('🔍 myBrand._id:', myBrand._id);
+    console.log('🔍 targetBrandId:', targetBrandId);
+    
+    if (targetBrandId) {
+      const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+      console.log('🔍 ایده‌های ذخیره شده:', savedIdeas);
+      
+      if (savedIdeas.length > 0) {
+        container.innerHTML = "";
+        container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
+        // به‌روزرسانی متغیر global ideas قبل از ایجاد کارت‌ها
+        ideas = savedIdeas;
+        currentIdeas = savedIdeas;
+        
+        savedIdeas.forEach((idea, i) => {
+          const card = createIdeaCard(idea, i);
+          if (card) {
+            container.appendChild(card);
+          }
+        });
+        
+        setupIdeaButtons();
+        
+        // اگر ایده‌های قبلی موجود است، فقط ایده‌های جدید تولید کن
+        await generateNewIdeas(myBrand, targetBrandId, savedIdeas.length);
+        return;
+      } else {
+        console.log('🔍 هیچ ایده‌ای ذخیره نشده است');
+      }
+    } else {
+      console.log('🔍 targetBrandId یافت نشد');
+    }
+  } catch (err) {
+    console.error("خطا در بارگذاری ایده‌های قبلی:", err);
+  }
+
+  // اگر ایده‌های قبلی موجود نیست، ایده‌های جدید تولید کن
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    await generateNewIdeas(myBrand, targetBrandId, 0);
+  } catch (err) {
+    console.error("خطا در تولید ایده‌های جدید:", err);
+    errorText.textContent = "❌ خطا: " + err.message;
+    errorText.style.display = "block";
+  }
+}
+
+async function generateNewIdeas(myBrand = null, targetBrandId = null, existingCount = 0) {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+
+  errorText.style.display = "none";
+  loadingText.style.display = "block";
+  generateBtn.disabled = true;
+
+  try {
+    if (!myBrand) {
+      myBrand = await fetchMyBrand();
+    }
+    
+    if (!targetBrandId) {
+      targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
+    }
+    
+    if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
+
+    const targetBrand = await fetchTargetBrand(targetBrandId);
+    const similarBrands = [targetBrand];  // فقط برند هدف برای پرامپت
+
+    // نمایش اطلاعات صنعتی
+    await displayIndustryInfo(myBrand, targetBrand);
+
+    // دریافت ایده‌های قبلی و اضافه کردن به allIdeas
+    const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+    const allIdeas = [...savedIdeas]; // شروع با ایده‌های قبلی
+
+    // دریافت عناوین قبلی از localStorage بر اساس برند هدف
+    let storedTitles = getStoredIdeaTitles(targetBrandId);
+
+    // ۱. ایده‌های اولویت اول (۵ تا) - بدون مناسبت
+    const prompt1 = buildPrompt(myBrand, similarBrands, targetBrandId);
+    const text1 = await callOpenAI(prompt1, myBrand._id, targetBrandId);
+    const ideas1 = parseIdeas(text1);
+    
+    console.log('🔍 ایده‌های تولید شده:', ideas1);
+    
+    // فیلتر ایده‌های تکراری نسبت به storedTitles
+    const uniqueIdeas1 = ideas1.filter(idea => !storedTitles.includes(idea.title));
+    
+    console.log('🔍 ایده‌های منحصر به فرد:', uniqueIdeas1);
+    
+    allIdeas.push(...uniqueIdeas1);
+
+    // به‌روزرسانی متغیر global ideas قبل از نمایش
+    ideas = allIdeas;
+    currentIdeas = allIdeas;
+
+    // ذخیره ایده‌های جدید
+    console.log('🔍 ذخیره ایده‌های جدید در localStorage...');
+    saveIdeasToStorage(uniqueIdeas1, myBrand._id, targetBrandId);
+    
+    // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
+    storedTitles = storedTitles.concat(uniqueIdeas1.map(i => i.title));
+    storeIdeaTitles(storedTitles, targetBrandId);
+
+    // نمایش ایده‌های جدید
+    if (existingCount > 0) {
+      container.appendChild(addSectionTitle(`🟢 ایده‌های جدید (${existingCount + 1} تا ${existingCount + uniqueIdeas1.length}):`));
+    } else {
+      container.appendChild(addSectionTitle(`🟢 ایده‌های اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
+    }
+    
+    uniqueIdeas1.forEach((idea, i) => {
+      const card = createIdeaCard(idea, existingCount + i);
+      if (card) {
+        container.appendChild(card);
+      }
+    });
+
+    // به‌روزرسانی آرایه global ideas با تمام ایده‌ها (قبلی + جدید)
+    ideas = allIdeas;
+    currentIdeas = allIdeas;
+
+    setupIdeaButtons();
+
+    // ذخیره ایده‌ها در دیتابیس
+    console.log('🔍 ذخیره ایده‌ها در دیتابیس...');
+    await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
+
+  } catch (err) {
+    errorText.textContent = "❌ خطا: " + err.message;
+    errorText.style.display = "block";
+  } finally {
+    loadingText.style.display = "none";
+    generateBtn.disabled = false;
+  }
+}
+
+// تابع برای تولید ایده‌های مناسبتی
+async function generateOccasionIdeas() {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+  const generateOccasionBtn = document.getElementById("generateOccasionBtn");
+
+  // بارگذاری ایده‌های قبلی
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    
+    if (targetBrandId) {
+      const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+      if (savedIdeas.length > 0) {
+        container.innerHTML = "";
+        container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
+        // به‌روزرسانی متغیر global ideas قبل از ایجاد کارت‌ها
+        ideas = savedIdeas;
+        currentIdeas = savedIdeas;
+        
+        savedIdeas.forEach((idea, i) => {
+          const card = createIdeaCard(idea, i);
+          if (card) {
+            container.appendChild(card);
+          }
+        });
+        
+        setupIdeaButtons();
+        
+        // تولید ایده‌های مناسبتی جدید
+        await generateNewOccasionIdeas(myBrand, targetBrandId, savedIdeas.length);
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("خطا در بارگذاری ایده‌های قبلی:", err);
+  }
+
+  // اگر ایده‌های قبلی موجود نیست، ایده‌های مناسبتی جدید تولید کن
+  try {
+    const myBrand = await fetchMyBrand();
+    const targetBrandId = sessionStorage.getItem("targetBrandId") || getTargetBrandId();
+    await generateNewOccasionIdeas(myBrand, targetBrandId, 0);
+  } catch (err) {
+    console.error("خطا در تولید ایده‌های مناسبتی جدید:", err);
+    errorText.textContent = "❌ خطا: " + err.message;
+    errorText.style.display = "block";
+  }
+}
+
+async function generateNewOccasionIdeas(myBrand = null, targetBrandId = null, existingCount = 0) {
+  const container = document.getElementById("ideasContainer");
+  const loadingText = document.getElementById("loadingText");
+  const errorText = document.getElementById("errorText");
+  const generateBtn = document.getElementById("generateBtn");
+  const generateOccasionBtn = document.getElementById("generateOccasionBtn");
+
+  errorText.style.display = "none";
+  loadingText.style.display = "block";
+  generateBtn.disabled = true;
+  generateOccasionBtn.disabled = true;
+
+  try {
+    if (!myBrand) {
+      myBrand = await fetchMyBrand();
+    }
+    
+    if (!targetBrandId) {
+      targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
+    }
+    
+    if (!targetBrandId) throw new Error("شناسه برند هدف یافت نشد.");
+
+    const targetBrand = await fetchTargetBrand(targetBrandId);
+    const similarBrands = [targetBrand];
+    
+    // نمایش اطلاعات صنعتی
+    await displayIndustryInfo(myBrand, targetBrand);
+
+    // دریافت ایده‌های قبلی و اضافه کردن به allIdeas
+    const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+    const allIdeas = [...savedIdeas]; // شروع با ایده‌های قبلی
+
+    // دریافت عناوین قبلی از localStorage بر اساس برند هدف
+    let storedTitles = getStoredIdeaTitles(targetBrandId);
+
+    // ۱. ایده‌های اولویت اول (۵ تا) با تمرکز بر مناسبت‌ها
+    const prompt1 = buildOccasionPrompt(myBrand, similarBrands, targetBrandId);
+    const text1 = await callOpenAI(prompt1, myBrand._id, targetBrandId);
+    const ideas1 = parseIdeas(text1);
+    
+    // فیلتر ایده‌های تکراری نسبت به storedTitles
+    const uniqueIdeas1 = ideas1.filter(idea => !storedTitles.includes(idea.title));
+    
+    allIdeas.push(...uniqueIdeas1);
+
+    // به‌روزرسانی متغیر global ideas قبل از نمایش
+    ideas = allIdeas;
+    currentIdeas = allIdeas;
+
+    // ذخیره ایده‌های جدید
+    saveIdeasToStorage(uniqueIdeas1, myBrand._id, targetBrandId);
+
+    // ذخیره عناوین جدید به لیست storedTitles و ذخیره در localStorage
+    storedTitles = storedTitles.concat(uniqueIdeas1.map(i => i.title));
+    storeIdeaTitles(storedTitles, targetBrandId);
+
+    // نمایش ایده‌های جدید
+    if (existingCount > 0) {
+      container.appendChild(addSectionTitle(`🎉 ایده‌های مناسبتی جدید (${existingCount + 1} تا ${existingCount + uniqueIdeas1.length}):`));
+    } else {
+      container.appendChild(addSectionTitle(`🎉 ایده‌های مناسبتی بر اساس اولویت اول: «${myBrand.priorities?.[0] || "اولویت اول"}»`));
+    }
+    
+    uniqueIdeas1.forEach((idea, i) => {
+      const card = createIdeaCard(idea, existingCount + i);
+      if (card) {
+        container.appendChild(card);
+      }
+    });
+
+    // به‌روزرسانی آرایه global ideas با تمام ایده‌ها (قبلی + جدید)
+    ideas = allIdeas;
+    currentIdeas = allIdeas;
+
+    setupIdeaButtons();
+
+    // ذخیره ایده‌ها در دیتابیس
+    await saveIdeasToDatabase(allIdeas, myBrand._id, targetBrandId);
+
+  } catch (err) {
+    errorText.textContent = "❌ خطا: " + err.message;
+    errorText.style.display = "block";
+  } finally {
+    loadingText.style.display = "none";
+    generateBtn.disabled = false;
+    generateOccasionBtn.disabled = false;
+  }
+}
+
+document.getElementById("generateBtn").addEventListener("click", generateIdeas);
+document.getElementById("generateOccasionBtn").addEventListener("click", generateOccasionIdeas);
+
+// بارگذاری ایده‌های قبلی در هنگام لود صفحه
+window.onload = async () => {
+  try {
+    const myBrand = await fetchMyBrand();
+    
+    // همیشه ابتدا از URL دریافت کن، سپس از sessionStorage
+    let targetBrandId = getTargetBrandId() || sessionStorage.getItem("targetBrandId");
+    
+    console.log("🔍 targetBrandId از URL:", getTargetBrandId());
+    console.log("🔍 targetBrandId از sessionStorage:", sessionStorage.getItem("targetBrandId"));
+    console.log("🔍 targetBrandId نهایی:", targetBrandId);
+    console.log("🔍 URL کامل:", window.location.href);
+    
+    // targetBrandId را در sessionStorage ذخیره کن
+    if (targetBrandId) {
+      sessionStorage.setItem("targetBrandId", targetBrandId);
+      console.log("🔍 targetBrandId در sessionStorage ذخیره شد:", targetBrandId);
+    }
+    
+    // اگر targetBrandId هنوز null است، خطا نمایش بده
+    if (!targetBrandId) {
+      console.error("❌ targetBrandId یافت نشد!");
+      document.getElementById("ideasContainer").innerHTML = `
+        <div class="error">
+          <h4>❌ خطا در بارگذاری</h4>
+          <p>شناسه برند هدف یافت نشد. لطفاً از طریق داشبورد وارد شوید.</p>
+          <button onclick="window.location.href='dashboard.html'" class="btn">
+            🔙 بازگشت به داشبورد
+          </button>
+        </div>
+      `;
+      return;
+    }
+    
+    if (targetBrandId) {
+      console.log("🔍 در حال دریافت اطلاعات برند هدف:", targetBrandId);
+      // نمایش اطلاعات صنعتی
+      const targetBrand = await fetchTargetBrand(targetBrandId);
+      console.log("🔍 برند هدف دریافت شده:", targetBrand);
+      await displayIndustryInfo(myBrand, targetBrand);
+      
+      // بارگذاری ایده‌های قبلی
+      const savedIdeas = getSavedIdeas(myBrand._id, targetBrandId);
+      if (savedIdeas.length > 0) {
+        const container = document.getElementById("ideasContainer");
+        container.innerHTML = "";
+        container.appendChild(addSectionTitle("📚 ایده‌های قبلی:"));
+        // به‌روزرسانی متغیر global ideas قبل از ایجاد کارت‌ها
+        ideas = savedIdeas;
+        currentIdeas = savedIdeas;
+        
+        savedIdeas.forEach((idea, i) => {
+          const card = createIdeaCard(idea, i);
+          if (card) {
+            container.appendChild(card);
+          }
+        });
+        
+        // به‌روزرسانی متغیر global ideas
+        ideas = savedIdeas;
+        currentIdeas = savedIdeas;
+        
+        setupIdeaButtons();
+      }
+    }
+    
+    // اضافه کردن observer برای تشخیص حالت sticky
+    setupStickyObserver();
+  } catch (err) {
+    console.error("خطا در بارگذاری ایده‌های قبلی:", err);
+  }
+};
+
+// بررسی وضعیت ایده
+async function checkIdeaStatus(ideaTitle, targetBrandId) {
+  try {
+    const response = await fetch(`/api/cooperation-requests/check/${encodeURIComponent(ideaTitle)}/${targetBrandId}`, {
+      credentials: 'include'
+    });
+    
+    if (response.ok) {
+      const status = await response.json();
+      
+      // ذخیره وضعیت در sessionStorage
+      sessionStorage.setItem('ideaStatus', JSON.stringify(status));
+      
+      // ذخیره شناسه درخواست دریافتی
+      if (status.receivedRequestId) {
+        sessionStorage.setItem('receivedRequestId', status.receivedRequestId);
+      }
+    }
+  } catch (error) {
+    console.error('خطا در بررسی وضعیت ایده:', error);
+  }
+}
+
+// ارسال درخواست همکاری
+async function sendCooperationRequest(ideaTitle, ideaDescription, targetBrandId) {
+  try {
+    const response = await fetch('/api/cooperation-requests', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        targetBrandId: targetBrandId,
+        ideaTitle: ideaTitle,
+        ideaDescription: ideaDescription
+      })
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      showPopup("موفقیت", "درخواست همکاری با موفقیت ارسال شد!");
+      return true;
+    } else {
+      const error = await response.json();
+      showPopup("خطا", error.error || "خطا در ارسال درخواست همکاری");
+      return false;
+    }
+  } catch (error) {
+    console.error("خطا در ارسال درخواست همکاری:", error);
+    showPopup("خطا", "خطا در ارسال درخواست همکاری");
+    return false;
+  }
+}
+
+// تابع برای تشخیص حالت sticky دکمه‌ها
+function setupStickyObserver() {
+  const buttonsContainer = document.querySelector('.buttons-container');
+  if (!buttonsContainer) return;
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.intersectionRatio < 1) {
+        // دکمه‌ها در حالت sticky هستند
+        buttonsContainer.classList.add('sticky');
+      } else {
+        // دکمه‌ها در حالت عادی هستند
+        buttonsContainer.classList.remove('sticky');
+      }
+    });
+  }, {
+    threshold: 1.0
+  });
+  
+  observer.observe(buttonsContainer);
+}
+
+// ===== Revenue Modal controls =====
+function openRevenueModal(html) {
+  const modal = document.getElementById('revenueModal');
+  const content = document.getElementById('revenueModalContent');
+  content.innerHTML = html || '—';
+  modal.style.display = 'flex';
+  modal.removeAttribute('aria-hidden');
+  modal.removeAttribute('inert');
+  document.body.style.overflow = 'hidden';
+  window.__lastActiveElement = document.activeElement;
+  const closeBtn = document.getElementById('revenueModalClose');
+  if (closeBtn) closeBtn.focus();
+}
+function closeRevenueModal() {
+  const modal = document.getElementById('revenueModal');
+  modal.style.display = 'none';
+  modal.setAttribute('inert', '');
+  document.body.style.overflow = '';
+  if (window.__lastActiveElement && typeof window.__lastActiveElement.focus === 'function') {
+    window.__lastActiveElement.focus();
+  }
+}
+document.getElementById('revenueModalClose').addEventListener('click', closeRevenueModal);
+document.getElementById('revenueModalOk').addEventListener('click', closeRevenueModal);
+document.getElementById('revenueModal').addEventListener('click', (e) => { if (e.target.id === 'revenueModal') closeRevenueModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeRevenueModal(); });
+
+// ===== Generate revenue models =====
+async function showRevenueForIdea(index) {
+  try {
+    const idea = ideas[index];
+    if (!idea) return openRevenueModal('<p>ایده یافت نشد</p>');
+
+    openRevenueModal('<p>⏳ در حال تولید مدل‌های درآمدی...</p>');
+
+    const myBrandRes = await fetch('/api/my-brand', { credentials:'include' });
+    const myBrand = myBrandRes.ok ? await myBrandRes.json() : null;
+
+    const targetId = getTargetBrandId();
+    const partnerRes = targetId ? await fetch(`/api/brand/${targetId}`, { credentials:'include' }) : null;
+    const targetBrand = partnerRes && partnerRes.ok ? await partnerRes.json() : null;
+
+    const promptBrand1Name = myBrand ? myBrand.name : 'برند اول';
+    const promptBrand2Name = targetBrand ? targetBrand.name : 'برند دوم';
+    const enhancedPrompt = `${idea.title}\n\n${idea.description}`;
+
+    const revenuePrompt = `
+تو یک نابغه کسب‌وکار و مشاور استراتژیک برند در سطح جهانی هستی، کسی که تجربه خلق مدل‌های درآمدی میلیارد دلاری و فوق‌العاده خلاقانه برای برندهای مختلف را دارد.
+هدف تو این است که از ایده همکاری زیر، **۵ مدل درآمدی حرفه‌ای و کاملاً عملی برای ${promptBrand1Name} و ۵ مدل برای ${promptBrand2Name}** بسازی.
+
+ایده همکاری: ${enhancedPrompt}
+
+⚠️ خروجی را دقیقاً با دو سرفصل مجزا بنویس:
+«برای ${promptBrand1Name}»
+«برای ${promptBrand2Name}»
+و زیر هر سرفصل دقیقاً ۵ مدل شماره‌دار (۱ تا ۵) بنویس.
+
+نکات مهم:
+- مدل‌ها باید خلاقانه و عملی باشند.
+- هر مدل شامل: عنوان، شرح کوتاه، «جزئیات عملی: ...»، «نحوه درآمدزایی: ...»، «مثال: ...» باشد.
+
+برای ${promptBrand1Name}:
+1. [عنوان مدل] — شرح کوتاه. جزئیات عملی: ... | نحوه درآمدزایی: ... | مثال: ...
+2. [...]
+3. [...]
+4. [...]
+5. [...]
+
+برای ${promptBrand2Name}:
+1. [عنوان مدل] — شرح کوتاه. جزئیات عملی: ... | نحوه درآمدزایی: ... | مثال: ...
+2. [...]
+3. [...]
+4. [...]
+5. [...]
+`;
+
+    const resp = await fetch('/api/generate-ideas', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt: revenuePrompt, myBrandId: myBrand?._id, targetBrandId: targetBrand?._id }) });
+    if (!resp.ok) {
+      const e = await resp.json().catch(()=>({}));
+      return openRevenueModal(`<p>❌ خطا: ${e.error || 'خطا در تولید مدل‌ها'}</p>`);
+    }
+    const data = await resp.json();
+    const content = (data.choices?.[0]?.message?.content || '').trim();
+
+    const lines = content.split('\n').map(l=>l.trim()).filter(Boolean);
+    const numberRegex = /^(?:\d+|[۰-۹]+)[\.:\)\-\s]+/;
+    const isNumbered = (l)=>numberRegex.test(l);
+    const isHeader = (l)=> /^\s*(برای|مدل(?:‌| )های درآمدی برای)\s+/i.test(l) || l.includes(promptBrand1Name) || l.includes(promptBrand2Name) || /برند\s*(اول|دوم)/.test(l);
+
+    let currentBrand = 0;
+    let allNumbered = [];
+    let brand1 = []; let brand2 = [];
+    for (let i=0;i<lines.length;i++){
+      const line = lines[i];
+      if (isHeader(line)) {
+        if (line.includes(promptBrand2Name) || /برند\s*دوم/.test(line)) currentBrand = 2;
+        else if (line.includes(promptBrand1Name) || /برند\s*اول/.test(line)) currentBrand = 1;
+        continue;
+      }
+      if (isNumbered(line)){
+        let text = line.replace(numberRegex,'');
+        let j=i+1;
+        while (j<lines.length && !isNumbered(lines[j]) && !isHeader(lines[j])){ text += '\n'+lines[j]; j++; }
+        allNumbered.push(text);
+        if (currentBrand===1) brand1.push(text); else if (currentBrand===2) brand2.push(text);
+        i=j-1;
+      }
+    }
+
+    if (brand1.length===0 && brand2.length===0 && allNumbered.length>0) {
+      if (allNumbered.length>=10) {
+        brand1 = allNumbered.slice(0,5);
+        brand2 = allNumbered.slice(5,10);
+      } else if (allNumbered.length>=6) {
+        const mid = Math.ceil(allNumbered.length/2);
+        brand1 = allNumbered.slice(0, mid);
+        brand2 = allNumbered.slice(mid);
+      } else {
+        brand1 = allNumbered.slice();
+      }
+    }
+    if (brand1.length===10 && brand2.length===0) {
+      brand2 = brand1.slice(5,10);
+      brand1 = brand1.slice(0,5);
+    }
+
+    const parseModelText = (text) => {
+      const parts = { title:'', desc:'', ops:'', revenue:'', example:'' };
+      const ls = text.split('\n').map(x=>x.trim()).filter(Boolean);
+      if (ls.length>0){ parts.title = ls[0]; parts.desc = ls.slice(1).join(' ');} 
+      const pick=(label,key)=>{ const re=new RegExp(`${label}\\s*[:：-]\\s*([^|]+)`,'i'); const m=parts.desc.match(re); if(m){ parts[key]=m[1].trim(); parts.desc=parts.desc.replace(m[0],'').trim(); } };
+      pick('جزئیات عملی','ops'); pick('نحوه درآمدزایی','revenue'); pick('مثال','example');
+      return parts;
+    };
+    const renderModel = (m)=>{ const p=parseModelText(m); return `<div class="revenue-model-item"><div class="model-title-box">${p.title||'مدل درآمدی'}</div>${p.desc?`<div class="model-section-title">شرح</div><div>${p.desc}</div>`:''}${p.ops?`<div class="model-section-title">جزئیات عملی</div><div>${p.ops}</div>`:''}${p.revenue?`<div class="model-section-title">نحوه درآمدزایی</div><div>${p.revenue}</div>`:''}${p.example?`<div class="model-section-title">مثال</div><div>${p.example}</div>`:''}</div>`};
+    const brand1HTML = brand1.map(renderModel).join('');
+    const brand2HTML = brand2.map(renderModel).join('');
+
+    const html = `
+      <div class="revenue-container">
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${promptBrand1Name}</div>
+          ${brand1HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${promptBrand2Name}</div>
+          ${brand2HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+      </div>`;
+
+    openRevenueModal(html);
+  } catch (e) {
+    openRevenueModal(`<p>❌ خطا: ${e.message}</p>`);
+  }
+}
+
+// تابع جدید بهبود یافته برای نمایش مدل‌های درآمدی
+async function showRevenueForIdeaNew(index) {
+  try {
+    const idea = ideas[index];
+    if (!idea) return openRevenueModal('<p>ایده یافت نشد</p>');
+
+    openRevenueModal('<p>⏳ در حال تولید مدل‌های درآمدی...</p>');
+
+    const myBrandRes = await fetch('/api/my-brand', { credentials:'include' });
+    const myBrand = myBrandRes.ok ? await myBrandRes.json() : null;
+
+    const targetId = getTargetBrandId();
+    const partnerRes = targetId ? await fetch(`/api/brand/${targetId}`, { credentials:'include' }) : null;
+    const targetBrand = partnerRes && partnerRes.ok ? await partnerRes.json() : null;
+
+    const promptBrand1Name = myBrand ? myBrand.name : 'برند اول';
+    const promptBrand2Name = targetBrand ? targetBrand.name : 'برند دوم';
+    
+    const revenuePrompt = `
+تو یک نابغه کسب‌وکار و مشاور استراتژیک برند در سطح جهانی هستی.
+هدف تو این است که از ایده همکاری زیر، **۵ مدل درآمدی حرفه‌ای برای ${promptBrand1Name} و ۵ مدل برای ${promptBrand2Name}** بسازی.
+
+ایده همکاری: ${idea.title}
+
+${idea.description}
+
+**خروجی دقیق و ساختاریافته:**
+برای ${promptBrand1Name}:
+1. [عنوان مدل] — [شرح کامل مدل]
+2. [عنوان مدل] — [شرح کامل مدل]
+3. [عنوان مدل] — [شرح کامل مدل]
+4. [عنوان مدل] — [شرح کامل مدل]
+5. [عنوان مدل] — [شرح کامل مدل]
+
+برای ${promptBrand2Name}:
+1. [عنوان مدل] — [شرح کامل مدل]
+2. [عنوان مدل] — [شرح کامل مدل]
+3. [عنوان مدل] — [شرح کامل مدل]
+4. [عنوان مدل] — [شرح کامل مدل]
+5. [عنوان مدل] — [شرح کامل مدل]
+`;
+
+    const resp = await fetch('/api/generate-ideas', { 
+      method:'POST', 
+      headers:{'Content-Type':'application/json'}, 
+      body: JSON.stringify({ prompt: revenuePrompt, myBrandId: myBrand?._id, targetBrandId: targetBrand?._id }) 
+    });
+    
+    if (!resp.ok) {
+      const e = await resp.json().catch(()=>({}));
+      return openRevenueModal(`<p>❌ خطا: ${e.error || 'خطا در تولید مدل‌ها'}</p>`);
+    }
+    
+    const data = await resp.json();
+    const content = (data.choices?.[0]?.message?.content || '').trim();
+    
+    // پارس دقیق متن
+    const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+    const brand1Models = [];
+    const brand2Models = [];
+    
+    const extractModels = (brandName) => {
+      const models = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].toLowerCase().includes('برای') && lines[i].toLowerCase().includes(brandName.toLowerCase())) {
+          i++; // رفتن به مدل‌ها
+          while (i < lines.length && /^\d+\./.test(lines[i])) {
+            models.push(lines[i].replace(/^\d+\.\s*/, ''));
+            i++;
+          }
+          break;
+        }
+      }
+      return models;
+    };
+    
+    brand1Models.push(...extractModels(promptBrand1Name));
+    brand2Models.push(...extractModels(promptBrand2Name));
+    
+    // اگر هیچ مدلی یافت نشد، کل متن را پارس کن
+    if (brand1Models.length === 0 && brand2Models.length === 0) {
+      const numberedLines = lines.filter(l => /^\d+\./.test(l));
+      brand1Models.push(...numberedLines.slice(0, 5).map(l => l.replace(/^\d+\.\s*/, '')));
+      brand2Models.push(...numberedLines.slice(5, 10).map(l => l.replace(/^\d+\.\s*/, '')));
+    }
+    
+    const renderModel = (model, index) => `
+      <div class="revenue-model-item">
+        <div class="model-title-box">${model}</div>
+      </div>
+    `;
+    
+    const brand1HTML = brand1Models.map(renderModel).join('');
+    const brand2HTML = brand2Models.map(renderModel).join('');
+    
+    if (brand1Models.length === 0 && brand2Models.length === 0) {
+      return openRevenueModal('<p>مدلی یافت نشد. لطفاً دوباره تلاش کنید.</p>');
+    }
+    
+    const html = `
+      <div class="revenue-container">
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${promptBrand1Name}</div>
+          ${brand1HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${promptBrand2Name}</div>
+          ${brand2HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+      </div>`;
+
+    openRevenueModal(html);
+  } catch (e) {
+    openRevenueModal(`<p>❌ خطا: ${e.message}</p>`);
+  }
+}
+</script>
+
+
+</body>
+</html>

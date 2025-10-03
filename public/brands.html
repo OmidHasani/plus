@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>برندهای ثبت شده</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      color: #333;
+      direction: rtl;
+      line-height: 1.7;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 4px 20px rgba(52, 152, 219, 0.3);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 2rem;
+      color: #fff;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: #3498db;
+      color: white;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      color: white;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Search Section */
+    .search-section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e1e8ed;
+    }
+
+    .search-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .search-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .search-subtitle {
+      color: #7f8c8d;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    .search-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 300px;
+      padding: 1rem 1.5rem;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: 'Vazirmatn', sans-serif;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      background: white;
+    }
+
+    .filter-select {
+      padding: 1rem 1.5rem;
+      border: 2px solid #e1e8ed;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: 'Vazirmatn', sans-serif;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      background: white;
+    }
+
+    /* Section Titles */
+    .section-title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 2rem 0;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      border-radius: 2px;
+    }
+
+    /* Brands List */
+    .brands-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .brand-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid #d6e4f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .brand-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    .brand-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
+      border-color: #3498db;
+    }
+
+    .brand-info {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex: 1;
+    }
+
+    .brand-details h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-field {
+      color: #7f8c8d;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-field i {
+      color: #3498db;
+      font-size: 0.9rem;
+    }
+
+    .brand-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-sm {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
+      border-radius: 12px;
+      flex: 1;
+    }
+
+    .btn-info {
+      background: #3498db;
+      color: white;
+      box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-info:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-success {
+      background: #2c3e50;
+      color: white;
+      box-shadow: 0 3px 10px rgba(44, 62, 80, 0.3);
+    }
+
+    .btn-success:hover {
+      background: #34495e;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4);
+    }
+
+    /* Show All Button */
+    .show-all-section {
+      text-align: center;
+      margin: 3rem 0;
+    }
+
+    .show-all-btn {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .show-all-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .show-all-btn:hover::before {
+      left: 100%;
+    }
+
+    .show-all-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e1e8ed;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: #bdc3c7;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+      font-size: 1.3rem;
+      color: #7f8c8d;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .empty-state p {
+      color: #95a5a6;
+      font-size: 0.9rem;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(52, 152, 219, 0.1);
+      border-left: 3px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        padding: 0 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .main-container {
+        padding: 1rem;
+      }
+
+      .search-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-input {
+        min-width: auto;
+      }
+
+      .brand-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1.5rem;
+      }
+
+      .brand-info {
+        justify-content: center;
+      text-align: center;
+        gap: 0;
+      }
+
+      .brand-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-sm {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    /* Animation Classes */
+    .fade-in {
+      animation: fadeIn 0.6s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-up {
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-handshake"></i>
+        برندهای همکار
+      </div>
+      <div class="nav-buttons">
+        <button class="btn btn-secondary" onclick="goToEdit()">
+          <i class="fas fa-edit"></i>
+          ویرایش برند
+        </button>
+        <a href="dashboard.html" class="btn btn-primary">
+          <i class="fas fa-chart-line"></i>
+          داشبورد
+        </a>
+        <button class="btn btn-danger" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          خروج
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Search Section -->
+    <section class="search-section fade-in">
+      <div class="search-header">
+        <h1 class="search-title">صنایع و برندهای همراستا با اولویت‌های شما</h1>
+        <p class="search-subtitle">برندهای مناسب برای همکاری را پیدا کنید و فرصت‌های جدید ایجاد کنید</p>
+  </div>
+      <div class="search-controls">
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="search-input" 
+          placeholder="جستجوی برندها..." 
+        />
+        <select id="fieldFilter" class="filter-select" onchange="filterByField()">
+      <option value="">همه حوزه‌ها</option>
+    </select>
+  </div>
+    </section>
+
+    <!-- Search Results Section -->
+<div id="searchResultsSection" style="display:none;">
+      <h2 class="section-title">نتایج جستجو</h2>
+      <div id="searchResultsContainer" class="brands-list"></div>
+</div>
+
+    <!-- Main Brands Section -->
+    <section id="mainBrandsSection">
+      <div id="brandsContainer" class="brands-list"></div>
+    </section>
+
+    <!-- Show All Button -->
+    <div class="show-all-section">
+      <button id="showAllBtn" class="show-all-btn">
+        <i class="fas fa-th-large"></i>
+        نمایش تمام برندها
+      </button>
+    </div>
+
+    <!-- All Brands Section -->
+<div id="allBrandsSection" style="display:none;">
+      <h2 class="section-title">تمام برندهای لیست شده</h2>
+      <div id="allBrandsContainer" class="brands-list"></div>
+    </div>
+</div>
+
+<script>
+  let allBrandsShown = false;
+  let initialBrands = [];
+  let allBrands = [];
+  let searchTimeout = null;
+
+    // Create brand item element
+    function createBrandCard(brand) {
+      const item = document.createElement('div');
+      item.className = 'brand-item slide-up';
+      
+      item.innerHTML = `
+        <div class="brand-info">
+          <div class="brand-details">
+            <h3>${brand.name}</h3>
+            <div class="brand-field">
+              <i class="fas fa-industry"></i>
+              ${brand.field || 'نامشخص'}
+            </div>
+          </div>
+        </div>
+        <div class="brand-actions">
+          <button class="btn btn-info btn-sm" onclick="showDetails('${brand._id}')">
+            <i class="fas fa-info-circle"></i>
+            اطلاعات برند
+          </button>
+          <button class="btn btn-success btn-sm" onclick="exploreOpportunities('${brand._id}')">
+            <i class="fas fa-handshake"></i>
+            فرصت‌های همکاری
+          </button>
+        </div>
+      `;
+      
+      return item;
+    }
+
+    // Fetch initial brands
+  async function fetchBrands() {
+    try {
+        const container = document.getElementById('brandsContainer');
+        container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+      const res = await fetch('/api/recommendations', { credentials: 'include' });
+      if (!res.ok) throw new Error('خطا در دریافت داده‌ها');
+      const similarBrands = await res.json();
+
+      initialBrands = similarBrands;
+      container.innerHTML = '';
+
+      if (similarBrands.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-search"></i>
+              <h3>برند مشابه‌ای یافت نشد</h3>
+              <p>با اولویت‌های شما برند مشابه‌ای پیدا نشد</p>
+            </div>
+          `;
+        return;
+      }
+
+        similarBrands.forEach((brand, index) => {
+          setTimeout(() => {
+            const card = createBrandCard(brand);
+            container.appendChild(card);
+          }, index * 100);
+      });
+    } catch (err) {
+      console.error(err);
+        const container = document.getElementById('brandsContainer');
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>خطا در بارگذاری</h3>
+            <p>خطا در دریافت برندها. لطفاً دوباره تلاش کنید</p>
+          </div>
+        `;
+      }
+    }
+
+    // Fetch all brands
+  async function fetchAllBrands() {
+    try {
+      const res = await fetch('/api/brands', { credentials: 'include' });
+      if (!res.ok) throw new Error('خطا در دریافت تمام برندها');
+      const all = await res.json();
+
+      allBrands = all;
+      const initialIds = initialBrands.map(b => b._id);
+      const filtered = all.filter(b => !initialIds.includes(b._id));
+
+      const container = document.getElementById('allBrandsContainer');
+      container.innerHTML = '';
+
+      if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-info-circle"></i>
+              <h3>برند جدیدی وجود ندارد</h3>
+              <p>همه برندها در لیست اولیه نمایش داده شده‌اند</p>
+            </div>
+          `;
+      } else {
+          filtered.forEach((brand, index) => {
+            setTimeout(() => {
+              const card = createBrandCard(brand);
+              container.appendChild(card);
+            }, index * 100);
+          });
+        }
+
+      allBrandsShown = true;
+      document.getElementById('allBrandsSection').style.display = 'block';
+      document.getElementById('showAllBtn').style.display = 'none';
+    } catch (err) {
+      console.error(err);
+      alert('خطا در دریافت تمام برندها');
+    }
+  }
+
+    // Search functionality
+  function searchBrands(query) {
+    query = query.trim().toLowerCase();
+    const searchResultsSection = document.getElementById('searchResultsSection');
+    const searchResultsContainer = document.getElementById('searchResultsContainer');
+      const mainBrandsSection = document.getElementById('mainBrandsSection');
+    const showAllBtn = document.getElementById('showAllBtn');
+    const allBrandsSection = document.getElementById('allBrandsSection');
+
+    if (query.length === 0) {
+      searchResultsSection.style.display = 'none';
+      searchResultsContainer.innerHTML = '';
+        mainBrandsSection.style.display = 'block';
+      showAllBtn.style.display = allBrandsShown ? 'none' : 'block';
+      allBrandsSection.style.display = allBrandsShown ? 'block' : 'none';
+      return;
+    }
+
+    let combinedList = [...initialBrands];
+    if (allBrands.length > 0) {
+      const initialIds = initialBrands.map(b => b._id);
+      const filteredAll = allBrands.filter(b => !initialIds.includes(b._id));
+      combinedList = combinedList.concat(filteredAll);
+    }
+
+    const filtered = combinedList.filter(b => b.name.toLowerCase().includes(query));
+    searchResultsContainer.innerHTML = '';
+
+    if (filtered.length === 0) {
+        searchResultsContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>برندی یافت نشد</h3>
+            <p>با عبارت جستجوی شما برندی پیدا نشد</p>
+          </div>
+        `;
+    } else {
+        filtered.forEach((brand, index) => {
+          setTimeout(() => {
+            const card = createBrandCard(brand);
+            searchResultsContainer.appendChild(card);
+          }, index * 100);
+        });
+      }
+
+    searchResultsSection.style.display = 'block';
+      mainBrandsSection.style.display = 'none';
+    showAllBtn.style.display = 'none';
+    allBrandsSection.style.display = 'none';
+    }
+
+    // Filter by field
+    async function filterByField() {
+      const selectedField = document.getElementById('fieldFilter').value;
+
+      if (allBrands.length === 0) {
+    try {
+      const res = await fetch('/api/brands', { credentials: 'include' });
+          if (!res.ok) throw new Error('خطا در دریافت برندها');
+          allBrands = await res.json();
+      populateFieldOptions();
+    } catch (err) {
+          console.error('خطا در دریافت برندها:', err);
+          alert('خطا در دریافت برندها');
+          return;
+        }
+      }
+
+      const searchResultsSection = document.getElementById('searchResultsSection');
+      const searchResultsContainer = document.getElementById('searchResultsContainer');
+      const mainBrandsSection = document.getElementById('mainBrandsSection');
+      const showAllBtn = document.getElementById('showAllBtn');
+      const allBrandsSection = document.getElementById('allBrandsSection');
+      const allBrandsContainer = document.getElementById('allBrandsContainer');
+
+      if (!selectedField) {
+        searchResultsSection.style.display = 'none';
+        mainBrandsSection.style.display = 'block';
+        showAllBtn.style.display = allBrandsShown ? 'none' : 'block';
+        allBrandsSection.style.display = allBrandsShown ? 'block' : 'none';
+        return;
+      }
+
+      const filteredBrands = allBrands.filter(b => b.field === selectedField);
+      searchResultsContainer.innerHTML = '';
+
+      if (filteredBrands.length === 0) {
+        searchResultsContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-filter"></i>
+            <h3>برندی یافت نشد</h3>
+            <p>با حوزه کاری انتخاب شده برندی پیدا نشد</p>
+          </div>
+        `;
+      } else {
+        filteredBrands.forEach((brand, index) => {
+          setTimeout(() => {
+            const card = createBrandCard(brand);
+            searchResultsContainer.appendChild(card);
+          }, index * 100);
+        });
+      }
+
+      searchResultsSection.style.display = 'block';
+      mainBrandsSection.style.display = 'none';
+      showAllBtn.style.display = 'none';
+      allBrandsSection.style.display = 'none';
+    }
+
+    // Populate field options
+  function populateFieldOptions() {
+    const fieldSet = new Set();
+    allBrands.forEach(b => {
+      if (b.field) {
+        fieldSet.add(b.field.trim());
+      }
+    });
+
+    const select = document.getElementById('fieldFilter');
+    fieldSet.forEach(field => {
+      const option = document.createElement('option');
+      option.value = field;
+      option.textContent = field;
+      select.appendChild(option);
+    });
+  }
+
+    // Preload all brands
+    async function preloadAllBrands() {
+      try {
+        const res = await fetch('/api/brands', { credentials: 'include' });
+        if (!res.ok) throw new Error('خطا در دریافت تمام برندها');
+        const all = await res.json();
+        allBrands = all;
+        populateFieldOptions();
+      } catch (err) {
+        console.error('خطا در preload برندها:', err);
+      }
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', e => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchBrands(e.target.value);
+      }, 400);
+    });
+
+    document.getElementById('showAllBtn').addEventListener('click', fetchAllBrands);
+
+    // Navigation functions
+    function logout() {
+      fetch('/api/logout', { method: 'POST', credentials: 'include' }).then(() => {
+        window.location.href = 'login.html';
+      });
+    }
+
+    function showDetails(id) {
+      window.location.href = `brand-details.html?id=${id}`;
+    }
+
+function exploreOpportunities(id) {
+  window.location.href = `coop1.html?target=${id}`;
+}
+
+async function goToEdit() {
+  const res = await fetch('/api/my-brand', {credentials: 'include'});
+  const brand = await res.json();
+  if (!brand._id) return alert("برند شما یافت نشد");
+  window.location.href = `brand-edit.html?id=${brand._id}`;
+}
+
+    // Initialize
+    fetchBrands().then(() => {
+      preloadAllBrands();
+    });
+</script>
+</body>
+</html>

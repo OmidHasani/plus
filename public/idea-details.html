@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>جزئیات ایده همکاری</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 50%, #ffffff 100%);
+      padding: 20px;
+      color: #333;
+      line-height: 1.9;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    /* استایل هدر */
+    .header {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+      position: relative;
+      overflow: hidden;
+      animation: headerSlideIn 0.8s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes headerSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-link:hover::before {
+      left: 100%;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* استایل مخصوص دکمه داشبورد - بنفش */
+    .nav-dashboard {
+      background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important;
+      border: 1px solid rgba(155, 89, 182, 0.3) !important;
+    }
+
+    .nav-dashboard:hover {
+      background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%) !important;
+      box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4) !important;
+    }
+
+    /* استایل مخصوص دکمه لیست برندها - سفید با متن آبی */
+    .nav-brands {
+      background: white !important;
+      color: #3498db !important;
+      border: 1px solid rgba(52, 152, 219, 0.3) !important;
+    }
+
+    .nav-brands:hover {
+      background: #f8f9fa !important;
+      color: #2980b9 !important;
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2) !important;
+    }
+
+    /* استایل دکمه برگشت - نارنجی */
+    .nav-back {
+      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+      border: 1px solid rgba(243, 156, 18, 0.3) !important;
+    }
+
+    .nav-back:hover {
+      background: linear-gradient(135deg, #e67e22 0%, #d35400 100%) !important;
+      box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4) !important;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .header-nav {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      .nav-link {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+    }
+
+    h1 {
+      text-align: center;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    .section h2 {
+      color: #0057a3;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .section h3 {
+      color: #1f3b73;
+      font-size: 18px;
+      margin: 20px 0 10px;
+    }
+
+    .analysis-text {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    .impact-list {
+      list-style-type: disc;
+      padding-right: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin: 10px 5px 0 0;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    .btn:hover { 
+      background: #217dbb; 
+    }
+
+    .btn-success {
+      background: #27ae60;
+    }
+
+    .btn-success:hover {
+      background: #229954;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    .btn-warning {
+      background: #f39c12;
+    }
+
+    .btn-warning:hover {
+      background: #e67e22;
+    }
+
+    .btn-disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .collaboration-section {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid #dee2e6;
+      border-radius: 12px;
+      padding: 25px;
+      margin-top: 30px;
+      margin-bottom: 25px;
+    }
+
+    .collaboration-section h2 {
+      color: #495057;
+      margin-bottom: 15px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+
+    .status-accepted {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status-sent {
+      background: #cce5ff;
+      color: #004085;
+      border: 1px solid #b3d7ff;
+    }
+
+    .idea-info {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #dee2e6;
+    }
+
+    .idea-info h3 {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+    }
+
+    .idea-info p {
+      margin: 5px 0;
+      color: #555;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #7f8c8d;
+    }
+
+    .error {
+      background: #fdf2f2;
+      border: 1px solid #fecaca;
+      color: #e74c3c;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .success {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    /* App Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(2, 6, 23, 0.35);
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      animation: modalIn 0.18s ease-out;
+    }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(8px);} to {opacity:1; transform: translateY(0);} }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .modal-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+    .modal-close {
+      background: #eff6ff;
+      border: 1px solid #dbeafe;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #1e40af;
+      font-weight: 800;
+    }
+    .modal-body {
+      padding: 16px;
+      color: #334155;
+      line-height: 1.9;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 12px 16px 16px 16px;
+    }
+    .modal-button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Analysis (CSR/PR/Branding) Styling */
+    .analysis-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .analysis-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+    .analysis-card h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      color: #1e3a8a;
+      border-right: 4px solid #3b82f6;
+      padding-right: 10px;
+    }
+    .analysis-card ul {
+      padding-right: 18px;
+      margin: 0;
+      color: #334155;
+      line-height: 1.8;
+    }
+
+    /* Revenue Models Styling */
+    .revenue-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    #revenueModelsSection {
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .revenue-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .revenue-brand-box {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .revenue-brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #3b82f6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .revenue-model-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .revenue-model-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+      border-color: #3b82f6;
+    }
+
+    .revenue-model-number {
+      display: inline-block;
+      background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-left: 10px;
+      float: right;
+    }
+
+    .revenue-model-text {
+      margin-right: 40px;
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    .model-title-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 8px 0 12px 0;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .model-section-title {
+      font-weight: 700;
+      color: #1e3a8a;
+      margin: 8px 0 6px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- هدر صفحه -->
+  <header class="header">
+    <div class="header-content">
+      <h1 class="header-title" id="pageTitle">💡 جزئیات ایده همکاری</h1>
+      <nav class="header-nav">
+        <a href="dashboard.html" class="nav-link nav-dashboard">داشبورد</a>
+        <a href="brands.html" class="nav-link nav-brands">لیست برندها</a>
+        <span onclick="window.history.back()" class="nav-link nav-back">↩ برگشت</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Idea Information Section -->
+  <div class="section idea-info" id="ideaInfoSection">
+  <h3>📋 اطلاعات ایده</h3>
+  <div id="ideaInfo">
+    <p><strong>عنوان ایده:</strong> <span id="ideaTitleDisplay">-</span></p>
+    <p><strong>برند همکار:</strong> <span id="partnerNameDisplay">-</span></p>
+    <p><strong>توضیحات:</strong> <span id="ideaDescriptionDisplay">-</span></p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>چرا باید این ایده را از زاویه CSR، PR و Branding بررسی کرد؟</h2>
+  <div id="analysis" class="analysis-text">⏳ در حال دریافت تحلیل...</div>
+</div>
+
+<div class="btn-container">
+  <button class="btn" id="btnSample">📌 نمونه‌های اجرا شده</button>
+  <button class="btn" id="btnRevenue">💰 مدل‌های درآمدی</button>
+  <button class="btn" id="btnEconomy">📊 توجیه اقتصادی</button>
+  <button class="btn" id="btnStrategy">📈 یک استراتژی می‌خواهم</button>
+</div>
+
+<!-- Revenue Models Section -->
+<div class="section" id="revenueModelsSection" style="display:none;">
+  <h2>💰 مدل‌های درآمدی پیشنهادی</h2>
+  <div id="revenueModels" class="analysis-text">—</div>
+  <div id="revenueError" class="error" style="display:none;"></div>
+  <div id="revenueSuccess" class="success" style="display:none;"></div>
+</div>
+
+<!-- Collaboration Status Section -->
+<div class="collaboration-section" id="collaborationSection">
+  <h2>🤝 وضعیت همکاری</h2>
+  <div id="collaborationStatus">
+    <div class="loading">⏳ در حال بررسی وضعیت...</div>
+  </div>
+  <div id="collaborationButtons" style="margin-top: 20px; text-align: center;">
+    <!-- دکمه‌های همکاری در اینجا نمایش داده می‌شوند -->
+  </div>
+</div>
+
+</div><!-- پایان container -->
+
+<!-- Modal -->
+<div id="appModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h4 class="modal-title" id="appModalTitle">اطلاع</h4>
+      <button class="modal-close" id="appModalClose" aria-label="بستن">×</button>
+    </div>
+    <div class="modal-body" id="appModalBody">این بخش به زودی فعال می‌شود.</div>
+    <div class="modal-actions">
+      <button class="modal-button" id="appModalOk">باشه</button>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+let currentIdeaId = null;
+let collaborationStatus = null;
+
+// دریافت شناسه ایده از URL یا sessionStorage
+function getIdeaId() {
+  const params = new URLSearchParams(window.location.search);
+  const ideaId = params.get("id");
+  
+  if (ideaId) {
+    return ideaId;
+  }
+  
+  // اگر ID در URL نیست، از sessionStorage دریافت کن
+  return sessionStorage.getItem("ideaId");
+}
+
+// پیدا کردن ایده بر اساس عنوان و اطلاعات برند
+async function findIdeaByTitle() {
+  try {
+    const ideaTitle = sessionStorage.getItem("ideaTitle");
+    const targetBrandId = sessionStorage.getItem("targetBrandId");
+    
+    if (!ideaTitle || !targetBrandId) {
+      throw new Error("اطلاعات ایده ناقص است");
+    }
+    
+    // دریافت برند خود کاربر
+    const myBrandResponse = await fetch("/api/my-brand", {
+      credentials: 'include'
+    });
+    
+    if (!myBrandResponse.ok) {
+      throw new Error("برند شما یافت نشد");
+    }
+    
+    const myBrand = await myBrandResponse.json();
+    
+    // جستجوی ایده در دیتابیس
+    const ideasResponse = await fetch(`/api/ideas/partner/${targetBrandId}`, {
+      credentials: 'include'
+    });
+    
+    if (!ideasResponse.ok) {
+      throw new Error("خطا در دریافت ایده‌ها");
+    }
+    
+    const ideas = await ideasResponse.json();
+    
+    // پیدا کردن ایده با عنوان مطابق
+    const matchingIdea = ideas.find(idea => 
+      idea.title === ideaTitle && 
+      (idea.myBrandId._id === myBrand._id || idea.partnerBrandId._id === myBrand._id)
+    );
+    
+    if (matchingIdea) {
+      return matchingIdea._id;
+    }
+    
+    // اگر ایده پیدا نشد، یک ایده جدید ایجاد کن
+    return await createNewIdea(ideaTitle, sessionStorage.getItem("ideaDescription"), targetBrandId);
+    
+  } catch (error) {
+    console.error("خطا در پیدا کردن ایده:", error);
+    throw error;
+  }
+}
+
+// ایجاد ایده جدید
+async function createNewIdea(title, description, partnerBrandId) {
+  try {
+    const response = await fetch('/api/ideas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        title: title,
+        description: description,
+        partnerBrandId: partnerBrandId
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error("خطا در ایجاد ایده جدید");
+    }
+    
+    const result = await response.json();
+    return result.idea._id;
+    
+  } catch (error) {
+    console.error("خطا در ایجاد ایده جدید:", error);
+    throw error;
+  }
+}
+
+// دریافت اطلاعات ایده
+async function fetchIdeaDetails(ideaId) {
+  try {
+    console.log('🔍 در حال دریافت اطلاعات ایده با ID:', ideaId);
+    const response = await fetch(`/api/ideas/${ideaId}`, {
+      credentials: 'include'
+    });
+    
+    console.log('🔍 پاسخ API:', response.status, response.statusText);
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('🔍 خطای API:', errorData);
+      throw new Error(errorData.error || 'ایده یافت نشد');
+    }
+    
+    const idea = await response.json();
+    console.log('🔍 ایده دریافت شده:', idea);
+    return idea;
+  } catch (error) {
+    console.error('خطا در دریافت اطلاعات ایده:', error);
+    throw error;
+  }
+}
+
+// دریافت وضعیت همکاری
+async function fetchCollaborationStatus(ideaId) {
+  try {
+    const response = await fetch(`/api/ideas/${ideaId}/collaboration-status`, {
+      credentials: 'include'
+    });
+    
+    if (!response.ok) {
+      throw new Error('خطا در دریافت وضعیت همکاری');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('خطا در دریافت وضعیت همکاری:', error);
+    throw error;
+  }
+}
+
+// نمایش اطلاعات ایده
+function displayIdeaInfo(idea) {
+  document.getElementById("ideaTitleDisplay").textContent = idea.title;
+  document.getElementById("ideaDescriptionDisplay").textContent = idea.description;
+}
+
+// نمایش وضعیت همکاری
+function displayCollaborationStatus(status) {
+  const statusDiv = document.getElementById("collaborationStatus");
+  const buttonsDiv = document.getElementById("collaborationButtons");
+  
+  let statusText = '';
+  let statusClass = '';
+  
+  if (status.hasSentRequest) {
+    if (status.sentRequestStatus === 'pending') {
+      statusText = 'درخواست همکاری ارسال شده - در انتظار پاسخ';
+      statusClass = 'status-sent';
+    } else if (status.sentRequestStatus === 'accepted') {
+      statusText = 'درخواست همکاری پذیرفته شده';
+      statusClass = 'status-accepted';
+    }
+  } else if (status.hasReceivedRequest) {
+    if (status.receivedRequestStatus === 'pending') {
+      statusText = 'درخواست همکاری دریافت شده - در انتظار پاسخ شما';
+      statusClass = 'status-pending';
+    } else if (status.receivedRequestStatus === 'accepted') {
+      statusText = 'درخواست همکاری پذیرفته شده';
+      statusClass = 'status-accepted';
+    }
+  } else {
+    statusText = 'هیچ درخواست همکاری ارسال نشده';
+    statusClass = 'status-pending';
+  }
+  
+  statusDiv.innerHTML = `
+    <div class="status-badge ${statusClass}">${statusText}</div>
+  `;
+  
+  // نمایش دکمه‌های مناسب
+  buttonsDiv.innerHTML = '';
+  
+  // اگر کاربر صاحب ایده است (isOwner = true)
+  if (status.isOwner) {
+    if (status.canSendRequest) {
+      // کاربر صاحب ایده است و می‌تواند درخواست ارسال کند
+      const sendBtn = document.createElement('button');
+      sendBtn.className = 'btn btn-success';
+      sendBtn.textContent = '🤝 ارسال درخواست همکاری';
+      sendBtn.onclick = () => sendCollaborationRequest();
+      buttonsDiv.appendChild(sendBtn);
+    } else if (status.hasSentRequest && status.sentRequestStatus === 'pending') {
+      // درخواست ارسال شده و در انتظار پاسخ
+      const waitingBtn = document.createElement('button');
+      waitingBtn.className = 'btn btn-disabled';
+      waitingBtn.textContent = '⏳ در انتظار پاسخ';
+      waitingBtn.disabled = true;
+      buttonsDiv.appendChild(waitingBtn);
+    } else if (status.hasSentRequest && status.sentRequestStatus === 'accepted') {
+      // درخواست پذیرفته شده
+      const acceptedBtn = document.createElement('button');
+      acceptedBtn.className = 'btn btn-disabled';
+      acceptedBtn.textContent = '✅ همکاری پذیرفته شده';
+      acceptedBtn.disabled = true;
+      buttonsDiv.appendChild(acceptedBtn);
+    }
+  } 
+  // اگر کاربر دریافت کننده است (isPartner = true)
+  else if (status.isPartner) {
+    if (status.canAcceptRequest) {
+      // کاربر دریافت کننده است و می‌تواند درخواست را بپذیرد
+      const acceptBtn = document.createElement('button');
+      acceptBtn.className = 'btn btn-danger';
+      acceptBtn.textContent = '✅ پذیرفتن درخواست همکاری';
+      acceptBtn.onclick = () => acceptCollaborationRequest(status.receivedRequestId);
+      buttonsDiv.appendChild(acceptBtn);
+    } else if (status.hasReceivedRequest && status.receivedRequestStatus === 'accepted') {
+      // درخواست دریافتی پذیرفته شده
+      const acceptedBtn = document.createElement('button');
+      acceptedBtn.className = 'btn btn-disabled';
+      acceptedBtn.textContent = '✅ همکاری پذیرفته شده';
+      acceptedBtn.disabled = true;
+      buttonsDiv.appendChild(acceptedBtn);
+    }
+  }
+}
+
+// ارسال درخواست همکاری
+async function sendCollaborationRequest() {
+  // نمایش پاپ‌آپ تایید
+  const confirmed = confirm('آیا از ارسال درخواست همکاری مطمئن هستید؟');
+  if (!confirmed) {
+    return; // اگر کاربر لغو کرد، کاری انجام نده
+  }
+
+  try {
+    const response = await fetch('/api/cooperation-requests', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        targetBrandId: collaborationStatus.isOwner ? 
+          (await fetchIdeaDetails(currentIdeaId)).partnerBrandId : 
+          (await fetchIdeaDetails(currentIdeaId)).myBrandId,
+        ideaTitle: collaborationStatus.ideaTitle,
+        ideaDescription: collaborationStatus.ideaDescription
+      })
+    });
+
+    if (response.ok) {
+      alert('✅ درخواست همکاری با موفقیت ارسال شد');
+      // بروزرسانی وضعیت
+      await loadCollaborationStatus();
+    } else {
+      const error = await response.json();
+      alert('❌ خطا در ارسال درخواست: ' + error.error);
+    }
+  } catch (error) {
+    console.error('خطا در ارسال درخواست همکاری:', error);
+    alert('❌ خطا در ارسال درخواست همکاری');
+  }
+}
+
+// پذیرفتن درخواست همکاری
+async function acceptCollaborationRequest(requestId) {
+  // نمایش پاپ‌آپ تایید
+  const confirmed = confirm('آیا از پذیرش درخواست همکاری مطمئن هستید؟');
+  if (!confirmed) {
+    return; // اگر کاربر لغو کرد، کاری انجام نده
+  }
+
+  try {
+    const response = await fetch(`/api/cooperation-requests/${requestId}/accept`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    if (response.ok) {
+      alert('✅ درخواست همکاری با موفقیت پذیرفته شد');
+      // بروزرسانی وضعیت
+      await loadCollaborationStatus();
+    } else {
+      const error = await response.json();
+      alert('❌ خطا در پذیرش درخواست: ' + error.error);
+    }
+  } catch (error) {
+    console.error('خطا در پذیرش درخواست همکاری:', error);
+    alert('❌ خطا در پذیرش درخواست همکاری');
+  }
+}
+
+// بارگذاری وضعیت همکاری
+async function loadCollaborationStatus() {
+  try {
+    const status = await fetchCollaborationStatus(currentIdeaId);
+    collaborationStatus = status;
+    displayCollaborationStatus(status);
+  } catch (error) {
+    console.error('خطا در بارگذاری وضعیت همکاری:', error);
+    document.getElementById("collaborationStatus").innerHTML = 
+      '<div class="error">خطا در بارگذاری وضعیت همکاری</div>';
+  }
+}
+
+// بارگذاری تحلیل ایده
+async function loadIdeaAnalysis() {
+  try {
+    const idea = await fetchIdeaDetails(currentIdeaId);
+
+    // ذخیره سریع ایده در سشن
+    if (!sessionStorage.getItem("ideaPrompt")) {
+      sessionStorage.setItem("ideaPrompt", idea.title + '\n\n' + idea.description);
+      sessionStorage.setItem("ideaTitle", idea.title);
+      sessionStorage.setItem("ideaDescription", idea.description);
+    }
+
+    const analysisDiv = document.getElementById("analysis");
+    analysisDiv.textContent = "⏳ در حال تحلیل...";
+
+    // ساخت پرامپت حرفه‌ای: 3 مورد برای هر منظر (CSR/PR/Branding)
+    const csrPrBrandPrompt = `
+شرح ایده همکاری:
+عنوان: ${idea.title}
+توضیح: ${idea.description}
+
+وظیفه تو: فقط و فقط «چرایی»‌های بررسی این ایده از سه منظر زیر را بیان کن؛ یعنی دلایل، منطق و ارزش‌های نهفته که نشان دهد چرا نگاه از این زاویه ضروری/مفید/اثرگذار است. هیچ راهکار اجرایی، پیشنهاد عملیاتی، یا ایده‌ی جدید ارائه نده. از افعال دستوری (مثل انجام دهید/پیاده‌سازی کنید) پرهیز کن. هر مورد ۱–۲ جمله، شفاف، دقیق و بدون کلی‌گویی باشد.
+
+فرمت خروجی اجباری (دقیقاً همین ساختار):
+CSR:
+1) ...
+2) ...
+3) ...
+
+PR:
+1) ...
+2) ...
+3) ...
+
+Branding:
+1) ...
+2) ...
+3) ...`;
+
+    const response = await fetch("/api/generate-ideas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        prompt: csrPrBrandPrompt,
+        myBrandId: typeof idea.myBrandId === 'object' ? idea.myBrandId._id : idea.myBrandId,
+        targetBrandId: typeof idea.partnerBrandId === 'object' ? idea.partnerBrandId._id : idea.partnerBrandId
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const content = (data.choices?.[0]?.message?.content || '').trim();
+
+      // پارس پاسخ بر اساس فرمت اجباری
+      const extractSection = (name) => {
+        const regex = new RegExp(`${name}:[\\s\\S]*?(?=(CSR:|PR:|Branding:|$))`, 'i');
+        const match = content.match(regex);
+        if (!match) return [];
+        const section = match[0]
+          .replace(/^[^\n]*\n?/, '')
+          .split('\n')
+          .map(l => l.trim())
+          .filter(l => l)
+          .map(l => l.replace(/^\d+[\)\.\-]\s*/, ''))
+          .slice(0, 3);
+        return section;
+      };
+
+      const csrItems = extractSection('CSR');
+      const prItems = extractSection('PR');
+      const brandItems = extractSection('Branding');
+
+      const cardHTML = (title, items) => `
+        <div class="analysis-card">
+          <h3>${title}</h3>
+          <ul>
+            ${items.map(it => `<li>${it}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+
+      analysisDiv.innerHTML = `
+        <div class="analysis-cards">
+          ${cardHTML('از منظر مسئولیت اجتماعی (CSR)', csrItems)}
+          ${cardHTML('از منظر روابط عمومی (PR)', prItems)}
+          ${cardHTML('از نگاه برندسازی (Branding)', brandItems)}
+        </div>
+      `;
+    } else {
+      analysisDiv.innerHTML = `
+        <div class="error">
+          <h4>❌ خطا در تحلیل ایده</h4>
+          <p>متأسفانه امکان تحلیل ایده در حال حاضر وجود ندارد.</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('خطا در بارگذاری تحلیل ایده:', error);
+    document.getElementById("analysis").innerHTML = `
+      <div class="error">
+        <h4>❌ خطا در تحلیل ایده</h4>
+        <p>${error.message}</p>
+      </div>
+    `;
+  }
+}
+
+// تولید مدل‌های درآمدی با OpenAI و نمایش در صفحه
+async function generateRevenueModels() {
+  try {
+    const section = document.getElementById('revenueModelsSection');
+    const out = document.getElementById('revenueModels');
+    const errBox = document.getElementById('revenueError');
+    const okBox = document.getElementById('revenueSuccess');
+
+    section.style.display = 'block';
+    errBox.style.display = 'none';
+    okBox.style.display = 'none';
+    out.innerHTML = '⏳ در حال تولید مدل‌های درآمدی...';
+
+    // دریافت ایده و برندها برای ساخت پرامپت
+    const idea = await fetchIdeaDetails(currentIdeaId);
+
+    // دریافت اطلاعات دو برند درگیر با اطمینان از شناسه‌های رشته‌ای
+    const myBrandResp = await fetch('/api/my-brand', { credentials: 'include' });
+    const myBrand = myBrandResp.ok ? await myBrandResp.json() : null;
+
+    const ideaMyId = typeof idea.myBrandId === 'object' ? (idea.myBrandId._id || idea.myBrandId.id) : idea.myBrandId;
+    const ideaPartnerId = typeof idea.partnerBrandId === 'object' ? (idea.partnerBrandId._id || idea.partnerBrandId.id) : idea.partnerBrandId;
+
+    const isOwner = myBrand && ideaMyId && myBrand._id === ideaMyId;
+    const otherBrandId = isOwner ? ideaPartnerId : ideaMyId;
+
+    const partnerResp = otherBrandId ? await fetch(`/api/brand/${otherBrandId}`, { credentials: 'include' }) : null;
+    const targetBrand = partnerResp && partnerResp.ok ? await partnerResp.json() : null;
+
+    // ساخت enhancedPrompt از عنوان + توضیحات ایده
+    const enhancedPrompt = `${idea.title}\n\n${idea.description || ''}`.trim();
+
+    const promptBrand1Name = myBrand ? myBrand.name : (typeof idea.myBrandId === 'object' ? idea.myBrandId?.name : 'برند اول');
+    const promptBrand2Name = targetBrand ? targetBrand.name : (typeof idea.partnerBrandId === 'object' ? idea.partnerBrandId?.name : 'برند دوم');
+
+    const revenuePrompt = `
+تو یک نابغه کسب‌وکار و مشاور استراتژیک برند در سطح جهانی هستی، کسی که تجربه خلق مدل‌های درآمدی میلیارد دلاری و فوق‌العاده خلاقانه برای برندهای مختلف را دارد.  
+هدف تو این است که از ایده همکاری زیر، **5 مدل درآمدی حرفه‌ای و کاملاً عملی برای برند اول و 5 مدل برای برند دوم** بسازی.  
+
+ایده همکاری: ${enhancedPrompt}
+
+**نکات مهم برای تولید مدل‌ها:**  
+- مدل‌ها باید کاملاً خلاقانه، نوآورانه و منحصر به فرد باشند.  
+- مدل‌ها باید عملی و قابل اجرا باشند، بدون ارائه فیلدهای خشک یا جدول‌بندی رسمی.  
+- توضیحات هر مدل باید **جزئیات دقیق، مثال‌های کاربردی و نحوه درآمدزایی** را نشان دهد.  
+- می‌توانی از انواع مدل‌ها استفاده کنی: فروش مستقیم، اشتراک، اسپانسرشیپ، خدمات ویژه، آپ‌سل، تبلیغات، لید جن، بسته‌های B2B و هر روش دیگری که خلاقانه و سودآور باشد.  
+- سبک نوشتار باید **مثل مشاور میلیارد دلاری** باشد، طبیعی، روان و با تمام جزئیات لازم برای درک ارزش مدل.  
+
+**برای ${promptBrand1Name}:**  
+1. [عنوان مدل] — شرح کوتاه مدل (۲–۳ جمله). جزئیات عملی: ... | نحوه درآمدزایی: ... | مثال: ...  
+2. [مدل درآمدی دوم...]  
+3. [مدل درآمدی سوم...]  
+4. [مدل درآمدی چهارم...]  
+5. [مدل درآمدی پنجم...]  
+
+**برای ${promptBrand2Name}:**  
+1. [عنوان مدل] — شرح کوتاه مدل (۲–۳ جمله). جزئیات عملی: ... | نحوه درآمدزایی: ... | مثال: ...  
+2. [مدل درآمدی دوم...]  
+3. [مدل درآمدی سوم...]  
+4. [مدل درآمدی چهارم...]  
+5. [مدل درآمدی پنجم...]  
+
+**تذکر:**  
+- هیچ مدل نباید شبیه دیگری باشد، تمام مدل‌ها باید خلاقانه، متمایز و جذاب باشند.  
+- توضیحات باید واقعی و قابل تصور برای اجرای عملی باشند، نه کلی و سطحی.  
+- تمرکز روی سودآوری، نوآوری و عملی بودن مدل‌ها باشد.  
+- سبک نوشتار باید **جذاب، حرفه‌ای و به گونه‌ای باشد که خواننده احساس کند یک مشاور برند حرفه‌ای و با تجربه آن را نوشته است.**
+ 
+فرمت خروجی اجباری (دقیقاً همین ساختار را رعایت کن):
+برای ${promptBrand1Name}:
+1. ...
+2. ...
+3. ...
+4. ...
+5. ...
+
+برای ${promptBrand2Name}:
+1. ...
+2. ...
+3. ...
+4. ...
+5. ...
+`;
+
+    const resp = await fetch('/api/generate-ideas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        prompt: revenuePrompt, 
+        myBrandId: isOwner ? ideaMyId : otherBrandId,
+        targetBrandId: isOwner ? otherBrandId : ideaMyId
+      })
+    });
+
+    if (!resp.ok) {
+      const e = await resp.json().catch(() => ({}));
+      throw new Error(e.error || 'خطا در تولید مدل‌های درآمدی');
+    }
+
+    const data = await resp.json();
+    const content = data.choices?.[0]?.message?.content || '';
+
+    // پارس کردن خروجی و تفکیک دو بخش برند (حفظ توضیحات چندخطی)
+    const persianDigits = {'۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
+    const normalizeDigits = (str) => (str || '').replace(/[۰-۹]/g, d => persianDigits[d] || d);
+
+    const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+    
+    let brand1Name = promptBrand1Name || myBrand?.name || 'برند اول';
+    let brand2Name = promptBrand2Name || targetBrand?.name || 'برند دوم';
+    let brand1Models = [];
+    let brand2Models = [];
+    let currentBrand = null;
+
+    const numberRegex = /^(?:\d+|[۰-۹]+)[\.:\)\-\s]+/; // 1. یا ۱) یا 1- ...
+    const isBrandHeader = (line) => {
+      const lower = normalizeDigits(line).toLowerCase();
+      if (/^\s*برای\s+/.test(lower)) {
+        if (lower.includes(brand1Name.toLowerCase()) || lower.includes('برند اول') || lower.includes('اول')) return 1;
+        if (lower.includes(brand2Name.toLowerCase()) || lower.includes('برند دوم') || lower.includes('دوم')) return 2;
+      }
+      return 0;
+    };
+    const isNumbered = (line) => numberRegex.test(normalizeDigits(line));
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const header = isBrandHeader(line);
+      if (header === 1) { currentBrand = 1; continue; }
+      if (header === 2) { currentBrand = 2; continue; }
+      if (isNumbered(line)) {
+        // آغاز یک مدل جدید؛ توضیحات تا قبل از مدل شماره‌دار بعدی یا هدر برند جمع‌آوری شود
+        let text = line.replace(numberRegex, '').trim();
+        let j = i + 1;
+        while (j < lines.length && !isNumbered(lines[j]) && isBrandHeader(lines[j]) === 0) {
+          text += '\n' + lines[j];
+          j++;
+        }
+        if (currentBrand === 1) brand1Models.push(text);
+        else if (currentBrand === 2) brand2Models.push(text);
+        i = j - 1;
+      }
+    }
+
+    // تلاش دوم (fallback): اگر چیزی پیدا نشد، از همه آیتم‌های شماره‌دار استفاده و بین دو برند تقسیم کن
+    if (brand1Models.length === 0 && brand2Models.length === 0) {
+      const allModels = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (isNumbered(lines[i])) {
+          let text = lines[i].replace(numberRegex, '').trim();
+          let j = i + 1;
+          while (j < lines.length && !isNumbered(lines[j]) && isBrandHeader(lines[j]) === 0) {
+            text += '\n' + lines[j];
+            j++;
+          }
+          allModels.push(text);
+          i = j - 1;
+        }
+      }
+      if (allModels.length > 0) {
+        brand1Models = allModels.slice(0, 5);
+        brand2Models = allModels.slice(5, 10);
+      }
+    }
+
+    // ساخت HTML شیک و کادربندی شده
+    // مدل‌ها را به عنوان/شرح/جزئیات عملی/درآمدزایی/مثال تفکیک کن (با الگوهای ساده)
+    function parseModelText(text) {
+      const parts = { title: '', desc: '', ops: '', revenue: '', example: '' };
+      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+      if (lines.length > 0) {
+        parts.title = lines[0];
+        parts.desc = lines.slice(1).join(' ');
+      }
+      // تلاش برای شناسایی سکشن‌ها داخل desc
+      const extract = (labelFa, key) => {
+        const regex = new RegExp(`${labelFa}\s*[:：-]\s*([^|]+)`, 'i');
+        const m = parts.desc.match(regex);
+        if (m) { parts[key] = m[1].trim(); parts.desc = parts.desc.replace(m[0], '').trim(); }
+      };
+      extract('جزئیات عملی', 'ops');
+      extract('نحوه درآمدزایی', 'revenue');
+      extract('مثال', 'example');
+      return parts;
+    }
+
+    const renderModel = (model, idx) => {
+      const p = parseModelText(model);
+      return `
+        <div class="revenue-model-item">
+          <span class="revenue-model-number">${idx + 1}</span>
+          <div class="revenue-model-text">
+            <div class="model-title-box">${p.title || 'مدل درآمدی'}</div>
+            ${p.desc ? `<div class="model-section-title">شرح</div><div>${p.desc}</div>` : ''}
+            ${p.ops ? `<div class="model-section-title">جزئیات عملی</div><div>${p.ops}</div>` : ''}
+            ${p.revenue ? `<div class="model-section-title">نحوه درآمدزایی</div><div>${p.revenue}</div>` : ''}
+            ${p.example ? `<div class="model-section-title">مثال</div><div>${p.example}</div>` : ''}
+          </div>
+        </div>
+      `;
+    };
+
+    const brand1HTML = brand1Models.map((m, i) => renderModel(m, i)).join('');
+    const brand2HTML = brand2Models.map((m, i) => renderModel(m, i)).join('');
+
+    // اگر هیچ مدلی یافت نشد، پیام مناسب نمایش بده و success نشان داده نشود
+    if (brand1Models.length === 0 && brand2Models.length === 0) {
+      out.innerHTML = '<p style="color:#999;">مدلی یافت نشد. لطفاً دوباره تلاش کنید یا پرامپت را بررسی کنید.</p>';
+      return;
+    }
+
+    out.innerHTML = `
+      <div class="revenue-container">
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${brand1Name}</div>
+          ${brand1HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+        <div class="revenue-brand-box">
+          <div class="revenue-brand-title">💼 ${brand2Name}</div>
+          ${brand2HTML || '<p style="color:#999;">مدلی یافت نشد</p>'}
+        </div>
+      </div>
+    `;
+    
+    okBox.textContent = '✅ مدل‌های درآمدی با موفقیت تولید شد';
+    okBox.style.display = 'block';
+  } catch (err) {
+    console.error('Revenue models error:', err);
+    const errBox = document.getElementById('revenueError');
+    const section = document.getElementById('revenueModelsSection');
+    section.style.display = 'block';
+    errBox.textContent = err.message || 'خطای ناشناخته در تولید مدل‌های درآمدی';
+    errBox.style.display = 'block';
+  }
+}
+
+// بارگذاری اطلاعات برند همکار
+async function loadPartnerInfo(idea) {
+  try {
+    // دریافت برند خود کاربر
+    const myBrandResp = await fetch('/api/my-brand', { credentials: 'include' });
+    const myBrand = myBrandResp.ok ? await myBrandResp.json() : null;
+
+    const ideaMyId = typeof idea.myBrandId === 'object' ? (idea.myBrandId._id || idea.myBrandId.id) : idea.myBrandId;
+    const ideaPartnerId = typeof idea.partnerBrandId === 'object' ? (idea.partnerBrandId._id || idea.partnerBrandId.id) : idea.partnerBrandId;
+
+    let otherBrandId = ideaPartnerId;
+    if (myBrand && myBrand._id && ideaMyId && myBrand._id === ideaMyId) {
+      otherBrandId = ideaPartnerId;
+    } else {
+      otherBrandId = ideaMyId;
+    }
+
+    if (!otherBrandId) throw new Error('شناسه برند همکار نامعتبر است');
+
+    const response = await fetch(`/api/brand/${otherBrandId}`, { credentials: 'include' });
+    if (response.ok) {
+      const partnerBrand = await response.json();
+      document.getElementById('partnerNameDisplay').textContent = partnerBrand.name;
+    }
+  } catch (error) {
+    console.error('خطا در دریافت اطلاعات برند همکار:', error);
+    document.getElementById('partnerNameDisplay').textContent = 'برند همکار';
+  }
+}
+
+// Event Listeners
+document.getElementById("btnSample").addEventListener("click", () => {
+  openAppModal('📌 نمونه‌های اجرا شده', 'این بخش به زودی فعال می‌شود.');
+});
+
+document.getElementById("btnRevenue").addEventListener("click", () => {
+  generateRevenueModels();
+});
+
+document.getElementById("btnEconomy").addEventListener("click", () => {
+  openAppModal('📊 توجیه اقتصادی', 'این بخش به زودی فعال می‌شود.');
+});
+
+document.getElementById("btnStrategy").addEventListener("click", () => {
+  openAppModal('📈 یک استراتژی می‌خواهم', 'این بخش به زودی فعال می‌شود.');
+});
+
+// App Modal Helpers
+function openAppModal(title, body) {
+  const modal = document.getElementById('appModal');
+  const titleEl = document.getElementById('appModalTitle');
+  const bodyEl = document.getElementById('appModalBody');
+  titleEl.textContent = title || 'اطلاع';
+  bodyEl.textContent = body || '';
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAppModal() {
+  const modal = document.getElementById('appModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('appModalClose').addEventListener('click', closeAppModal);
+document.getElementById('appModalOk').addEventListener('click', closeAppModal);
+document.getElementById('appModal').addEventListener('click', (e) => {
+  if (e.target.id === 'appModal') closeAppModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAppModal();
+});
+
+// بارگذاری اولیه صفحه
+window.onload = async () => {
+  try {
+    currentIdeaId = getIdeaId();
+    console.log('🔍 currentIdeaId از getIdeaId:', currentIdeaId);
+    
+    // اگر ID در URL یا sessionStorage نیست، سعی کن آن را پیدا کن
+    if (!currentIdeaId) {
+      try {
+        console.log('🔍 جستجو برای ایده بر اساس عنوان...');
+        currentIdeaId = await findIdeaByTitle();
+        sessionStorage.setItem("ideaId", currentIdeaId);
+        console.log('🔍 ایده پیدا شد با ID:', currentIdeaId);
+      } catch (error) {
+        console.error("خطا در پیدا کردن ایده:", error);
+        document.getElementById("analysis").innerHTML = `
+          <div class="error">
+            <h4>❌ خطا در بارگذاری</h4>
+            <p>ایده یافت نشد. لطفاً از طریق داشبورد وارد شوید.</p>
+            <button onclick="window.location.href='dashboard.html'" class="btn">
+              🔙 بازگشت به داشبورد
+            </button>
+          </div>
+        `;
+        return;
+      }
+    }
+    
+    if (!currentIdeaId) {
+      console.error('❌ currentIdeaId هنوز null است');
+      document.getElementById("analysis").innerHTML = `
+        <div class="error">
+          <h4>❌ خطا در بارگذاری</h4>
+          <p>شناسه ایده یافت نشد. لطفاً از طریق داشبورد وارد شوید.</p>
+          <button onclick="window.location.href='dashboard.html'" class="btn">
+            🔙 بازگشت به داشبورد
+          </button>
+        </div>
+      `;
+      return;
+    }
+    
+    console.log('🔍 در حال بارگذاری ایده با ID:', currentIdeaId);
+
+    // بارگذاری اطلاعات ایده
+    const idea = await fetchIdeaDetails(currentIdeaId);
+    displayIdeaInfo(idea);
+    
+    // بارگذاری وضعیت همکاری
+    await loadCollaborationStatus();
+    
+    // بارگذاری اطلاعات برند همکار
+    await loadPartnerInfo(idea);
+    
+    // بارگذاری تحلیل ایده
+    await loadIdeaAnalysis();
+    
+  } catch (error) {
+    console.error('خطا در بارگذاری صفحه:', error);
+    document.getElementById("analysis").innerHTML = `
+      <div class="error">
+        <h4>❌ خطا در بارگذاری</h4>
+        <p>${error.message}</p>
+        <button onclick="window.location.href='dashboard.html'" class="btn">
+          🔙 بازگشت به داشبورد
+        </button>
+      </div>
+    `;
+  }
+};
+</script>
+</body>
+</html>
